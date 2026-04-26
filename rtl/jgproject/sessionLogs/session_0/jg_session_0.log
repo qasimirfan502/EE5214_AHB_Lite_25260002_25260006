@@ -1,0 +1,666 @@
+# ----------------------------------------
+# Jasper Version Info
+# tool      : Jasper 2025.06
+# platform  : Linux 3.10.0-1160.119.1.el7.x86_64
+# version   : 2025.06p002 64 bits
+# build date: 2025.08.26 14:59:20 UTC
+# ----------------------------------------
+# started   : 2026-04-26 05:15:23 PKT
+# hostname  : pc3.(none)
+# pid       : 32737
+# arguments : '-style' 'windows' '-label' 'session_0' '-console' '//127.0.0.1:33777' '-data' 'AAAAfHicY2RgYLCp////PwMYMD6A0Aw2jAyoAMRnQhUJbEChGRhYUZVLMaQxFDCUMcQzFDOkMpQwlAJ5ekA6mSEHrAYA9BgL7A==' '-bridge_url' '10.103.76.67:37633' '-proj' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.initCmds.tcl' 'fpv_setup.tcl'
+
+Any disclosure about the Cadence Design Systems software or its use
+model to any third party violates the written Non-Disclosure Agreement
+between Cadence Design Systems, Inc. and the customer.
+
+THIS SOFTWARE CONTAINS CONFIDENTIAL INFORMATION AND TRADE SECRETS OF
+CADENCE DESIGN SYSTEMS, INC. USE, DISCLOSURE, OR REPRODUCTION IS
+PROHIBITED WITHOUT THE PRIOR EXPRESS WRITTEN PERMISSION OF CADENCE
+DESIGN SYSTEMS, INC.
+
+Copyright (C) 2000-2025 Cadence Design Systems, Inc. All Rights
+Reserved.  Unpublished -- rights reserved under the copyright laws of
+the United States.
+
+This product includes software developed by others and redistributed
+according to license agreement. See doc/third_party_readme.txt for
+further details.
+
+RESTRICTED RIGHTS LEGEND
+
+Use, duplication, or disclosure by the Government is subject to
+restrictions as set forth in subparagraph (c) (1) (ii) of the Rights in
+Technical Data and Computer Software clause at DFARS 252.227-7013 or
+subparagraphs (c) (1) and (2) of Commercial Computer Software -- Restricted
+Rights at 48 CFR 52.227-19, as applicable.
+
+
+                          Cadence Design Systems, Inc.
+                          2655 Seely Avenue
+                          San Jose, CA 95134
+                          Phone: 408.943.1234
+
+For technical assistance visit http://support.cadence.com.
+
+Jasper Apps Analysis Session - /home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0
+
+WARNING (WG017): [session]: The system's locale is "ANSI_X3.4-1968", which is not UTF-8. Non-ASCII characters might not be handled correctly.
+INFO (IPL017): The host machine is running out of memory.
+    This message was triggered because the system reached 10% memory.
+    System memory use information:
+    [Process]
+        Memory In Use: 0.289 GiB (1%)
+        Peak Memory Usage: 0.289 GiB (1%)
+    [Host]
+        Available Memory: 1.66 GiB (10%)
+        Total Memory: 15.4 GiB
+        Free Swap: 7.86 GiB (80%)
+        Total Swap: 9.75 GiB
+WARNING (WG017): [jg_console]: The system's locale is "ANSI_X3.4-1968", which is not UTF-8. Non-ASCII characters might not be handled correctly.
+INFO: successfully checked out licenses "jasper_pint" and "jasper_papp".
+INFO: reading configuration file "/home/Abdullah.Rafique/.config/cadence/jasper.conf".
+% # ============================================================
+% # fpv_setup.tcl
+% # JasperGold FPV Setup Script
+% # EE-5214 — AHB-Lite Verification — Spring 2025
+% # ============================================================
+% 
+% # ------------------------------------------------------------
+% # STEP 1 — Clear previous session
+% # ------------------------------------------------------------
+% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+% 
+% # ------------------------------------------------------------
+% # STEP 2 — Analyze (compile) all files
+% # Order matters:
+% #   1. Package first — defines constants used by everything
+% #   2. DUT files
+% #   3. Checker and assumptions
+% #   4. Bind file last — references all other modules
+% # ------------------------------------------------------------
+% 
+% # Package
+% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+% 
+% # DUT
+% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+% 
+% # Checker and assumptions
+% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[ERROR (VERI-1137)] ahb_checker.sv(146): syntax error near '('
+[ERROR (VERI-1137)] ahb_checker.sv(147): syntax error near '|=>'
+[ERROR (VERI-1137)] ahb_checker.sv(189): syntax error near 'property'
+[ERROR (VERI-2344)] ahb_checker.sv(189): SystemVerilog 2012 keyword 'property' used in incorrect context
+[ERROR (VERI-1128)] ahb_checker.sv(150): 'DEASSERTION_RESET' is not declared
+[ERROR (VERI-1072)] ahb_checker.sv(223): module 'ahb_checker' is ignored due to previous errors
+Summary of errors detected:
+	[ERROR (VERI-1137)] ahb_checker.sv(146): syntax error near '('
+	[ERROR (VERI-1137)] ahb_checker.sv(147): syntax error near '|=>'
+	[ERROR (VERI-1137)] ahb_checker.sv(189): syntax error near 'property'
+	[ERROR (VERI-2344)] ahb_checker.sv(189): SystemVerilog 2012 keyword 'property' used in incorrect context
+	[ERROR (VERI-1128)] ahb_checker.sv(150): 'DEASSERTION_RESET' is not declared
+	[ERROR (VERI-1072)] ahb_checker.sv(223): module 'ahb_checker' is ignored due to previous errors
+ERROR (ENL034): 6 errors detected in the design file(s).
+
+ERROR: problem encountered at line 29 in file fpv_setup.tcl
+
+% include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[ERROR (VERI-1137)] ahb_checker.sv(146): syntax error near '@'
+[ERROR (VERI-1137)] ahb_checker.sv(147): syntax error near '|=>'
+[ERROR (VERI-1128)] ahb_checker.sv(150): 'DEASSERTION_RESET' is not declared
+[ERROR (VERI-1072)] ahb_checker.sv(223): module 'ahb_checker' is ignored due to previous errors
+Summary of errors detected:
+	[ERROR (VERI-1137)] ahb_checker.sv(146): syntax error near '@'
+	[ERROR (VERI-1137)] ahb_checker.sv(147): syntax error near '|=>'
+	[ERROR (VERI-1128)] ahb_checker.sv(150): 'DEASSERTION_RESET' is not declared
+	[ERROR (VERI-1072)] ahb_checker.sv(223): module 'ahb_checker' is ignored due to previous errors
+ERROR at line 29 in file fpv_setup.tcl, more info in Tcl-variable errorInfo
+ERROR (ENL034): 4 errors detected in the design file(s).
+
+
+% include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+[ERROR (VERI-1137)] ahb_assumptions.sv(169): syntax error near ';'
+[ERROR (VERI-1536)] ahb_assumptions.sv(190): illegal concurrent assertion in action block
+[ERROR (VERI-1072)] ahb_assumptions.sv(302): module 'ahb_assumptions' is ignored due to previous errors
+Summary of errors detected:
+	[ERROR (VERI-1137)] ahb_assumptions.sv(169): syntax error near ';'
+	[ERROR (VERI-1536)] ahb_assumptions.sv(190): illegal concurrent assertion in action block
+	[ERROR (VERI-1072)] ahb_assumptions.sv(302): module 'ahb_assumptions' is ignored due to previous errors
+ERROR at line 30 in file fpv_setup.tcl, more info in Tcl-variable errorInfo
+ERROR (ENL034): 3 errors detected in the design file(s).
+
+
+% include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+[ERROR (VERI-1536)] ahb_assumptions.sv(190): illegal concurrent assertion in action block
+[ERROR (VERI-1072)] ahb_assumptions.sv(302): module 'ahb_assumptions' is ignored due to previous errors
+Summary of errors detected:
+	[ERROR (VERI-1536)] ahb_assumptions.sv(190): illegal concurrent assertion in action block
+	[ERROR (VERI-1072)] ahb_assumptions.sv(302): module 'ahb_assumptions' is ignored due to previous errors
+ERROR at line 30 in file fpv_setup.tcl, more info in Tcl-variable errorInfo
+ERROR (ENL034): 2 errors detected in the design file(s).
+
+
+% include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+%% 
+%% # Bind file — must be last
+%% analyze -sv12 bind_fpv.sv
+[-- (VERI-1482)] Analyzing Verilog file 'bind_fpv.sv'
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 3 — Elaborate
+%% # Top module is the DUT
+%% # Parameters match design.sv defaults
+%% # ------------------------------------------------------------
+%% elaborate -top ahb3liten \
+    -parameter MEM_SIZE 32 \
+    -parameter MEM_DEPTH 256 \
+    -parameter HADDR_SIZE 16 \
+    -parameter HDATA_SIZE 32
+INFO (ISW003): Top module name is "ahb3liten".
+[INFO (HIER-8002)] ../rtl/design.sv(297): Disabling old hierarchical reference handler
+[INFO (VERI-1018)] ../rtl/mem.sv(1): compiling module 'mem:(ABITS=8)'
+[INFO (VERI-2571)] ../rtl/mem.sv(25): extracting RAM for identifier 'mem_array'
+[WARN (VERI-9033)] ../rtl/mem.sv(25): array mem_array (size 8192) automatically BLACK-BOXED. Use the "elaborate -bbox_a" command to prevent automatic black-boxing.
+[INFO (VERI-1018)] ahb_checker.sv(6): compiling module 'ahb_checker'
+[INFO (VERI-1018)] ahb_assumptions.sv(11): compiling module 'ahb_assumptions'
+[WARN (VERI-1209)] ahb_assumptions.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(137): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(138): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(147): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(148): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1796)] ahb_assumptions.sv(168): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1796)] ahb_assumptions.sv(179): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ../rtl/design.sv(1): compiling module 'ahb3liten'
+[WARN (VERI-1209)] ../rtl/design.sv(113): expression size 16 truncated to fit in target size 7
+[WARN (VERI-1959)] ../rtl/design.sv(155): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(156): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(157): left shift count >= width of value
+[WARN (VERI-1209)] ../rtl/design.sv(126): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(129): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(130): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(133): expression size 32 truncated to fit in target size 16
+INFO (INL208): Elaboration synthesis summary:
+  Number of synthesized netlists          5 (1 packages)
+  Single run mode                         On
+  Pipeline                                On (4 pipelined netlists)
+  Late hierarchical reference connection  On
+  Number of analyzed Verilog modules      6 (5 synthesized)
+  Number of analyzed VHDL entities        0 (0 synthesized)
+  Advanced Incremental run mode           Off
+INFO (INL003): Clearing all state information (assumes, stopats, and so forth).
+ahb3liten
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 4 — Clock and reset
+%% # HCLK  : rising edge triggered
+%% # HRESETn : active low reset
+%% # ------------------------------------------------------------
+%% clock HCLK
+%% reset -expression {!HRESETn}
+INFO (IPM031): Clearing proof results of all properties.
+INFO (IRS006): Current reset condition is "HRESETn".
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 5 — Run proof
+%% # ------------------------------------------------------------
+%% prove -task FPV
+ERROR at line 57 in file fpv_setup.tcl, more info in Tcl-variable errorInfo
+ERROR (EPM061): No tasks match the provided regular expression(s).
+
+
+[<embedded>] % prove -all -bg
+background 0
+Bcustom1: Custom engine code is hT3Nm7hPr1Vp3Di1Ra2USNIGL4JypRnLKLAdF6JAyuavO2JfGCiY9OZJhcAcOUnLx5xwNdhILGrAWX9s+z2WDkKwNR7tAfClBEjRFVQeq6DU54boFgEA
+Mpcustom2: Custom engine code is hT3NZbhP9fmY2AbBQnsjfOxn6c+6e6yL+/e8fZFmaQrnlgEA
+Ncustom3: Custom engine code is hT3Ng7hPPfiYQOTDZ3qhYOwGAM51eA+J/FjkM5shLioAsqhgLR4Ft+O1BuKG6ilQ83B9tLXSl+CwjiTMAQA
+AMcustom4: Custom engine code is hT3Ng7hP/feYQOTDZ3qhYOwGAM51eA+J/FjkM5shLioAsqhgLR4Ft+O1BuKG6ilQ83B9tLXSmmqwm7g9AQA
+INFO (IPF036): Starting proof on task: "<embedded>", 41 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis: phase 2 of 4.
+INFO (IRS031): Running reset analysis: phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (ISIM006): Running simulation: {mode = single, probe = all}.
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (ISIM008): Simulation is processing trace data. Total number of nets in analysis 1655.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 220 of 331 design flops, 0 of 0 design latches, 104 of 225 internal elements.
+INFO (IRS039): Reset analysis complete.
+INFO (IPF031): Settings used for proof thread 2:
+    orchestration                      = on
+    time_limit                         = 86400s
+    per_property_time_limit            = 1s * 10 ^ scan
+    engine_mode                        = auto
+    proofgrid_per_engine_max_jobs      = 1
+    max engine jobs                    = auto
+    proofgrid_mode                     = local
+    proofgrid_restarts                 = 10
+2.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 2.0.PRE: The property "ahb3liten.checker_i.RESP_OK" was proven in 0.00 s.
+2.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 2.0.PRE: The property "ahb3liten.checker_i.TWO_CYCLE_RESP" was proven in 0.00 s.
+2.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 2.0.PRE: The cover property "ahb3liten.checker_i.TWO_CYCLE_RESP:precondition1" was proven unreachable in 0.00 s.
+2.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 2.0.PRE: The cover property "ahb3liten.checker_i.TWO_CYCLE_RESP_COVER" was proven unreachable in 0.00 s.
+2.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 2.0.PRE: The cover property "ahb3liten.assumptions_i.HTRANS_IDLE_DURING_RESET:precondition1" was proven unreachable in 0.00 s.
+2: Found proofs for 5 properties in preprocessing
+2: Using multistage preprocessing
+2: Starting reduce
+2: Finished reduce in 0.002s
+2.0.PRE: Performing Proof Simplification...
+2.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+2.0.Hp: Proof Simplification Iteration 1	[0.00 s]
+2.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.15 s]
+INFO (IPF008): 2.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.checker_i.RESP_OK_COVER" in 0.00 s.
+2.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.15 s]
+INFO (IPF008): 2.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.checker_i.HREADY_RESET_SLAVE:precondition1" in 0.00 s.
+2.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.15 s]
+INFO (IPF008): 2.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.checker_i.RESET_RECOVERY_COVER" in 0.00 s.
+2.0.Hp: Proof Simplification Iteration 2	[0.00 s]
+2.0.Hp: Proof Simplification Iteration 3	[0.00 s]
+2.0.Hp: Proof Simplification Iteration 4	[0.00 s]
+2.0.Hp: Proof Simplification Iteration 5	[0.01 s]
+2.0.PRE: Proof Simplification completed in 0.16 s
+2.0.Hp: Identified and disabled 7 duplicated targets.
+2: About to start ProofGrid in its own thread with a limit of 10000 pending notifications and a limit of 10 traces.
+AMcustom5: Custom engine code is hT3N1rhP11/52HrFRS21ROp2LOjVTgPvT8L8BGXHgLhaIuqtT4nARFjUqrBL+7pLmaTOzBepZW/Jm8SSrHDybSQtoNiO3y43wk+dEoWlsZizu97Fih6O6lPVG/LpWP5SsUPwlGagLNa1FKEFvwVXyX7//8prySbvSxIHXr5er+z4RAEA
+Ncustom6: Custom engine code is hT3OXrhPByJp3TrFSTLhUmMH4KVtJgmTCnNDF46yMXOKY48m4LS5nE7yBzFjA7kDuwO/GhGUpEPiky3p3wmPn3dJZHxFMsafSoObRzSC+tn7sEY0WbTdZ/FV4hL3MYH/b1CIUvXSWR4wqEoVLsmMOD4xIPT4lI1LO6ZCO7PnnWQuLwetnvKlrXx6wCW/A+x+enqslg1YPobi4wEF/EvbzOvcTYdJvl2s4H2yZg2b2ofAVN5WvhWk1HoBAA
+ADcustom7: Custom engine code is hT3Nv7hPv1752HrFRa2kROx2f/ECJeZB2AZsLdlO8VwmIuqtT4nIDFXclhg+O+o+DMmQCekbheGk0kK28laA9gaOFDXsQp29J3X615HY1IPHJWd6FUFvCHjO+p1k652b5JJvZlShNpGlGSXAiQe/mEAj6tEBAA
+Tricustom8: Custom engine code is hT3Nu7hPt1752DvFRa0kNDiyIV97VyejwM9C/jCLJjdPvusZONHY42VYUy0Q1ZotnhcVtNc56tJ5wbxv6V2+XpdsaSlHck5vfnbYjdwj1OECy9U+7oSQ0SZE3g5ayD+Phuh4odCJTjeKa2k4elM9ldQfkAEA
+Gcustom9: Custom engine code is hT3NibhPDfeYQADBZnYcglOvK9Pfd7EOeniIqP8jNsyIqInncipMGcUXqAadachREE9F2PwhBUZUNw5kHnd4JdXkamORRgEA
+C2custom10: Custom engine code is hT3NirhPjfWYQADBZnYcglOvK9Pfd7EOeniIqP8jNsyIqInncgkrYMMXCYbdK0dUjZIF9d4cJ0rHoBDjwVLBKuG86XYVV00BAA
+AGcustom11: Custom engine code is hT3NirhP/fmYQADBZnYcglOvK9Pfd7EOeniIqP8jNsyIqInnckcwYMMXCYbdK0dUjZIF9d4cJ0rHoBDjwVLBKuHEZnZByh0BAA
+Bcustom12: Custom engine code is hT3NjrhPDfiYQADBZnYcglOvK9PfWxFtenjIyBqfrgr7if/jL/yPOuK1BAflEcW0DxNH2eDIoezN2gxlQFg81RZtiWXh7aiTAidvAQA
+Ncustom13: Custom engine code is hT3NR7hPByFp3TrFSTLhUmMH4KWtJglTyV/c51BHEeZWamnJv767nE6PCak26bd3gf3XGN3rIRheufhDieCJQVISo+gNYUKhiUedBKGtsP/a18svAnlMJZudHxDFwK5ufsyoxsIyiAeSY2oi3tEuoDHr5gw42DFKAG3PqO3CEsl8Azzdt3pl5nGA1Ifv2H02eYsFzWb/nfp8PMb3F0krE/EgBcm8TD9Div8BAA
+Tricustom14: Custom engine code is hT3Nu7hP3fiYQADBZnYcglNHp9bfd7EOeniIqP/ji8sGLQu8yhsFO+wxJ+O+R0bU8g/IewXFomyos+viQnWc2xYNYmMqpo3i40O7DaZR7qfp4YqNx26KRvQ/qx0BAA
+2: ============================= ProofGrid (v3) start =============================
+2: ProofGrid usable level: 29
+2: Initial ProofGrid level: 1
+2: ProofGrid is starting event handling
+2: Computed task hash in 0.00ss
+2.0.Hp: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2.0.Ht: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2: ProofGrid usable level: 29
+2.0.Bm: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2: ProofGrid usable level: 29
+2.0.Mpcustom2: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2: ProofGrid usable level: 29
+2.0.Oh: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2: ProofGrid usable level: 29
+2.0.L: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2: ProofGrid usable level: 29
+2.0.N: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2.0.B: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2.0.AM: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+2.0.L: Proofgrid shell started at 1396@pc3(local) jg_32737_pc3_1
+2.0.Ht: Proofgrid shell started at 1312@pc3(local) jg_32737_pc3_1
+2.0.L: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+2.0.Ht: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+2.0.L: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.RESP_OK_COVER" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.HREADY_RESET_SLAVE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.SPURIOUS_WRITE_CHECK:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.RESET_RECOVERY_COVER" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.SPURIOUS_WRITE_COVER" was covered in 1 cycles in 0.00 s.
+2.0.L: Using trace diversification with seed 1 (0.05)
+2.0.L: Using LRU state removal heuristic
+2.0.L: Using states from traces to { (reset) }
+2.0.L: Trace Attempt  3	[0.01 s]
+2.0.Ht: Trace Attempt  1	[0.01 s]
+2.0.Ht: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.checker_i.IDLE_ZERO_WAIT:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.checker_i.IDLE_ZERO_WAIT_COVER" was covered in 1 cycles in 0.00 s.
+2.0.Ht: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.checker_i.BUSY_ZERO_WAIT:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.checker_i.BUSY_ZERO_WAIT_COVER" was covered in 1 cycles in 0.00 s.
+2.0.Ht: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_START:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_WRITE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.BURST_START_CHECK:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_LEGAL:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED:precondition1" was covered in 1 cycles in 0.01 s.
+2.0.Ht: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_COMPLETE:precondition1" was covered in 1 cycles in 0.01 s.
+2: ProofGrid is temporarily paused because there are too many pending traces.
+2: ProofGrid is resuming to work after pausing for 0.16s. The amount of pending traces decreased.
+2.0.Ht: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.SLAVE_REQUESTING_WAIT:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.HWDATA_STABLE_DURING_WAIT:precondition1" was covered in 1 cycles in 0.01 s.
+2: ProofGrid is temporarily paused because there are too many pending traces.
+2: ProofGrid is resuming to work after pausing for 0.02s. The amount of pending traces decreased.
+2.0.Bm: Proofgrid shell started at 1333@pc3(local) jg_32737_pc3_1
+2.0.Mpcustom2: Proofgrid shell started at 1354@pc3(local) jg_32737_pc3_1
+2.0.Oh: Proofgrid shell started at 1376@pc3(local) jg_32737_pc3_1
+2.0.L: A trace with 3 cycles was found. [0.02 s]
+INFO (IPF055): 2.0.L: A counterexample (cex) with 3 cycles was found for the property "ahb3liten.checker_i.SPURIOUS_WRITE_CHECK" in 0.02 s.
+2.0.L: Using states from traces to { ahb3liten.checker_i.SPURIOUS_WRITE_CHECK <2> }
+2.0.L: Trace Attempt  3	[0.02 s]
+2.0.L: A trace with 4 cycles was found. [0.02 s]
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.assumptions_i.READ_STABILITY:precondition1" was covered in 4 cycles in 0.03 s.
+2.0.L: Using states from traces to { ahb3liten.assumptions_i.READ_STABILITY:precondition1 (3) }
+2.0.L: Trace Attempt  3	[0.02 s]
+2.0.L: A trace with 5 cycles was found. [0.03 s]
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.BYTE_WRITE_CHECK:precondition1" was covered in 5 cycles in 0.03 s.
+2.0.L: Using states from traces to { ahb3liten.checker_i.BYTE_WRITE_CHECK:precondition1 (4) }
+2.0.L: Trace Attempt  3	[0.03 s]
+2.0.L: A trace with 6 cycles was found. [0.03 s]
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.assumptions_i.BURST_TYPE_STABLE:precondition1" was covered in 6 cycles in 0.03 s.
+2.0.L: Using states from traces to { ahb3liten.assumptions_i.BURST_TYPE_STABLE:precondition1 (5) }
+2.0.L: Trace Attempt  3	[0.03 s]
+2.0.L: A trace with 7 cycles was found. [0.04 s]
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.DATA_VALID_CHECK:precondition1" was covered in 6 cycles in 0.03 s.
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.DATA_VALID_COVER" was covered in 6 cycles in 0.03 s.
+2.0.L: Using states from traces to { ahb3liten.checker_i.DATA_VALID_CHECK:precondition1 (6) }
+2.0.L: Trace Attempt  3	[0.04 s]
+2: ProofGrid is temporarily paused because there are too many pending traces.
+2: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+2.0.L: A trace with 8 cycles was found. [0.04 s]
+INFO (IPF055): 2.0.L: A counterexample (cex) with 8 cycles was found for the property "ahb3liten.checker_i.DATA_VALID_CHECK" in 0.03 s.
+2.0.L: Using states from traces to { ahb3liten.checker_i.DATA_VALID_CHECK <7> }
+2.0.L: Trace Attempt  3	[0.04 s]
+2.0.L: A trace with 9 cycles was found. [0.04 s]
+INFO (IPF055): 2.0.L: A counterexample (cex) with 9 cycles was found for the property "ahb3liten.checker_i.BUSY_ZERO_WAIT" in 0.03 s.
+2.0.L: Using states from traces to { ahb3liten.checker_i.BUSY_ZERO_WAIT <8> }
+2.0.L: Trace Attempt  3	[0.05 s]
+2.0.L: A trace with 10 cycles was found. [0.05 s]
+INFO (IPF047): 2.0.L: The cover property "ahb3liten.checker_i.BYTE_WRITE_COVER" was covered in 10 cycles in 0.04 s.
+2.0.N: Proofgrid shell started at 1420@pc3(local) jg_32737_pc3_1
+2.0.B: Proofgrid shell started at 1421@pc3(local) jg_32737_pc3_1
+2.0.AM: Proofgrid shell started at 1424@pc3(local) jg_32737_pc3_1
+2.0.Hp: Proofgrid shell started at 1292@pc3(local) jg_32737_pc3_1
+2.0.Ht: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.READ_STABILITY:precondition1" was covered in 1 cycles in 0.03 s.
+2.0.Ht: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.BURST_TYPE_STABLE:precondition1" was covered in 1 cycles in 0.04 s.
+2.0.Ht: Trace Attempt  2	[0.01 s]
+2: ProofGrid is temporarily paused because there are too many pending traces.
+2: ProofGrid is resuming to work after pausing for 0.00s. The amount of pending traces decreased.
+2.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF055): 2.0.Ht: A counterexample (cex) with 2 cycles was found for the property "ahb3liten.checker_i.IDLE_ZERO_WAIT" in 0.04 s.
+INFO (IPF055): 2.0.Ht: A counterexample (cex) with 2 cycles was found for the property "ahb3liten.checker_i.HREADY_RESET_SLAVE" in 0.04 s.
+2: ProofGrid is temporarily paused because there are too many pending traces.
+2: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+2.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF055): 2.0.Ht: A counterexample (cex) with 2 cycles was found for the property "ahb3liten.checker_i.BUSY_ZERO_WAIT" in 0.04 s.
+2.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.checker_i.DATA_VALID_CHECK:precondition1" was covered in 2 cycles in 0.04 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.checker_i.BYTE_WRITE_CHECK:precondition1" was covered in 2 cycles in 0.04 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.checker_i.DATA_VALID_COVER" was covered in 2 cycles in 0.04 s.
+2.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF055): 2.0.Ht: A counterexample (cex) with 2 cycles was found for the property "ahb3liten.checker_i.SPURIOUS_WRITE_CHECK" in 0.05 s.
+2.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_FOLLOW_NONSEQ:precondition1" was covered in 2 cycles in 0.05 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCREMENT_INCR:precondition1" was covered in 2 cycles in 0.05 s.
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.BURST_1KB_BOUNDARY:precondition1" was covered in 2 cycles in 0.05 s.
+2.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCREMENT_WRAP4:precondition1" was covered in 2 cycles in 0.05 s.
+2: ProofGrid is temporarily paused because there are too many pending traces.
+2: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+2.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCREMENT_WRAP8:precondition1" was covered in 2 cycles in 0.05 s.
+2.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCREMENT_WRAP16:precondition1" was covered in 2 cycles in 0.06 s.
+2.0.L: Using states from traces to { ahb3liten.checker_i.BYTE_WRITE_COVER (9) }
+2.0.L: Trace Attempt  3	[0.19 s]
+2.0.L: Using states from traces to { ahb3liten.checker_i.IDLE_ZERO_WAIT <10> }
+2.0.L: Trace Attempt  3	[0.20 s]
+2.0.L: Trace Attempt  4	[0.20 s]
+2.0.L: Using states from traces to { ahb3liten.assumptions_i.SEQ_FOLLOW_NONSEQ:precondition1 (12) }
+2.0.L: Trace Attempt  3	[0.21 s]
+2.0.L: Trace Attempt  4	[0.21 s]
+2.0.L: Using states from traces to { ahb3liten.assumptions_i.HADDR_INCREMENT_INCR:precondition1 (14) }
+2.0.L: Trace Attempt  3	[0.22 s]
+2.0.L: Trace Attempt  4	[0.22 s]
+2: Running jobs with 7 threads on "pc3" with 6 cores (limit exceeded with 0.B).
+2: Running jobs with 7 threads on "pc3" with 6 cores (limit exceeded with 0.B).
+2: Running jobs with 8 threads on "pc3" with 6 cores (limit exceeded with 0.AM).
+2: Running jobs with 8 threads on "pc3" with 6 cores (limit exceeded with 0.AM).
+2: Running jobs with 9 threads on "pc3" with 6 cores (limit exceeded with 0.Hp).
+2: Running jobs with 9 threads on "pc3" with 6 cores (limit exceeded with 0.Hp).
+2.0.Ht: Trace Attempt  3	[0.19 s]
+2.0.Ht: A trace with 3 cycles was found. [0.19 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.checker_i.BYTE_WRITE_COVER" was covered in 3 cycles in 0.06 s.
+2.0.Ht: Trace Attempt  4	[0.19 s]
+2.0.Ht: A trace with 4 cycles was found. [0.20 s]
+INFO (IPF055): 2.0.Ht: A counterexample (cex) with 4 cycles was found for the property "ahb3liten.checker_i.BYTE_WRITE_CHECK" in 0.06 s.
+2.0.Ht: A trace with 4 cycles was found. [0.20 s]
+INFO (IPF047): 2.0.Ht: The cover property "ahb3liten.assumptions_i.BURST_COMPLETE:precondition1" was covered in 4 cycles in 0.06 s.
+2.0.Ht: All properties determined. [0.20 s]
+INFO (IPF144): 2: Initiating shutdown of proof [0.23 s]
+2.0.Hp: Requesting engine job to terminate
+2.0.Ht: Requesting engine job to terminate
+2.0.Bm: Requesting engine job to terminate
+2.0.Mpcustom2: Requesting engine job to terminate
+2.0.Oh: Requesting engine job to terminate
+2.0.L: Requesting engine job to terminate
+2.0.N: Requesting engine job to terminate
+2.0.B: Requesting engine job to terminate
+2.0.AM: Requesting engine job to terminate
+2.0.Ht: Outbound connection closed
+2.0.Ht: Outbound connection closed
+2.0.Mpcustom2: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+2.0.L: Using states from traces to { ahb3liten.assumptions_i.HADDR_INCREMENT_WRAP16:precondition1 (16) }
+2.0.Ht: Exited with Success (@ 0.23 s)
+2: ProofGrid usable level: 0
+2.0.Oh: Interrupted. [0.00 s]
+2.0.B: Interrupted. [0.03 s]
+2.0.Mpcustom2: All properties determined. [0.00 s]
+2.0.L: All properties determined. [0.00 s]
+2.0.AM: Interrupted. [0.02 s]
+2.0.Hp: Interrupted. [0.00 s]
+2.0.AM: Exited with Success (@ 0.23 s)
+2.0.Bm: Interrupted. [0.00 s]
+2.0.L: Exited with Success (@ 0.23 s)
+2.0.B: Exited with Success (@ 0.23 s)
+2.0.Hp: Exited with Success (@ 0.23 s)
+2.0.Oh: Exited with Success (@ 0.23 s)
+2.0.Bm: Exited with Success (@ 0.23 s)
+2.0.Mpcustom2: Exited with Success (@ 0.24 s)
+2.0.N: Interrupted. [0.03 s]
+2.0.N: Exited with Success (@ 0.24 s)
+2: --------------------------------------------------------------
+ProofGrid Summary (utilization 7.56 %)
+--------------------------------------------------------------
+     engines started                               :     9
+     engine jobs started                           :     9
+
+    Time in state (seconds)
+    --------------------------------------------
+               Pending     Running        Dead
+    --------------------------------------------
+    min           0.00        0.00        0.00
+    mean          0.62        0.05        0.00
+    median        0.63        0.00        0.00
+    max           0.74        0.23        0.00
+    sum           5.62        0.46        0.00
+
+    Data read    : 150.86 kiB
+    Data written : 6.49 kiB
+
+INFO (IPF180): 2: ProofGrid utilization: 7.56% slot-seconds: 0.46
+2: ProofGrid usable level: 0
+2: All pending notifications were processed.
+2: ProofGrid was paused 6 times for a total of 0.211 seconds
+INFO (IPF059): 2: Completed proof on task: "<embedded>"
+
+==============================================================
+SUMMARY
+==============================================================
+           Properties Considered              : 41
+                 assertions                   : 8
+                  - proven                    : 2 (25%)
+                  - bounded_proven (user)     : 0 (0%)
+                  - bounded_proven (auto)     : 0 (0%)
+                  - marked_proven             : 0 (0%)
+                  - cex                       : 6 (75%)
+                  - ar_cex                    : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+                 covers                       : 33
+                  - unreachable               : 3 (9.09091%)
+                  - bounded_unreachable (user): 0 (0%)
+                  - covered                   : 30 (90.9091%)
+                  - ar_covered                : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)

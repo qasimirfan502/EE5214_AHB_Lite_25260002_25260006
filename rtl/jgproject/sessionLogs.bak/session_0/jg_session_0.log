@@ -1,0 +1,119 @@
+# ----------------------------------------
+# Jasper Version Info
+# tool      : Jasper 2025.06
+# platform  : Linux 3.10.0-1160.119.1.el7.x86_64
+# version   : 2025.06p002 64 bits
+# build date: 2025.08.26 14:59:20 UTC
+# ----------------------------------------
+# started   : 2026-04-26 05:14:33 PKT
+# hostname  : pc3.(none)
+# pid       : 32571
+# arguments : '-style' 'windows' '-label' 'session_0' '-console' '//127.0.0.1:43190' '-nowindow' '-exitonerror' '-data' 'AAAAmHicY2RgYLCp////PwMYMD6A0Aw2jAyoAMRnQhUJbEChGRhYEZLMQMzDoMuQxJDIUMKQzJAB5HMA+SB2DpAtxZDGUMBQxhDPUMyQChQtBfL04LIMDABZVA+h' '-bridge_url' '10.103.76.67:42057' '-proj' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.initCmds.tcl' 'fpv_setup.tcl' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.postCmds.tcl'
+
+Any disclosure about the Cadence Design Systems software or its use
+model to any third party violates the written Non-Disclosure Agreement
+between Cadence Design Systems, Inc. and the customer.
+
+THIS SOFTWARE CONTAINS CONFIDENTIAL INFORMATION AND TRADE SECRETS OF
+CADENCE DESIGN SYSTEMS, INC. USE, DISCLOSURE, OR REPRODUCTION IS
+PROHIBITED WITHOUT THE PRIOR EXPRESS WRITTEN PERMISSION OF CADENCE
+DESIGN SYSTEMS, INC.
+
+Copyright (C) 2000-2025 Cadence Design Systems, Inc. All Rights
+Reserved.  Unpublished -- rights reserved under the copyright laws of
+the United States.
+
+This product includes software developed by others and redistributed
+according to license agreement. See doc/third_party_readme.txt for
+further details.
+
+RESTRICTED RIGHTS LEGEND
+
+Use, duplication, or disclosure by the Government is subject to
+restrictions as set forth in subparagraph (c) (1) (ii) of the Rights in
+Technical Data and Computer Software clause at DFARS 252.227-7013 or
+subparagraphs (c) (1) and (2) of Commercial Computer Software -- Restricted
+Rights at 48 CFR 52.227-19, as applicable.
+
+
+                          Cadence Design Systems, Inc.
+                          2655 Seely Avenue
+                          San Jose, CA 95134
+                          Phone: 408.943.1234
+
+For technical assistance visit http://support.cadence.com.
+
+Jasper Apps Analysis Session - /home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0
+
+WARNING (WG017): [session]: The system's locale is "ANSI_X3.4-1968", which is not UTF-8. Non-ASCII characters might not be handled correctly.
+INFO (IPL017): The host machine is running out of memory.
+    This message was triggered because the system reached 10% memory.
+    System memory use information:
+    [Process]
+        Memory In Use: 0.283 GiB (1%)
+        Peak Memory Usage: 0.283 GiB (1%)
+    [Host]
+        Available Memory: 1.63 GiB (10%)
+        Total Memory: 15.4 GiB
+        Free Swap: 7.86 GiB (80%)
+        Total Swap: 9.75 GiB
+WARNING (WG017): [jg_console]: The system's locale is "ANSI_X3.4-1968", which is not UTF-8. Non-ASCII characters might not be handled correctly.
+INFO: successfully checked out license "jasper_papp".
+INFO: reading configuration file "/home/Abdullah.Rafique/.config/cadence/jasper.conf".
+% # ============================================================
+% # fpv_setup.tcl
+% # JasperGold FPV Setup Script
+% # EE-5214 — AHB-Lite Verification — Spring 2025
+% # ============================================================
+% 
+% # ------------------------------------------------------------
+% # STEP 1 — Clear previous session
+% # ------------------------------------------------------------
+% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+% 
+% # ------------------------------------------------------------
+% # STEP 2 — Analyze (compile) all files
+% # Order matters:
+% #   1. Package first — defines constants used by everything
+% #   2. DUT files
+% #   3. Checker and assumptions
+% #   4. Bind file last — references all other modules
+% # ------------------------------------------------------------
+% 
+% # Package
+% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+% 
+% # DUT
+% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+% 
+% # Checker and assumptions
+% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[ERROR (VERI-1137)] ahb_checker.sv(146): syntax error near '('
+[ERROR (VERI-1137)] ahb_checker.sv(147): syntax error near '|=>'
+[ERROR (VERI-1137)] ahb_checker.sv(189): syntax error near 'property'
+[ERROR (VERI-2344)] ahb_checker.sv(189): SystemVerilog 2012 keyword 'property' used in incorrect context
+[ERROR (VERI-1128)] ahb_checker.sv(150): 'DEASSERTION_RESET' is not declared
+[ERROR (VERI-1072)] ahb_checker.sv(223): module 'ahb_checker' is ignored due to previous errors
+Summary of errors detected:
+	[ERROR (VERI-1137)] ahb_checker.sv(146): syntax error near '('
+	[ERROR (VERI-1137)] ahb_checker.sv(147): syntax error near '|=>'
+	[ERROR (VERI-1137)] ahb_checker.sv(189): syntax error near 'property'
+	[ERROR (VERI-2344)] ahb_checker.sv(189): SystemVerilog 2012 keyword 'property' used in incorrect context
+	[ERROR (VERI-1128)] ahb_checker.sv(150): 'DEASSERTION_RESET' is not declared
+	[ERROR (VERI-1072)] ahb_checker.sv(223): module 'ahb_checker' is ignored due to previous errors
+ERROR (ENL034): 6 errors detected in the design file(s).
+
+ERROR: problem encountered at line 29 in file fpv_setup.tcl
+
+INFO (IPL005): Received request to exit from the console.
+INFO (IPL018): The peak resident set memory use for this session was 0.328 GB.
+INFO (IPL014): Waiting for the Tcl-thread to exit.
+INFO (IPL015): The Tcl-thread exited with status 1.
+INFO (IPL016): Exiting the analysis session with status 1.
