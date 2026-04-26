@@ -1,0 +1,10 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-sv
+packages/ahb3lite_pkg.sv
+tb_top.sv
+-access
++rwc
+-gui

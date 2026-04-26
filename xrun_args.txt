@@ -1,0 +1,15 @@
+-sv
+
+// Compile the package first
+packages/ahb3lite_pkg.sv	// package compilation
+
+rtl/ahb3lite_sram1x32.sv	// DUT compilation
+
+// other complilations
+scoreboard.sv
+ahb_cov.sv
+tb_top.sv
+
+-coverage all
+-covoverwrite
+-covfile covfile.txt

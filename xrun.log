@@ -1,0 +1,72 @@
+xrun: 23.09-s013: (c) Copyright 1995-2024 Cadence Design Systems, Inc.
+TOOL:	xrun	23.09-s013: Started on Apr 25, 2026 at 15:38:39 PKT
+xrun
+	-sv
+	packages/ahb3lite_pkg.sv
+	tb_top.sv
+	-access +rwc
+	-gui
+Recompiling... reason: file './tb_top.sv' is newer than expected.
+	expected: Sat Apr 25 15:14:14 2026
+	actual:   Sat Apr 25 15:37:37 2026
+file: tb_top.sv
+            ahb_master my_txn = new();
+                              |
+xmvlog: *W,VARIST (tb_top.sv,115|30): Local static variable with initializer requires 'static' keyword.
+	module worklib.tb_top:sv
+		errors: 0, warnings: 1
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		$unit_0x642e194c
+		ahb3lite_pkg
+		tb_top
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.tb_top:sv <0x65bc03b6>
+			streams:   9, words:  7969
+		worklib.\$unit_0x642e194c :compilation_unit <0x408167e2>
+			streams:   7, words:  2166
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                     Instances  Unique
+		Modules:                     1       1
+		Verilog packages:            1       1
+		Registers:                  20      28
+		Scalar wires:                1       -
+		Initial blocks:              3       3
+		Cont. assignments:           1       1
+		Compilation units:           1       1
+		SV Class declarations:       1       1
+		SV Class specializations:    1       1
+		Simulation timescale:      1ps
+	Writing initial simulation snapshot: worklib.tb_top:sv
+xmsim: *W,NOMTDGUI: Multi-Threaded Dumping is disabled for interactive debug mode.
+SVSEED default: 1
+
+-------------------------------------
+Relinquished control to SimVision...
+xcelium> 
+xcelium> source /mnt/cadence_tools/installs/XCELIUM2309/tools/xcelium/files/xmsimrc
+xcelium> database -open waves -into waves.shm -default
+Created default SHM database waves
+xcelium> probe -create -shm tb_top.HADDR tb_top.HBURST tb_top.HCLK tb_top.HMASTLOCK tb_top.HPROT tb_top.HREADYOUT tb_top.HRESETn tb_top.HSIZE tb_top.HTRANS tb_top.HWDATA tb_top.HWRITE
+Created probe 1
+xcelium> run
+stop -create -name Randomize -randomize
+Created stop Randomize
+
+[46000] Driving Burst: HADDR=22e187cb, HBURST=11
+[95000] Driving Burst: HADDR=8152704e, HBURST=11
+[145000] Driving Burst: HADDR=bcce0ce, HBURST=111
+[315000] Driving Burst: HADDR=16309c2c, HBURST=1
+[335000] Driving Burst: HADDR=d256efb8, HBURST=110
+[505000] Driving Burst: HADDR=4f5c44f4, HBURST=1
+[525000] Driving Burst: HADDR=ce371dcb, HBURST=0
+[545000] Driving Burst: HADDR=e97bfc98, HBURST=1
+[565000] Driving Burst: HADDR=8c9c0d75, HBURST=0
+[585000] Driving Burst: HADDR=a62f9eba, HBURST=101
+Simulation complete via $finish(1) at time 775 NS + 0
+./tb_top.sv:127         #100 $finish; // End simulation neatly
+xcelium> 

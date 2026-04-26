@@ -1,0 +1,4 @@
+select_coverage -block -expr -fsm -toggle
+set_covergroup -per_instance
+
+deselect_coverage -all -module tb_top

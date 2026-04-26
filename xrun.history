@@ -1,0 +1,8 @@
+s1(25Apr2026:11:53:31):  xrun packages/ahb3lite_pkg.sv rtl/design.sv rtl/mem.sv tb_top.sv -top tb_top -sv -access +rwc -timescale 1ns/1ps -l xrun.log 
+s2(25Apr2026:13:20:06):  xrun -sv packages/ahb3lite_pkg.sv rtl/design.sv rtl/mem.sv tb_top.sv -compile 
+s3(25Apr2026:13:22:00):  xrun -sv packages/ahb3lite_pkg.sv rtl/design.sv rtl/mem.sv tb_top.sv -compile 
+s4(25Apr2026:13:24:40):  xrun -sv packages/ahb3lite_pkg.sv rtl/design.sv rtl/mem.sv tb_top.sv -compile 
+s5(25Apr2026:15:10:47):  xrun -sv packages/ahb3lite_pkg.sv tb_top.sv 
+s6(25Apr2026:15:11:18):  xrun -sv packages/ahb3lite_pkg.sv tb_top.sv 
+s7(25Apr2026:15:14:28):  xrun -sv packages/ahb3lite_pkg.sv tb_top.sv -access +rwc -gui 
+s8(25Apr2026:15:38:39):  xrun -sv packages/ahb3lite_pkg.sv tb_top.sv -access +rwc -gui 
