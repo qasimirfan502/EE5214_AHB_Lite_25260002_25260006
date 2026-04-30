@@ -9,6 +9,10 @@
 # ------------------------------------------------------------
 clear -all
 
+
+# JG settings for lab
+set_engine_mode {H B}
+set_max_trace_length 100
 # ------------------------------------------------------------
 # STEP 2 — Analyze (compile) all files
 # Order matters:
@@ -49,21 +53,14 @@ elaborate -top ahb3liten \
 # HRESETn : active low reset
 # ------------------------------------------------------------
 clock HCLK
-reset -expression {!HRESETn}
+reset -expression {!HRESETn} 
+
+
+# Setting this because some assumptions require more cycles such as INCR16 and WRAP16
+set_max_trace_length 40
 
 # ------------------------------------------------------------
-# STEP 5 — Run proof
+# STEP 6 — Run proof
 # ------------------------------------------------------------
-prove -task FPV
+prove -all
 
-# ------------------------------------------------------------
-# STEP 7 — Report results
-# ------------------------------------------------------------
-report -type summary  -file results_summary.txt  -force
-report -type detail   -file results_detail.txt   -force
-report -type cover    -file results_cover.txt    -force
-
-puts "============================================"
-puts "FPV run complete"
-puts "Check results_summary.txt for results"
-puts "============================================"

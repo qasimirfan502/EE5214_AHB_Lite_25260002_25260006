@@ -5,10 +5,10 @@
 # version   : 2025.06p002 64 bits
 # build date: 2025.08.26 14:59:20 UTC
 # ----------------------------------------
-# started   : 2026-04-26 05:14:33 PKT
+# started   : 2026-04-30 03:31:24 PKT
 # hostname  : pc3.(none)
-# pid       : 32571
-# arguments : '-style' 'windows' '-label' 'session_0' '-console' '//127.0.0.1:43190' '-nowindow' '-exitonerror' '-data' 'AAAAmHicY2RgYLCp////PwMYMD6A0Aw2jAyoAMRnQhUJbEChGRhYEZLMQMzDoMuQxJDIUMKQzJAB5HMA+SB2DpAtxZDGUMBQxhDPUMyQChQtBfL04LIMDABZVA+h' '-bridge_url' '10.103.76.67:42057' '-proj' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.initCmds.tcl' 'fpv_setup.tcl' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.postCmds.tcl'
+# pid       : 28061
+# arguments : '-style' 'windows' '-label' 'session_0' '-console' '//127.0.0.1:33908' '-data' 'AAAAfHicY2RgYLCp////PwMYMD6A0Aw2jAyoAMRnQhUJbEChGRhYUZVLMaQxFDCUMcQzFDOkMpQwlAJ5ekA6mSEHrAYA9BgL7A==' '-bridge_url' '10.103.76.67:36021' '-proj' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.initCmds.tcl' 'fpv_setup.tcl'
 
 Any disclosure about the Cadence Design Systems software or its use
 model to any third party violates the written Non-Disclosure Agreement
@@ -46,19 +46,8 @@ For technical assistance visit http://support.cadence.com.
 Jasper Apps Analysis Session - /home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0
 
 WARNING (WG017): [session]: The system's locale is "ANSI_X3.4-1968", which is not UTF-8. Non-ASCII characters might not be handled correctly.
-INFO (IPL017): The host machine is running out of memory.
-    This message was triggered because the system reached 10% memory.
-    System memory use information:
-    [Process]
-        Memory In Use: 0.283 GiB (1%)
-        Peak Memory Usage: 0.283 GiB (1%)
-    [Host]
-        Available Memory: 1.63 GiB (10%)
-        Total Memory: 15.4 GiB
-        Free Swap: 7.86 GiB (80%)
-        Total Swap: 9.75 GiB
 WARNING (WG017): [jg_console]: The system's locale is "ANSI_X3.4-1968", which is not UTF-8. Non-ASCII characters might not be handled correctly.
-INFO: successfully checked out license "jasper_papp".
+INFO: successfully checked out licenses "jasper_pint" and "jasper_papp".
 INFO: reading configuration file "/home/Abdullah.Rafique/.config/cadence/jasper.conf".
 % # ============================================================
 % # fpv_setup.tcl
@@ -72,6 +61,12 @@ INFO: reading configuration file "/home/Abdullah.Rafique/.config/cadence/jasper.
 % clear -all
 INFO (IPF121): Cleared environment completely for new design analysis.
 % 
+% 
+% # JG settings for lab
+% set_max_trace_length 40
+% set_engine_mode {Hp Ht J L B N} 
+% set_prove_per_property_time_limit 5s 
+% set_prove_per_property_time_limit_factor 2
 % # ------------------------------------------------------------
 % # STEP 2 — Analyze (compile) all files
 % # Order matters:
@@ -95,25 +90,2377 @@ INFO (IPF121): Cleared environment completely for new design analysis.
 % # Checker and assumptions
 % analyze -sv12 ahb_checker.sv
 [-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
-[ERROR (VERI-1137)] ahb_checker.sv(146): syntax error near '('
-[ERROR (VERI-1137)] ahb_checker.sv(147): syntax error near '|=>'
-[ERROR (VERI-1137)] ahb_checker.sv(189): syntax error near 'property'
-[ERROR (VERI-2344)] ahb_checker.sv(189): SystemVerilog 2012 keyword 'property' used in incorrect context
-[ERROR (VERI-1128)] ahb_checker.sv(150): 'DEASSERTION_RESET' is not declared
-[ERROR (VERI-1072)] ahb_checker.sv(223): module 'ahb_checker' is ignored due to previous errors
+[WARN (VERI-1049)] ahb_checker.sv(346): /* is inside a comment
+% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+% 
+% # Bind file — must be last
+% analyze -sv12 bind_fpv.sv
+[-- (VERI-1482)] Analyzing Verilog file 'bind_fpv.sv'
+% 
+% # ------------------------------------------------------------
+% # STEP 3 — Elaborate
+% # Top module is the DUT
+% # Parameters match design.sv defaults
+% # ------------------------------------------------------------
+% elaborate -top ahb3liten \
+    -parameter MEM_SIZE 32 \
+    -parameter MEM_DEPTH 256 \
+    -parameter HADDR_SIZE 16 \
+    -parameter HDATA_SIZE 32
+INFO (ISW003): Top module name is "ahb3liten".
+[INFO (HIER-8002)] ../rtl/design.sv(297): Disabling old hierarchical reference handler
+[INFO (VERI-1018)] ../rtl/mem.sv(1): compiling module 'mem:(ABITS=8)'
+[INFO (VERI-2571)] ../rtl/mem.sv(25): extracting RAM for identifier 'mem_array'
+[WARN (VERI-9033)] ../rtl/mem.sv(25): array mem_array (size 8192) automatically BLACK-BOXED. Use the "elaborate -bbox_a" command to prevent automatic black-boxing.
+[INFO (VERI-1018)] ahb_checker.sv(6): compiling module 'ahb_checker'
+[WARN (VERI-1796)] ahb_checker.sv(123): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ahb_assumptions.sv(11): compiling module 'ahb_assumptions'
+[WARN (VERI-1796)] ahb_assumptions.sv(45): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1209)] ahb_assumptions.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(141): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(142): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(151): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(152): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1796)] ahb_assumptions.sv(188): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1796)] ahb_assumptions.sv(468): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ../rtl/design.sv(1): compiling module 'ahb3liten'
+[WARN (VERI-1209)] ../rtl/design.sv(113): expression size 16 truncated to fit in target size 7
+[WARN (VERI-1959)] ../rtl/design.sv(155): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(156): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(157): left shift count >= width of value
+[WARN (VERI-1209)] ../rtl/design.sv(126): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(129): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(130): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(133): expression size 32 truncated to fit in target size 16
+INFO (INL208): Elaboration synthesis summary:
+  Number of synthesized netlists          5 (1 packages)
+  Single run mode                         On
+  Pipeline                                On (4 pipelined netlists)
+  Late hierarchical reference connection  On
+  Number of analyzed Verilog modules      6 (5 synthesized)
+  Number of analyzed VHDL entities        0 (0 synthesized)
+  Advanced Incremental run mode           Off
+WARNING (WNL018): ahb_assumptions.sv(269): multiplication operator mult_32u_32u (size 64) automatically black boxed.
+    Use the "elaborate -bbox_mul" command to prevent automatic black-boxing.
+INFO (INL003): Clearing all state information (assumes, stopats, and so forth).
+ahb3liten
+[<embedded>] % 
+[<embedded>] % # ------------------------------------------------------------
+[<embedded>] % # STEP 4 — Clock and reset
+[<embedded>] % # HCLK  : rising edge triggered
+[<embedded>] % # HRESETn : active low reset
+[<embedded>] % # ------------------------------------------------------------
+[<embedded>] % clock HCLK
+[<embedded>] % reset -expression {!HRESETn} 
+INFO (IPM031): Clearing proof results of all properties.
+INFO (IRS006): Current reset condition is "HRESETn".
+[<embedded>] % 
+[<embedded>] % 
+[<embedded>] % # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
+[<embedded>] % set_max_trace_length 40
+[<embedded>] % 
+[<embedded>] % # ------------------------------------------------------------
+[<embedded>] % # STEP 6 — Run proof
+[<embedded>] % # ------------------------------------------------------------
+[<embedded>] % prove -all
+Bcustom1: Custom engine code is hT3Nm7hPr1Vp3Di1Ra2USNIGL4JypRnLKLAdF6JAyuavO2JfGCiY9OZJhcAcOUnLx5xwNdhILGrAWX9s+z2WDkKwNR7tAfClBEjRFVQeq6DU54boFgEA
+Ncustom2: Custom engine code is hT3Ng7hPPfiYQOTDZ3qhYOwGAM51eA+J/FjkM5shLioAsqhgLR4Ft+O1BuKG6ilQ83B9tLXSl+CwjiTMAQA
+INFO (IPF036): Starting proof on task: "<embedded>", 67 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis: phase 2 of 4.
+INFO (IRS031): Running reset analysis: phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (ISIM006): Running simulation: {mode = single, probe = all}.
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (ISIM008): Simulation is processing trace data. Total number of nets in analysis 2647.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 158 of 269 design flops, 0 of 0 design latches, 238 of 327 internal elements.
+INFO (IRS039): Reset analysis complete.
+INFO (IPF031): Settings used for proof thread 0:
+    orchestration                      = on
+    time_limit                         = 86400s
+    per_property_time_limit            = 5s * 2 ^ scan
+    max_trace_length                   = 40
+    engine_mode                        = Hp Ht J L B N 
+    proofgrid_per_engine_max_jobs      = 1
+    max engine jobs                    = auto
+    proofgrid_mode                     = local
+    proofgrid_restarts                 = 10
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.ALWAYS_OK" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.DEASSERTION_RESET" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.DEASSERTION_RESET:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.assumptions_i.HTRANS_IDLE_DURING_RESET:precondition1" was proven unreachable in 0.00 s.
+0: Found proofs for 9 properties in preprocessing
+0: Using multistage preprocessing
+0: Starting reduce
+AMcustom3: Custom engine code is hT3N1rhP11/52HrFRS21ROp2LOjVTgPvT8L8BGXHgLhaIuqtT4nARFjUqrBL+7pLmaTOzBepZW/Jm8SSrHDybSQtoNiO3y43wk+dEoWlsZizu97Fih6O6lPVG/LpWP5SsUPwlGagLNa1FKEFvwVXyX7//8prySbvSxIHXr5er+z4RAEA
+Ncustom4: Custom engine code is hT3OXrhPByJp3TrFSTLhUmMH4KVtJgmTCnNDF46yMXOKY48m4LS5nE7yBzFjA7kDuwO/GhGUpEPiky3p3wmPn3dJZHxFMsafSoObRzSC+tn7sEY0WbTdZ/FV4hL3MYH/b1CIUvXSWR4wqEoVLsmMOD4xIPT4lI1LO6ZCO7PnnWQuLwetnvKlrXx6wCW/A+x+enqslg1YPobi4wEF/EvbzOvcTYdJvl2s4H2yZg2b2ofAVN5WvhWk1HoBAA
+ADcustom5: Custom engine code is hT3Nv7hPv1752HrFRa2kROx2f/ECJeZB2AZsLdlO8VwmIuqtT4nIDFXclhg+O+o+DMmQCekbheGk0kK28laA9gaOFDXsQp29J3X615HY1IPHJWd6FUFvCHjO+p1k652b5JJvZlShNpGlGSXAiQe/mEAj6tEBAA
+Tricustom6: Custom engine code is hT3Nu7hPt1752DvFRa0kNDiyIV97VyejwM9C/jCLJjdPvusZONHY42VYUy0Q1ZotnhcVtNc56tJ5wbxv6V2+XpdsaSlHck5vfnbYjdwj1OECy9U+7oSQ0SZE3g5ayD+Phuh4odCJTjeKa2k4elM9ldQfkAEA
+Gcustom7: Custom engine code is hT3NibhPDfeYQADBZnYcglOvK9Pfd7EOeniIqP8jNsyIqInncipMGcUXqAadachREE9F2PwhBUZUNw5kHnd4JdXkamORRgEA
+C2custom8: Custom engine code is hT3NirhPjfWYQADBZnYcglOvK9Pfd7EOeniIqP8jNsyIqInncgkrYMMXCYbdK0dUjZIF9d4cJ0rHoBDjwVLBKuG86XYVV00BAA
+AGcustom9: Custom engine code is hT3NirhP/fmYQADBZnYcglOvK9Pfd7EOeniIqP8jNsyIqInnckcwYMMXCYbdK0dUjZIF9d4cJ0rHoBDjwVLBKuHEZnZByh0BAA
+Bcustom10: Custom engine code is hT3NjrhPDfiYQADBZnYcglOvK9PfWxFtenjIyBqfrgr7if/jL/yPOuK1BAflEcW0DxNH2eDIoezN2gxlQFg81RZtiWXh7aiTAidvAQA
+Ncustom11: Custom engine code is hT3NR7hPByFp3TrFSTLhUmMH4KWtJglTyV/c51BHEeZWamnJv767nE6PCak26bd3gf3XGN3rIRheufhDieCJQVISo+gNYUKhiUedBKGtsP/a18svAnlMJZudHxDFwK5ufsyoxsIyiAeSY2oi3tEuoDHr5gw42DFKAG3PqO3CEsl8Azzdt3pl5nGA1Ifv2H02eYsFzWb/nfp8PMb3F0krE/EgBcm8TD9Div8BAA
+Tricustom12: Custom engine code is hT3Nu7hP3fiYQADBZnYcglNHp9bfd7EOeniIqP/ji8sGLQu8yhsFO+wxJ+O+R0bU8g/IewXFomyos+viQnWc2xYNYmMqpo3i40O7DaZR7qfp4YqNx26KRvQ/qx0BAA
+0: Finished reduce in 0.001s
+0.0.PRE: Performing Proof Simplification...
+0.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE" was proven in 0.00 s.
+0.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" in 0.00 s.
+0.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" in 0.00 s.
+0.0.Hp: Proof Simplification Iteration 2	[0.00 s]
+0.0.Hp: Proof Simplification Iteration 3	[0.00 s]
+0.0.Hp: Proof Simplification Iteration 4	[0.00 s]
+0.0.PRE: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.PRE: The cover property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.Hp: Proof Simplification Iteration 5	[0.01 s]
+0.0.Hp: Proof Simplification Iteration 6	[0.02 s]
+INFO (IPF055): 0.0.PRE: A counterexample (cex) with 11 cycles was found for the property ":noConflict" in 0.00 s.
+    Use check_assumptions -show to show this property in the property table.
+    Use check_assumptions -conflict to generate a cex trace.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property ":live" was proven unreachable in 0.00 s.
+    Use check_assumptions -show -live to show this property in the property table.
+0.0.PRE: Proof Simplification completed in 0.02 s
+0.0.Hp: Identified and disabled 13 duplicated targets.
+0: About to start ProofGrid in its own thread with a limit of 10000 pending notifications and a limit of 10 traces.
+0: ============================= ProofGrid (v3) start =============================
+0: ProofGrid usable level: 4294967295
+0: Initial ProofGrid level: 1
+0: ProofGrid is starting event handling
+0: Computed task hash in 0.00ss
+0.0.Hp: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Hp: Proofgrid shell started at 28131@pc3(local) jg_28061_pc3_1
+0.0.Ht: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Hp: Trace Attempt  1	[0.02 s]
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_COMPLETE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.READ_STABILITY:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HSIZE_LEGAL_FOR_BUS:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NO_BUSY_AFTER_SINGLE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HWRITE_CONSTANT_IN_BURST:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HPROT_KNOWN_ON_TRANSFER:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE:precondition1" was covered in 1 cycles in 0.02 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_START:precondition1" was covered in 1 cycles in 0.02 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_WRITE:precondition1" was covered in 1 cycles in 0.02 s.
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF055): 0.0.Hp: A counterexample (cex) with 1 cycles was found for the property "ahb3liten.checker_i.HREADY_EQUALS_HREADYOUT" in 0.02 s.
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.CAN_FINISH_WHAT_STARTED:precondition1" was covered in 1 cycles in 0.02 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.BURST_START_CHECK:precondition1" was covered in 1 cycles in 0.02 s.
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.SAFE_START_16:precondition1" was covered in 1 cycles in 0.02 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_HWORD:precondition1" was covered in 1 cycles in 0.03 s.
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_WORD:precondition1" was covered in 1 cycles in 0.03 s.
+0.0.Ht: Proofgrid shell started at 28151@pc3(local) jg_28061_pc3_1
+0.0.J: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.L: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.B: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Ht: Trace Attempt  1	[0.00 s]
+0.0.Ht: Trace Attempt  2	[0.00 s]
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_ANY:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HBURST_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HWDATA_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.BUSY_PERMITTED_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HBURST_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SLAVE_REQUESTING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HWRITE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_STABLE_NONSEQ_SEQ:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSEL_STABLE_DURING_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HPROT_STABLE_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_IDLE_TO_NONSEQ:precondition1" was covered in 2 cycles in 0.01 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_NONSEQ_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.L: Proofgrid shell started at 28175@pc3(local) jg_28061_pc3_1
+0.0.B: Proofgrid shell started at 28177@pc3(local) jg_28061_pc3_1
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_TO_SEQ:precondition1" was covered in 2 cycles in 0.02 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_STABLE_DURING_FIXED_BURST_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_FOLLOWS_NONSEQ_OR_SEQ:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR4_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.INCR_NO_1KB_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR8_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR16_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP4_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.00s. The amount of pending traces decreased.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP8_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP16_BOUNDARY:precondition1" was covered in 2 cycles in 0.03 s.
+0.0.Ht: Trace Attempt  3	[0.01 s]
+0.0.Ht: Trace Attempt  4	[0.01 s]
+0.0.Ht: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR4:precondition1" was covered in 4 cycles in 0.03 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_NO_BUSY_LAST:precondition1" was covered in 4 cycles in 0.03 s.
+0.0.Ht: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP4:precondition1" was covered in 4 cycles in 0.04 s.
+0.0.Ht: Trace Attempt  5	[0.01 s]
+0.0.J: Proofgrid shell started at 28172@pc3(local) jg_28061_pc3_1
+0.0.N: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.N: Proofgrid shell started at 28176@pc3(local) jg_28061_pc3_1
+0.0.Ht: Trace Attempt  8	[0.02 s]
+0.0.Ht: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR8:precondition1" was covered in 8 cycles in 0.04 s.
+0.0.Ht: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP8:precondition1" was covered in 8 cycles in 0.04 s.
+0.0.Ht: Trace Attempt  9	[0.02 s]
+0.0.Ht: Trace Attempt 10	[0.02 s]
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE" was proven in 0.04 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE" was proven in 0.04 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE" was proven in 0.04 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR16:precondition1" was proven unreachable in 0.04 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP16:precondition1" was proven unreachable in 0.04 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.BURST_16_TERMINATION_CLEAN:precondition1" was proven unreachable in 0.04 s.
+0.0.Ht: Overconstrained at 11 [0.02 s]
+INFO (IPF144): 0: Initiating shutdown of proof [0.07 s]
+0.0.Hp: Requesting engine job to terminate
+0.0.Ht: Requesting engine job to terminate
+0.0.J: Requesting engine job to terminate
+0.0.L: Requesting engine job to terminate
+0.0.N: Requesting engine job to terminate
+0.0.B: Requesting engine job to terminate
+0.0.Ht: Outbound connection closed
+0.0.Ht: Outbound connection closed
+0.0.Ht: Exited with Success (@ 0.07 s)
+0: ProofGrid usable level: 0
+0.0.L: Interrupted. [0.00 s]
+0.0.B: Interrupted. [0.03 s]
+0.0.Hp: Overconstrained at 11 [0.00 s]
+0.0.L: Exited with Success (@ 0.07 s)
+0.0.N: Interrupted. [0.00 s]
+0.0.B: Exited with Success (@ 0.07 s)
+0.0.Hp: Exited with Success (@ 0.07 s)
+0.0.N: Exited with Success (@ 0.08 s)
+0.0.J: Interrupted. [0.00 s]
+0.0.J: Exited with Success (@ 0.08 s)
+0: --------------------------------------------------------------
+ProofGrid Summary (utilization 26.22 %)
+--------------------------------------------------------------
+     engines started                               :     6
+     engine jobs started                           :     6
+
+    Time in state (seconds)
+    --------------------------------------------
+               Pending     Running        Dead
+    --------------------------------------------
+    min           0.00        0.00        0.00
+    mean          0.05        0.02        0.00
+    median        0.05        0.00        0.00
+    max           0.07        0.07        0.00
+    sum           0.31        0.11        0.00
+
+    Data read    : 48.65 kiB
+    Data written : 5.69 kiB
+
+INFO (IPF180): 0: ProofGrid utilization: 26.22% slot-seconds: 0.11
+0: ProofGrid usable level: 0
+0: All pending notifications were processed.
+0: ProofGrid was paused 5 times for a total of 0.042 seconds
+WARNING (WAS006): The task is inconsistent at cycle 11.
+INFO (IPF059): 0: Completed proof on task: "<embedded>"
+
+==============================================================
+SUMMARY
+==============================================================
+           Properties Considered              : 68
+                 assertions                   : 11
+                  - proven                    : 9 (81.8182%)
+                  - bounded_proven (user)     : 0 (0%)
+                  - bounded_proven (auto)     : 0 (0%)
+                  - marked_proven             : 0 (0%)
+                  - cex                       : 2 (18.1818%)
+                  - ar_cex                    : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+                 covers                       : 57
+                  - unreachable               : 7 (12.2807%)
+                  - bounded_unreachable (user): 0 (0%)
+                  - covered                   : 50 (87.7193%)
+                  - ar_covered                : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+overconstrained
+[<embedded>] % 
+[<embedded>] % include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% 
+%% # JG settings for lab
+%% set_max_trace_length 40
+%% set_engine_mode {Hp Ht J L B N k_induction} 
+ERROR at line 15 in file fpv_setup.tcl, more info in Tcl-variable errorInfo
+ERROR (EPF051): Unknown engine(s): k_induction
+
+
+% include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% 
+%% # JG settings for lab
+%% set_max_trace_length 60
+%% set_engine_mode {Hp Ht J L B N Tri} 
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[WARN (VERI-1049)] ahb_checker.sv(346): /* is inside a comment
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+%% 
+%% # Bind file — must be last
+%% analyze -sv12 bind_fpv.sv
+[-- (VERI-1482)] Analyzing Verilog file 'bind_fpv.sv'
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 3 — Elaborate
+%% # Top module is the DUT
+%% # Parameters match design.sv defaults
+%% # ------------------------------------------------------------
+%% elaborate -top ahb3liten \
+    -parameter MEM_SIZE 32 \
+    -parameter MEM_DEPTH 256 \
+    -parameter HADDR_SIZE 16 \
+    -parameter HDATA_SIZE 32
+INFO (ISW003): Top module name is "ahb3liten".
+[INFO (HIER-8002)] ../rtl/design.sv(297): Disabling old hierarchical reference handler
+[INFO (VERI-1018)] ../rtl/mem.sv(1): compiling module 'mem:(ABITS=8)'
+[INFO (VERI-2571)] ../rtl/mem.sv(25): extracting RAM for identifier 'mem_array'
+[WARN (VERI-9033)] ../rtl/mem.sv(25): array mem_array (size 8192) automatically BLACK-BOXED. Use the "elaborate -bbox_a" command to prevent automatic black-boxing.
+[INFO (VERI-1018)] ahb_checker.sv(6): compiling module 'ahb_checker'
+[WARN (VERI-1796)] ahb_checker.sv(123): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ahb_assumptions.sv(11): compiling module 'ahb_assumptions'
+[WARN (VERI-1796)] ahb_assumptions.sv(45): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1209)] ahb_assumptions.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(141): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(142): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(151): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(152): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1796)] ahb_assumptions.sv(188): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1796)] ahb_assumptions.sv(468): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ../rtl/design.sv(1): compiling module 'ahb3liten'
+[WARN (VERI-1209)] ../rtl/design.sv(113): expression size 16 truncated to fit in target size 7
+[WARN (VERI-1959)] ../rtl/design.sv(155): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(156): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(157): left shift count >= width of value
+[WARN (VERI-1209)] ../rtl/design.sv(126): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(129): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(130): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(133): expression size 32 truncated to fit in target size 16
+INFO (INL208): Elaboration synthesis summary:
+  Number of synthesized netlists          5 (1 packages)
+  Single run mode                         On
+  Pipeline                                On (4 pipelined netlists)
+  Late hierarchical reference connection  On
+  Number of analyzed Verilog modules      6 (5 synthesized)
+  Number of analyzed VHDL entities        0 (0 synthesized)
+  Advanced Incremental run mode           Off
+WARNING (WNL018): ahb_assumptions.sv(269): multiplication operator mult_32u_32u (size 64) automatically black boxed.
+    Use the "elaborate -bbox_mul" command to prevent automatic black-boxing.
+INFO (INL003): Clearing all state information (assumes, stopats, and so forth).
+ahb3liten
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 4 — Clock and reset
+%% # HCLK  : rising edge triggered
+%% # HRESETn : active low reset
+%% # ------------------------------------------------------------
+%% clock HCLK
+%% reset -expression {!HRESETn} 
+INFO (IPM031): Clearing proof results of all properties.
+INFO (IRS006): Current reset condition is "HRESETn".
+%% 
+%% 
+%% # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
+%% set_max_trace_length 40
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 6 — Run proof
+%% # ------------------------------------------------------------
+%% prove -all
+INFO (IPF036): Starting proof on task: "<embedded>", 67 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis: phase 2 of 4.
+INFO (IRS031): Running reset analysis: phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (ISIM006): Running simulation: {mode = single, probe = all}.
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (ISIM008): Simulation is processing trace data. Total number of nets in analysis 2647.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 158 of 269 design flops, 0 of 0 design latches, 238 of 327 internal elements.
+INFO (IRS039): Reset analysis complete.
+INFO (IPF031): Settings used for proof thread 0:
+    orchestration                      = on
+    time_limit                         = 86400s
+    per_property_time_limit            = 5s * 2 ^ scan
+    max_trace_length                   = 40
+    engine_mode                        = Hp Ht J L B N Tri 
+    proofgrid_per_engine_max_jobs      = 1
+    max engine jobs                    = auto
+    proofgrid_mode                     = local
+    proofgrid_restarts                 = 10
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.ALWAYS_OK" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.DEASSERTION_RESET" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.DEASSERTION_RESET:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.assumptions_i.HTRANS_IDLE_DURING_RESET:precondition1" was proven unreachable in 0.00 s.
+0: Found proofs for 9 properties in preprocessing
+0: Using multistage preprocessing
+0: Starting reduce
+0: Finished reduce in 0.001s
+0.0.PRE: Performing Proof Simplification...
+0.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE" was proven in 0.00 s.
+0.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" in 0.00 s.
+0.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" in 0.00 s.
+0.0.Hp: Proof Simplification Iteration 2	[0.00 s]
+0.0.Hp: Proof Simplification Iteration 3	[0.00 s]
+0.0.Hp: Proof Simplification Iteration 4	[0.00 s]
+0.0.PRE: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.PRE: The cover property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.Hp: Proof Simplification Iteration 5	[0.01 s]
+0.0.Hp: Proof Simplification Iteration 6	[0.01 s]
+INFO (IPF055): 0.0.PRE: A counterexample (cex) with 11 cycles was found for the property ":noConflict" in 0.00 s.
+    Use check_assumptions -show to show this property in the property table.
+    Use check_assumptions -conflict to generate a cex trace.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property ":live" was proven unreachable in 0.00 s.
+    Use check_assumptions -show -live to show this property in the property table.
+0.0.PRE: Proof Simplification completed in 0.01 s
+0.0.Hp: Identified and disabled 13 duplicated targets.
+0: About to start ProofGrid in its own thread with a limit of 10000 pending notifications and a limit of 10 traces.
+0: ============================= ProofGrid (v3) start =============================
+0: ProofGrid usable level: 4294967295
+0: Initial ProofGrid level: 1
+0: ProofGrid is starting event handling
+0: Computed task hash in 0.00ss
+0.0.Hp: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Hp: Proofgrid shell started at 28417@pc3(local) jg_28061_pc3_2
+0.0.Ht: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Hp: Trace Attempt  1	[0.01 s]
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_COMPLETE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.READ_STABILITY:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HSIZE_LEGAL_FOR_BUS:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NO_BUSY_AFTER_SINGLE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HWRITE_CONSTANT_IN_BURST:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HPROT_KNOWN_ON_TRANSFER:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_START:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_WRITE:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF055): 0.0.Hp: A counterexample (cex) with 1 cycles was found for the property "ahb3liten.checker_i.HREADY_EQUALS_HREADYOUT" in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.CAN_FINISH_WHAT_STARTED:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.BURST_START_CHECK:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.SAFE_START_16:precondition1" was covered in 1 cycles in 0.01 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_HWORD:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_WORD:precondition1" was covered in 1 cycles in 0.02 s.
+0.0.Ht: Proofgrid shell started at 28437@pc3(local) jg_28061_pc3_2
+0.0.Ht: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Ht: Trace Attempt  1	[0.00 s]
+0.0.Ht: Trace Attempt  2	[0.00 s]
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_ANY:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HBURST_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HWDATA_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.BUSY_PERMITTED_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HBURST_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SLAVE_REQUESTING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HWRITE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_STABLE_NONSEQ_SEQ:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSEL_STABLE_DURING_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HPROT_STABLE_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_IDLE_TO_NONSEQ:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_NONSEQ_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_TO_SEQ:precondition1" was covered in 2 cycles in 0.00 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_STABLE_DURING_FIXED_BURST_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_FOLLOWS_NONSEQ_OR_SEQ:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR4_INCREMENT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.INCR_NO_1KB_BOUNDARY:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR8_INCREMENT:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR16_INCREMENT:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP4_BOUNDARY:precondition1" was covered in 2 cycles in 0.01 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP8_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP16_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: Trace Attempt  3	[0.01 s]
+0.0.Ht: Trace Attempt  4	[0.01 s]
+0.0.Ht: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR4:precondition1" was covered in 4 cycles in 0.02 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_NO_BUSY_LAST:precondition1" was covered in 4 cycles in 0.02 s.
+0.0.Ht: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP4:precondition1" was covered in 4 cycles in 0.02 s.
+0.0.Ht: Trace Attempt  5	[0.01 s]
+0.0.Ht: Trace Attempt  8	[0.01 s]
+0.0.Ht: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR8:precondition1" was covered in 8 cycles in 0.03 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Ht: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP8:precondition1" was covered in 8 cycles in 0.03 s.
+0.0.Ht: Job connection closed, grace period 600s
+0.0.J: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.N: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.B: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Tri: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: Outbound connection closed
+0.0.Ht: Trace Attempt  9	[0.02 s]
+0.0.Ht: Trace Attempt 10	[0.02 s]
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR16:precondition1" was proven unreachable in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP16:precondition1" was proven unreachable in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.BURST_16_TERMINATION_CLEAN:precondition1" was proven unreachable in 0.03 s.
+0.0.Ht: Overconstrained at 11 [0.02 s]
+INFO (IPF144): 0: Initiating shutdown of proof [0.06 s]
+0.0.Ht: Requesting engine job to terminate
+0.0.J: Requesting engine job to terminate
+0.0.L: Requesting engine job to terminate
+0.0.N: Requesting engine job to terminate
+0.0.B: Requesting engine job to terminate
+0.0.Tri: Requesting engine job to terminate
+0.0.Hp: Requesting engine job to terminate
+0.0.L: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.B: Proofgrid shell started at 28462@pc3(local) jg_28061_pc3_2
+0.0.B: Preventing job from starting because proof is shutting down.
+0.0.Hp: Trace Attempt  2	[0.06 s]
+0.0.Ht: Outbound connection closed
+0.0.Ht: Outbound connection closed
+0.0.Ht: Exited with Success (@ 0.06 s)
+0: ProofGrid usable level: 0
+0.0.B: Interrupted. [0.00 s]
+0.0.Hp: Overconstrained at 11 [0.00 s]
+0.0.N: Proofgrid shell started at 28460@pc3(local) jg_28061_pc3_2
+0.0.B: Exited with Success (@ 0.07 s)
+0.0.Hp: Exited with Success (@ 0.07 s)
+0.0.N: Preventing job from starting because proof is shutting down.
+0.0.N: Interrupted. [0.00 s]
+0.0.N: Exited with Success (@ 0.07 s)
+0.0.Tri: Proofgrid shell started at 28463@pc3(local) jg_28061_pc3_2
+0.0.Tri: Preventing job from starting because proof is shutting down.
+0.0.Tri: Interrupted. [0.00 s]
+0.0.L: Proofgrid shell started at 28458@pc3(local) jg_28061_pc3_2
+0.0.L: Preventing job from starting because proof is shutting down.
+0.0.L: Interrupted. [0.00 s]
+0.0.Tri: Exited with Success (@ 0.07 s)
+0.0.L: Exited with Success (@ 0.07 s)
+0.0.J: Proofgrid shell started at 28457@pc3(local) jg_28061_pc3_2
+0.0.J: Preventing job from starting because proof is shutting down.
+0.0.J: Interrupted. [0.00 s]
+0.0.J: Exited with Success (@ 0.08 s)
+0: --------------------------------------------------------------
+ProofGrid Summary (utilization 20.60 %)
+--------------------------------------------------------------
+     engines started                               :     7
+     engine jobs started                           :     7
+
+    Time in state (seconds)
+    --------------------------------------------
+               Pending     Running        Dead
+    --------------------------------------------
+    min           0.00        0.00        0.00
+    mean          0.05        0.01        0.00
+    median        0.06        0.00        0.00
+    max           0.06        0.06        0.00
+    sum           0.38        0.10        0.00
+
+    Data read    : 48.98 kiB
+    Data written : 2.78 kiB
+
+INFO (IPF180): 0: ProofGrid utilization: 20.60% slot-seconds: 0.10
+0: ProofGrid usable level: 0
+0: All pending notifications were processed.
+0: ProofGrid was paused 4 times for a total of 0.038 seconds
+WARNING (WAS006): The task is inconsistent at cycle 11.
+INFO (IPF059): 0: Completed proof on task: "<embedded>"
+
+==============================================================
+SUMMARY
+==============================================================
+           Properties Considered              : 68
+                 assertions                   : 11
+                  - proven                    : 9 (81.8182%)
+                  - bounded_proven (user)     : 0 (0%)
+                  - bounded_proven (auto)     : 0 (0%)
+                  - marked_proven             : 0 (0%)
+                  - cex                       : 2 (18.1818%)
+                  - ar_cex                    : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+                 covers                       : 57
+                  - unreachable               : 7 (12.2807%)
+                  - bounded_unreachable (user): 0 (0%)
+                  - covered                   : 50 (87.7193%)
+                  - ar_covered                : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+overconstrained
+%% 
+overconstrained
+[<embedded>] % include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% 
+%% # JG settings for lab
+%% set_max_trace_length 60
+%% set_engine_mode {Hp Ht J L B N Tri} 
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[WARN (VERI-1049)] ahb_checker.sv(346): /* is inside a comment
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+[ERROR (VERI-1137)] ahb_assumptions.sv(349): syntax error near ';'
+[ERROR (VERI-1072)] ahb_assumptions.sv(490): module 'ahb_assumptions' is ignored due to previous errors
 Summary of errors detected:
-	[ERROR (VERI-1137)] ahb_checker.sv(146): syntax error near '('
-	[ERROR (VERI-1137)] ahb_checker.sv(147): syntax error near '|=>'
-	[ERROR (VERI-1137)] ahb_checker.sv(189): syntax error near 'property'
-	[ERROR (VERI-2344)] ahb_checker.sv(189): SystemVerilog 2012 keyword 'property' used in incorrect context
-	[ERROR (VERI-1128)] ahb_checker.sv(150): 'DEASSERTION_RESET' is not declared
-	[ERROR (VERI-1072)] ahb_checker.sv(223): module 'ahb_checker' is ignored due to previous errors
-ERROR (ENL034): 6 errors detected in the design file(s).
+	[ERROR (VERI-1137)] ahb_assumptions.sv(349): syntax error near ';'
+	[ERROR (VERI-1072)] ahb_assumptions.sv(490): module 'ahb_assumptions' is ignored due to previous errors
+ERROR at line 34 in file fpv_setup.tcl, more info in Tcl-variable errorInfo
+ERROR (ENL034): 2 errors detected in the design file(s).
 
-ERROR: problem encountered at line 29 in file fpv_setup.tcl
 
+% include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% 
+%% # JG settings for lab
+%% set_max_trace_length 60
+%% set_engine_mode {Hp Ht J L B N Tri} 
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[WARN (VERI-1049)] ahb_checker.sv(346): /* is inside a comment
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+%% 
+%% # Bind file — must be last
+%% analyze -sv12 bind_fpv.sv
+[-- (VERI-1482)] Analyzing Verilog file 'bind_fpv.sv'
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 3 — Elaborate
+%% # Top module is the DUT
+%% # Parameters match design.sv defaults
+%% # ------------------------------------------------------------
+%% elaborate -top ahb3liten \
+    -parameter MEM_SIZE 32 \
+    -parameter MEM_DEPTH 256 \
+    -parameter HADDR_SIZE 16 \
+    -parameter HDATA_SIZE 32
+INFO (ISW003): Top module name is "ahb3liten".
+[INFO (HIER-8002)] ../rtl/design.sv(297): Disabling old hierarchical reference handler
+[INFO (VERI-1018)] ../rtl/mem.sv(1): compiling module 'mem:(ABITS=8)'
+[INFO (VERI-2571)] ../rtl/mem.sv(25): extracting RAM for identifier 'mem_array'
+[WARN (VERI-9033)] ../rtl/mem.sv(25): array mem_array (size 8192) automatically BLACK-BOXED. Use the "elaborate -bbox_a" command to prevent automatic black-boxing.
+[INFO (VERI-1018)] ahb_checker.sv(6): compiling module 'ahb_checker'
+[WARN (VERI-1796)] ahb_checker.sv(123): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ahb_assumptions.sv(11): compiling module 'ahb_assumptions'
+[WARN (VERI-1796)] ahb_assumptions.sv(45): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1209)] ahb_assumptions.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(141): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(142): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(151): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(152): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1796)] ahb_assumptions.sv(188): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1796)] ahb_assumptions.sv(468): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ../rtl/design.sv(1): compiling module 'ahb3liten'
+[WARN (VERI-1209)] ../rtl/design.sv(113): expression size 16 truncated to fit in target size 7
+[WARN (VERI-1959)] ../rtl/design.sv(155): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(156): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(157): left shift count >= width of value
+[WARN (VERI-1209)] ../rtl/design.sv(126): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(129): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(130): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(133): expression size 32 truncated to fit in target size 16
+INFO (INL208): Elaboration synthesis summary:
+  Number of synthesized netlists          5 (1 packages)
+  Single run mode                         On
+  Pipeline                                On (4 pipelined netlists)
+  Late hierarchical reference connection  On
+  Number of analyzed Verilog modules      6 (5 synthesized)
+  Number of analyzed VHDL entities        0 (0 synthesized)
+  Advanced Incremental run mode           Off
+WARNING (WNL018): ahb_assumptions.sv(269): multiplication operator mult_32u_32u (size 64) automatically black boxed.
+    Use the "elaborate -bbox_mul" command to prevent automatic black-boxing.
+INFO (INL003): Clearing all state information (assumes, stopats, and so forth).
+ahb3liten
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 4 — Clock and reset
+%% # HCLK  : rising edge triggered
+%% # HRESETn : active low reset
+%% # ------------------------------------------------------------
+%% clock HCLK
+%% reset -expression {!HRESETn} 
+INFO (IPM031): Clearing proof results of all properties.
+INFO (IRS006): Current reset condition is "HRESETn".
+%% 
+%% 
+%% # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
+%% set_max_trace_length 40
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 6 — Run proof
+%% # ------------------------------------------------------------
+%% prove -all
+INFO (IPF036): Starting proof on task: "<embedded>", 67 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis: phase 2 of 4.
+INFO (IRS031): Running reset analysis: phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (ISIM006): Running simulation: {mode = single, probe = all}.
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (ISIM008): Simulation is processing trace data. Total number of nets in analysis 2650.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 158 of 269 design flops, 0 of 0 design latches, 238 of 343 internal elements.
+INFO (IRS039): Reset analysis complete.
+INFO (IPF031): Settings used for proof thread 0:
+    orchestration                      = on
+    time_limit                         = 86400s
+    per_property_time_limit            = 5s * 2 ^ scan
+    max_trace_length                   = 40
+    engine_mode                        = Hp Ht J L B N Tri 
+    proofgrid_per_engine_max_jobs      = 1
+    max engine jobs                    = auto
+    proofgrid_mode                     = local
+    proofgrid_restarts                 = 10
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.ALWAYS_OK" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.DEASSERTION_RESET" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.DEASSERTION_RESET:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.assumptions_i.HTRANS_IDLE_DURING_RESET:precondition1" was proven unreachable in 0.00 s.
+0: Found proofs for 9 properties in preprocessing
+0: Using multistage preprocessing
+0: Starting reduce
+0: Finished reduce in 0.001s
+0.0.PRE: Performing Proof Simplification...
+0.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE" was proven in 0.00 s.
+0.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" in 0.00 s.
+0.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" in 0.00 s.
+0.0.Hp: Proof Simplification Iteration 2	[0.00 s]
+0.0.Hp: Proof Simplification Iteration 3	[0.00 s]
+0.0.Hp: Proof Simplification Iteration 4	[0.00 s]
+0.0.PRE: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.PRE: The cover property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.Hp: Proof Simplification Iteration 5	[0.01 s]
+INFO (IPF055): 0.0.PRE: A counterexample (cex) with 11 cycles was found for the property ":noConflict" in 0.00 s.
+    Use check_assumptions -show to show this property in the property table.
+    Use check_assumptions -conflict to generate a cex trace.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property ":live" was proven unreachable in 0.00 s.
+    Use check_assumptions -show -live to show this property in the property table.
+0.0.PRE: Proof Simplification completed in 0.02 s
+0.0.Hp: Identified and disabled 13 duplicated targets.
+0: About to start ProofGrid in its own thread with a limit of 10000 pending notifications and a limit of 10 traces.
+0: ============================= ProofGrid (v3) start =============================
+0: ProofGrid usable level: 4294967295
+0: Initial ProofGrid level: 1
+0: ProofGrid is starting event handling
+0: Computed task hash in 0.00ss
+0.0.Hp: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Hp: Proofgrid shell started at 28808@pc3(local) jg_28061_pc3_3
+0.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Hp: Trace Attempt  1	[0.01 s]
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_COMPLETE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.READ_STABILITY:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HSIZE_LEGAL_FOR_BUS:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NO_BUSY_AFTER_SINGLE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HWRITE_CONSTANT_IN_BURST:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HPROT_KNOWN_ON_TRANSFER:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_START:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_WRITE:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF055): 0.0.Hp: A counterexample (cex) with 1 cycles was found for the property "ahb3liten.checker_i.HREADY_EQUALS_HREADYOUT" in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.CAN_FINISH_WHAT_STARTED:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.BURST_START_CHECK:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.SAFE_START_16:precondition1" was covered in 1 cycles in 0.01 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_HWORD:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_WORD:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Ht: Proofgrid shell started at 28828@pc3(local) jg_28061_pc3_3
+0.0.Ht: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Ht: Trace Attempt  1	[0.00 s]
+0.0.Ht: Trace Attempt  2	[0.00 s]
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_ANY:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HBURST_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HWDATA_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.BUSY_PERMITTED_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_NONSEQ_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SLAVE_REQUESTING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HWRITE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_STABLE_NONSEQ_SEQ:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_IDLE_TO_NONSEQ:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_TO_SEQ:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_STABLE_DURING_FIXED_BURST_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_FOLLOWS_NONSEQ_OR_SEQ:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HBURST_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSEL_STABLE_DURING_BURST:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HPROT_STABLE_IN_BURST:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR4_INCREMENT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.INCR_NO_1KB_BOUNDARY:precondition1" was covered in 2 cycles in 0.01 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.L: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR8_INCREMENT:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR16_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP4_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP8_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP16_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: Trace Attempt  3	[0.01 s]
+0.0.Ht: Trace Attempt  4	[0.01 s]
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Ht: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR4:precondition1" was covered in 4 cycles in 0.03 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_NO_BUSY_LAST:precondition1" was covered in 4 cycles in 0.03 s.
+0.0.Ht: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP4:precondition1" was covered in 4 cycles in 0.03 s.
+0.0.Ht: Trace Attempt  5	[0.01 s]
+0.0.J: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: Trace Attempt  8	[0.02 s]
+0.0.Ht: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR8:precondition1" was covered in 8 cycles in 0.03 s.
+0.0.Ht: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP8:precondition1" was covered in 8 cycles in 0.03 s.
+0.0.Ht: Trace Attempt  9	[0.02 s]
+0.0.Ht: Trace Attempt 10	[0.02 s]
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR16:precondition1" was proven unreachable in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP16:precondition1" was proven unreachable in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.BURST_16_TERMINATION_CLEAN:precondition1" was proven unreachable in 0.03 s.
+0.0.Ht: Overconstrained at 11 [0.02 s]
+INFO (IPF144): 0: Initiating shutdown of proof [0.05 s]
+0.0.Hp: Requesting engine job to terminate
+0.0.Ht: Requesting engine job to terminate
+0.0.J: Requesting engine job to terminate
+0.0.L: Requesting engine job to terminate
+0.0.N: Requesting engine job to terminate
+0.0.B: Requesting engine job to terminate
+0.0.Tri: Requesting engine job to terminate
+0.0.Hp: Overconstrained at 11 [0.00 s]
+0.0.B: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Hp: Exited with Success (@ 0.06 s)
+0: ProofGrid usable level: 0
+0.0.L: Proofgrid shell started at 28851@pc3(local) jg_28061_pc3_3
+0.0.L: Preventing job from starting because proof is shutting down.
+0.0.L: Interrupted. [0.00 s]
+0.0.L: Exited with Success (@ 0.06 s)
+0.0.Tri: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.N: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: Exited with Success (@ 0.08 s)
+0.0.J: Proofgrid shell started at 28849@pc3(local) jg_28061_pc3_3
+0.0.B: Proofgrid shell started at 28853@pc3(local) jg_28061_pc3_3
+0.0.B: Preventing job from starting because proof is shutting down.
+0.0.B: Interrupted. [0.00 s]
+0.0.J: Preventing job from starting because proof is shutting down.
+0.0.J: Interrupted. [0.00 s]
+0.0.Tri: Proofgrid shell started at 28871@pc3(local) jg_28061_pc3_3
+0.0.Tri: Preventing job from starting because proof is shutting down.
+0.0.Tri: Interrupted. [0.00 s]
+0.0.J: Exited with Success (@ 0.08 s)
+0.0.Tri: Exited with Success (@ 0.08 s)
+0.0.B: Exited with Success (@ 0.08 s)
+0.0.N: Proofgrid shell started at 28852@pc3(local) jg_28061_pc3_3
+0.0.N: Preventing job from starting because proof is shutting down.
+0.0.N: Interrupted. [0.00 s]
+0.0.N: Exited with Success (@ 0.09 s)
+0: --------------------------------------------------------------
+ProofGrid Summary (utilization 19.63 %)
+--------------------------------------------------------------
+     engines started                               :     7
+     engine jobs started                           :     7
+
+    Time in state (seconds)
+    --------------------------------------------
+               Pending     Running        Dead
+    --------------------------------------------
+    min           0.00        0.00        0.00
+    mean          0.04        0.01        0.00
+    median        0.04        0.00        0.00
+    max           0.05        0.05        0.00
+    sum           0.31        0.07        0.00
+
+    Data read    : 46.80 kiB
+    Data written : 3.04 kiB
+
+INFO (IPF180): 0: ProofGrid utilization: 19.63% slot-seconds: 0.07
+0: ProofGrid usable level: 0
+0: All pending notifications were processed.
+0: ProofGrid was paused 3 times for a total of 0.03 seconds
+WARNING (WAS006): The task is inconsistent at cycle 11.
+INFO (IPF059): 0: Completed proof on task: "<embedded>"
+
+==============================================================
+SUMMARY
+==============================================================
+           Properties Considered              : 68
+                 assertions                   : 11
+                  - proven                    : 9 (81.8182%)
+                  - bounded_proven (user)     : 0 (0%)
+                  - bounded_proven (auto)     : 0 (0%)
+                  - marked_proven             : 0 (0%)
+                  - cex                       : 2 (18.1818%)
+                  - ar_cex                    : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+                 covers                       : 57
+                  - unreachable               : 7 (12.2807%)
+                  - bounded_unreachable (user): 0 (0%)
+                  - covered                   : 50 (87.7193%)
+                  - ar_covered                : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+overconstrained
+%% 
+overconstrained
+[<embedded>] % include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% 
+%% # JG settings for lab
+%% set_max_trace_length 60
+%% set_engine_mode {Hp Ht J L B N Tri} 
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[WARN (VERI-1049)] ahb_checker.sv(346): /* is inside a comment
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+%% 
+%% # Bind file — must be last
+%% analyze -sv12 bind_fpv.sv
+[-- (VERI-1482)] Analyzing Verilog file 'bind_fpv.sv'
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 3 — Elaborate
+%% # Top module is the DUT
+%% # Parameters match design.sv defaults
+%% # ------------------------------------------------------------
+%% elaborate -top ahb3liten \
+    -parameter MEM_SIZE 32 \
+    -parameter MEM_DEPTH 256 \
+    -parameter HADDR_SIZE 16 \
+    -parameter HDATA_SIZE 32
+INFO (ISW003): Top module name is "ahb3liten".
+[INFO (HIER-8002)] ../rtl/design.sv(297): Disabling old hierarchical reference handler
+[INFO (VERI-1018)] ../rtl/mem.sv(1): compiling module 'mem:(ABITS=8)'
+[INFO (VERI-2571)] ../rtl/mem.sv(25): extracting RAM for identifier 'mem_array'
+[WARN (VERI-9033)] ../rtl/mem.sv(25): array mem_array (size 8192) automatically BLACK-BOXED. Use the "elaborate -bbox_a" command to prevent automatic black-boxing.
+[INFO (VERI-1018)] ahb_checker.sv(6): compiling module 'ahb_checker'
+[WARN (VERI-1796)] ahb_checker.sv(123): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ahb_assumptions.sv(11): compiling module 'ahb_assumptions'
+[WARN (VERI-1796)] ahb_assumptions.sv(45): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1209)] ahb_assumptions.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(141): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(142): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(151): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(152): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1796)] ahb_assumptions.sv(188): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1796)] ahb_assumptions.sv(468): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ../rtl/design.sv(1): compiling module 'ahb3liten'
+[WARN (VERI-1209)] ../rtl/design.sv(113): expression size 16 truncated to fit in target size 7
+[WARN (VERI-1959)] ../rtl/design.sv(155): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(156): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(157): left shift count >= width of value
+[WARN (VERI-1209)] ../rtl/design.sv(126): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(129): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(130): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(133): expression size 32 truncated to fit in target size 16
+INFO (INL208): Elaboration synthesis summary:
+  Number of synthesized netlists          5 (1 packages)
+  Single run mode                         On
+  Pipeline                                On (4 pipelined netlists)
+  Late hierarchical reference connection  On
+  Number of analyzed Verilog modules      6 (5 synthesized)
+  Number of analyzed VHDL entities        0 (0 synthesized)
+  Advanced Incremental run mode           Off
+WARNING (WNL018): ahb_assumptions.sv(269): multiplication operator mult_32u_32u (size 64) automatically black boxed.
+    Use the "elaborate -bbox_mul" command to prevent automatic black-boxing.
+INFO (INL003): Clearing all state information (assumes, stopats, and so forth).
+ahb3liten
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 4 — Clock and reset
+%% # HCLK  : rising edge triggered
+%% # HRESETn : active low reset
+%% # ------------------------------------------------------------
+%% clock HCLK
+%% reset -expression {!HRESETn} 
+INFO (IPM031): Clearing proof results of all properties.
+INFO (IRS006): Current reset condition is "HRESETn".
+%% 
+%% 
+%% # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
+%% set_max_trace_length 40
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 6 — Run proof
+%% # ------------------------------------------------------------
+%% prove -all
+INFO (IPF036): Starting proof on task: "<embedded>", 65 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis: phase 2 of 4.
+INFO (IRS031): Running reset analysis: phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (ISIM006): Running simulation: {mode = single, probe = all}.
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (ISIM008): Simulation is processing trace data. Total number of nets in analysis 2599.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 158 of 269 design flops, 0 of 0 design latches, 234 of 339 internal elements.
+INFO (IRS039): Reset analysis complete.
+INFO (IPF031): Settings used for proof thread 0:
+    orchestration                      = on
+    time_limit                         = 86400s
+    per_property_time_limit            = 5s * 2 ^ scan
+    max_trace_length                   = 40
+    engine_mode                        = Hp Ht J L B N Tri 
+    proofgrid_per_engine_max_jobs      = 1
+    max engine jobs                    = auto
+    proofgrid_mode                     = local
+    proofgrid_restarts                 = 10
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.ALWAYS_OK" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.DEASSERTION_RESET" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.DEASSERTION_RESET:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.assumptions_i.HTRANS_IDLE_DURING_RESET:precondition1" was proven unreachable in 0.00 s.
+0: Found proofs for 9 properties in preprocessing
+0: Using multistage preprocessing
+0: Starting reduce
+0: Finished reduce in 0.001s
+0.0.PRE: Performing Proof Simplification...
+0.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE" was proven in 0.00 s.
+0.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" in 0.00 s.
+0.0.Hp: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.Hp: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" in 0.00 s.
+0.0.Hp: Proof Simplification Iteration 2	[0.00 s]
+0.0.Hp: Proof Simplification Iteration 3	[0.00 s]
+0.0.Hp: Proof Simplification Iteration 4	[0.00 s]
+0.0.PRE: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.PRE: The cover property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.Hp: Proof Simplification Iteration 5	[0.01 s]
+INFO (IPF055): 0.0.PRE: A counterexample (cex) with 11 cycles was found for the property ":noConflict" in 0.00 s.
+    Use check_assumptions -show to show this property in the property table.
+    Use check_assumptions -conflict to generate a cex trace.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property ":live" was proven unreachable in 0.00 s.
+    Use check_assumptions -show -live to show this property in the property table.
+0.0.PRE: Proof Simplification completed in 0.01 s
+0.0.Hp: Identified and disabled 13 duplicated targets.
+0: About to start ProofGrid in its own thread with a limit of 10000 pending notifications and a limit of 10 traces.
+0: ============================= ProofGrid (v3) start =============================
+0: ProofGrid usable level: 4294967295
+0: Initial ProofGrid level: 1
+0: ProofGrid is starting event handling
+0: Computed task hash in 0.00ss
+0.0.Hp: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Hp: Proofgrid shell started at 29177@pc3(local) jg_28061_pc3_4
+0.0.Hp: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Hp: Trace Attempt  1	[0.01 s]
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_COMPLETE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.READ_STABILITY:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HSIZE_LEGAL_FOR_BUS:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NO_BUSY_AFTER_SINGLE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HWRITE_CONSTANT_IN_BURST:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HPROT_KNOWN_ON_TRANSFER:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_START:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_WRITE:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF055): 0.0.Hp: A counterexample (cex) with 1 cycles was found for the property "ahb3liten.checker_i.HREADY_EQUALS_HREADYOUT" in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.CAN_FINISH_WHAT_STARTED:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.BURST_START_CHECK:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_HWORD:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Hp: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Hp: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_WORD:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.Ht: Proofgrid shell started at 29196@pc3(local) jg_28061_pc3_4
+0.0.Ht: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.Ht: Trace Attempt  1	[0.00 s]
+0.0.Ht: Trace Attempt  2	[0.00 s]
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_ANY:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HBURST_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HWDATA_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.BUSY_PERMITTED_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_NONSEQ_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SLAVE_REQUESTING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HWRITE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_STABLE_NONSEQ_SEQ:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_IDLE_TO_NONSEQ:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_TO_SEQ:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.N: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_STABLE_DURING_FIXED_BURST_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.SEQ_FOLLOWS_NONSEQ_OR_SEQ:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HBURST_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSIZE_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HSEL_STABLE_DURING_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HPROT_STABLE_IN_BURST:precondition1" was covered in 2 cycles in 0.00 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR4_INCREMENT:precondition1" was covered in 2 cycles in 0.01 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.J: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.L: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR8_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_INCR16_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP4_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP8_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.HADDR_WRAP16_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.Ht: Trace Attempt  3	[0.01 s]
+0.0.Ht: Trace Attempt  4	[0.01 s]
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.Ht: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR4:precondition1" was covered in 4 cycles in 0.03 s.
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_NO_BUSY_LAST:precondition1" was covered in 4 cycles in 0.03 s.
+0.0.Ht: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP4:precondition1" was covered in 4 cycles in 0.03 s.
+0.0.Ht: Trace Attempt  5	[0.01 s]
+0.0.Ht: Trace Attempt  8	[0.02 s]
+0.0.Ht: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR8:precondition1" was covered in 8 cycles in 0.03 s.
+0.0.Ht: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP8:precondition1" was covered in 8 cycles in 0.03 s.
+0.0.Tri: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.Ht: Trace Attempt  9	[0.02 s]
+0.0.Ht: Trace Attempt 10	[0.02 s]
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF057): 0.0.Ht: The property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE" was proven in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR16:precondition1" was proven unreachable in 0.03 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP16:precondition1" was proven unreachable in 0.04 s.
+0.0.Ht: A proof was found: No trace exists. [0.02 s]
+INFO (IPF051): 0.0.Ht: The cover property "ahb3liten.assumptions_i.BURST_16_TERMINATION_CLEAN:precondition1" was proven unreachable in 0.04 s.
+0.0.Ht: Overconstrained at 11 [0.02 s]
+INFO (IPF144): 0: Initiating shutdown of proof [0.05 s]
+0.0.Hp: Requesting engine job to terminate
+0.0.J: Requesting engine job to terminate
+0.0.N: Requesting engine job to terminate
+0.0.B: Requesting engine job to terminate
+0.0.L: Requesting engine job to terminate
+0.0.Ht: Requesting engine job to terminate
+0.0.Tri: Requesting engine job to terminate
+0.0.Ht: Exited with Success (@ 0.05 s)
+0: ProofGrid usable level: 0
+0.0.Hp: Overconstrained at 11 [0.00 s]
+0.0.Hp: Exited with Success (@ 0.05 s)
+0.0.J: Proofgrid shell started at 29218@pc3(local) jg_28061_pc3_4
+0.0.J: Preventing job from starting because proof is shutting down.
+0.0.J: Interrupted. [0.00 s]
+0.0.L: Proofgrid shell started at 29220@pc3(local) jg_28061_pc3_4
+0.0.J: Exited with Success (@ 0.06 s)
+0.0.L: Preventing job from starting because proof is shutting down.
+0.0.L: Interrupted. [0.00 s]
+0.0.L: Exited with Success (@ 0.06 s)
+0.0.N: Proofgrid shell started at 29221@pc3(local) jg_28061_pc3_4
+0.0.B: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.N: Preventing job from starting because proof is shutting down.
+0.0.N: Interrupted. [0.00 s]
+0.0.N: Exited with Success (@ 0.07 s)
+0.0.Tri: Proofgrid shell started at 29223@pc3(local) jg_28061_pc3_4
+0.0.Tri: Preventing job from starting because proof is shutting down.
+0.0.Tri: Interrupted. [0.00 s]
+0.0.B: Proofgrid shell started at 29222@pc3(local) jg_28061_pc3_4
+0.0.Tri: Exited with Success (@ 0.09 s)
+0.0.B: Preventing job from starting because proof is shutting down.
+0.0.B: Interrupted. [0.00 s]
+0.0.B: Exited with Success (@ 0.09 s)
+0: --------------------------------------------------------------
+ProofGrid Summary (utilization 19.92 %)
+--------------------------------------------------------------
+     engines started                               :     7
+     engine jobs started                           :     7
+
+    Time in state (seconds)
+    --------------------------------------------
+               Pending     Running        Dead
+    --------------------------------------------
+    min           0.00        0.00        0.00
+    mean          0.04        0.01        0.00
+    median        0.05        0.00        0.00
+    max           0.05        0.05        0.00
+    sum           0.31        0.08        0.00
+
+    Data read    : 44.00 kiB
+    Data written : 2.98 kiB
+
+INFO (IPF180): 0: ProofGrid utilization: 19.92% slot-seconds: 0.08
+0: ProofGrid usable level: 0
+0: All pending notifications were processed.
+0: ProofGrid was paused 2 times for a total of 0.022 seconds
+WARNING (WAS006): The task is inconsistent at cycle 11.
+INFO (IPF059): 0: Completed proof on task: "<embedded>"
+
+==============================================================
+SUMMARY
+==============================================================
+           Properties Considered              : 66
+                 assertions                   : 11
+                  - proven                    : 9 (81.8182%)
+                  - bounded_proven (user)     : 0 (0%)
+                  - bounded_proven (auto)     : 0 (0%)
+                  - marked_proven             : 0 (0%)
+                  - cex                       : 2 (18.1818%)
+                  - ar_cex                    : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+                 covers                       : 55
+                  - unreachable               : 7 (12.7273%)
+                  - bounded_unreachable (user): 0 (0%)
+                  - covered                   : 48 (87.2727%)
+                  - ar_covered                : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+overconstrained
+%% 
+overconstrained
+[<embedded>] % check_assumptions -conflict -property
+ERROR (ESW087): No such switch "-property".
+
+
+[<embedded>] % check_assumptions -conflict
+INFO (IPF036): Starting proof on task: "<embedded>", 0 properties to prove with 0 already proven/unreachable
+INFO (IPF031): Settings used for proof thread 1:
+    orchestration                      = off
+    time_limit                         = 86400s
+    per_property_time_limit            = 5s * 2 ^ scan
+    max_trace_length                   = 40
+    engine_mode                        = Q1 Q2 Q3 
+    proofgrid_per_engine_max_jobs      = 1
+    max engine jobs                    = Q1 Q2 Q3, total 3
+    proofgrid_mode                     = local
+    proofgrid_restarts                 = 10
+1: Using multistage preprocessing
+1.0.PRE: Performing Proof Simplification...
+1.0.Q1: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+1.0.Q1: Proof Simplification Iteration 1	[0.00 s]
+1.0.Q1: Proof Simplification Iteration 2	[0.00 s]
+1.0.Q1: Proof Simplification Iteration 3	[0.00 s]
+1.0.Q1: Proof Simplification Iteration 4	[0.00 s]
+1.0.Q1: Proof Simplification Iteration 5	[0.00 s]
+1.0.Q1: Proof Simplification Iteration 6	[0.00 s]
+1.0.PRE: Proof Simplification completed in 0.00 s
+1: About to start ProofGrid in its own thread with a limit of 10000 pending notifications and a limit of 10 traces.
+1: ============================= ProofGrid (v3) start =============================
+1: ProofGrid usable level: 4294967295
+1: Initial ProofGrid level: 1
+1: Computed task hash in 0.00ss
+1: ProofGrid is starting event handling
+1.0.Q1: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+1.0.Q1: Proofgrid shell started at 29414@pc3(local) jg_28061_pc3_5
+1.0.Q1: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+1.0.Q1: Trace Attempt  1	[0.00 s]
+1.0.Q1: Trace Attempt  2	[0.00 s]
+1.0.Q1: Trace Attempt  3	[0.01 s]
+1.0.Q1: Trace Attempt  4	[0.01 s]
+1.0.Q1: Trace Attempt  5	[0.01 s]
+INFO (IPF054): 1.0.Q1: A min_length bound of 11 was found for the property ":noConflict" in 0.03 s.
+1.0.Q1: Trace Attempt 10	[0.03 s]
+1.0.Q1: A trace with 11 cycles was found. [0.03 s]
+INFO (IPF155): 1.0.Q1: A dead end state was reached after 11 cycles in task "<embedded>" in 0.03 s.
+    Use check_assumptions -show -dead_end to show this property in the property table.
+INFO (IPF144): 1: Initiating shutdown of proof [0.03 s]
+1.0.Q1: Requesting engine job to terminate
+1.0.Q1: Reached length limit (40) [0.03 s]
+1.0.Q1: Exited with Success (@ 0.04 s)
+1: --------------------------------------------------------------
+ProofGrid Summary (utilization 47.72 %)
+--------------------------------------------------------------
+     engines started                               :     1
+     engine jobs started                           :     1
+
+    Time in state (seconds)
+    --------------------------------------------
+               Pending     Running        Dead
+    --------------------------------------------
+    min           0.00        0.00        0.00
+    mean          0.04        0.03        0.00
+    median        0.04        0.03        0.00
+    max           0.04        0.03        0.00
+    sum           0.04        0.03        0.00
+
+    Data read    : 4.35 kiB
+    Data written : 634.00 B
+
+INFO (IPF180): 1: ProofGrid utilization: 47.72% slot-seconds: 0.03
+1: ProofGrid usable level: 0
+1: All pending notifications were processed.
+WARNING (WAS006): The task is inconsistent at cycle 11.
+INFO (IPF059): 1: Completed proof on task: "<embedded>"
+conflict
+[<embedded>] % check_assumptions -show -dead_end
+:noConflict :noDeadEnd
+[<embedded>] % include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% 
+%% # JG settings for lab
+%% set_engine_mode {H B}
+%% set_max_trace_length 100
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[WARN (VERI-1049)] ahb_checker.sv(346): /* is inside a comment
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+%% 
+%% # Bind file — must be last
+%% analyze -sv12 bind_fpv.sv
+[-- (VERI-1482)] Analyzing Verilog file 'bind_fpv.sv'
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 3 — Elaborate
+%% # Top module is the DUT
+%% # Parameters match design.sv defaults
+%% # ------------------------------------------------------------
+%% elaborate -top ahb3liten \
+    -parameter MEM_SIZE 32 \
+    -parameter MEM_DEPTH 256 \
+    -parameter HADDR_SIZE 16 \
+    -parameter HDATA_SIZE 32
+INFO (ISW003): Top module name is "ahb3liten".
+[INFO (HIER-8002)] ../rtl/design.sv(297): Disabling old hierarchical reference handler
+[INFO (VERI-1018)] ../rtl/mem.sv(1): compiling module 'mem:(ABITS=8)'
+[INFO (VERI-2571)] ../rtl/mem.sv(25): extracting RAM for identifier 'mem_array'
+[WARN (VERI-9033)] ../rtl/mem.sv(25): array mem_array (size 8192) automatically BLACK-BOXED. Use the "elaborate -bbox_a" command to prevent automatic black-boxing.
+[INFO (VERI-1018)] ahb_checker.sv(6): compiling module 'ahb_checker'
+[WARN (VERI-1796)] ahb_checker.sv(123): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ahb_assumptions.sv(11): compiling module 'ahb_assumptions'
+[WARN (VERI-1796)] ahb_assumptions.sv(45): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1209)] ahb_assumptions.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(141): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(142): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(151): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(152): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1796)] ahb_assumptions.sv(188): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1796)] ahb_assumptions.sv(468): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ../rtl/design.sv(1): compiling module 'ahb3liten'
+[WARN (VERI-1209)] ../rtl/design.sv(113): expression size 16 truncated to fit in target size 7
+[WARN (VERI-1959)] ../rtl/design.sv(155): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(156): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(157): left shift count >= width of value
+[WARN (VERI-1209)] ../rtl/design.sv(126): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(129): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(130): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(133): expression size 32 truncated to fit in target size 16
+INFO (INL208): Elaboration synthesis summary:
+  Number of synthesized netlists          5 (1 packages)
+  Single run mode                         On
+  Pipeline                                On (4 pipelined netlists)
+  Late hierarchical reference connection  On
+  Number of analyzed Verilog modules      6 (5 synthesized)
+  Number of analyzed VHDL entities        0 (0 synthesized)
+  Advanced Incremental run mode           Off
+WARNING (WNL018): ahb_assumptions.sv(269): multiplication operator mult_32u_32u (size 64) automatically black boxed.
+    Use the "elaborate -bbox_mul" command to prevent automatic black-boxing.
+INFO (INL003): Clearing all state information (assumes, stopats, and so forth).
+ahb3liten
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 4 — Clock and reset
+%% # HCLK  : rising edge triggered
+%% # HRESETn : active low reset
+%% # ------------------------------------------------------------
+%% clock HCLK
+%% reset -expression {!HRESETn} 
+INFO (IPM031): Clearing proof results of all properties.
+INFO (IRS006): Current reset condition is "HRESETn".
+%% 
+%% 
+%% # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
+%% set_max_trace_length 40
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 6 — Run proof
+%% # ------------------------------------------------------------
+%% prove -all
+INFO (IPF036): Starting proof on task: "<embedded>", 65 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis: phase 2 of 4.
+INFO (IRS031): Running reset analysis: phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (ISIM006): Running simulation: {mode = single, probe = all}.
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (ISIM008): Simulation is processing trace data. Total number of nets in analysis 2599.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 158 of 269 design flops, 0 of 0 design latches, 234 of 339 internal elements.
+INFO (IRS039): Reset analysis complete.
+INFO (IPF031): Settings used for proof thread 0:
+    orchestration                      = on
+    time_limit                         = 86400s
+    per_property_time_limit            = 5s * 2 ^ scan
+    max_trace_length                   = 40
+    engine_mode                        = H B 
+    proofgrid_per_engine_max_jobs      = 1
+    max engine jobs                    = auto
+    proofgrid_mode                     = local
+    proofgrid_restarts                 = 10
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.ALWAYS_OK" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.DEASSERTION_RESET" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.DEASSERTION_RESET:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.assumptions_i.HTRANS_IDLE_DURING_RESET:precondition1" was proven unreachable in 0.00 s.
+0: Found proofs for 9 properties in preprocessing
+0: Using multistage preprocessing
+0: Starting reduce
+0: Finished reduce in 0.001s
+0.0.PRE: Performing Proof Simplification...
+0.0.H: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.H: Proof Simplification Iteration 1	[0.00 s]
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE" was proven in 0.00 s.
+0.0.H: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.H: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" in 0.00 s.
+0.0.H: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.H: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" in 0.00 s.
+0.0.H: Proof Simplification Iteration 2	[0.00 s]
+0.0.H: Proof Simplification Iteration 3	[0.00 s]
+0.0.H: Proof Simplification Iteration 4	[0.00 s]
+0.0.PRE: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.PRE: The cover property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.H: Proof Simplification Iteration 5	[0.01 s]
+INFO (IPF055): 0.0.PRE: A counterexample (cex) with 11 cycles was found for the property ":noConflict" in 0.00 s.
+    Use check_assumptions -show to show this property in the property table.
+    Use check_assumptions -conflict to generate a cex trace.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property ":live" was proven unreachable in 0.00 s.
+    Use check_assumptions -show -live to show this property in the property table.
+0.0.PRE: Proof Simplification completed in 0.02 s
+0.0.H: Identified and disabled 13 duplicated targets.
+0: About to start ProofGrid in its own thread with a limit of 10000 pending notifications and a limit of 10 traces.
+0: ============================= ProofGrid (v3) start =============================
+0: ProofGrid usable level: 41
+0: Initial ProofGrid level: 1
+0: ProofGrid is starting event handling
+0: Computed task hash in 0.00ss
+0.0.H: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.B: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.H: Proofgrid shell started at 29888@pc3(local) jg_28061_pc3_6
+0.0.H: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.H: Trace Attempt  1	[0.00 s]
+0.0.H: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_COMPLETE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.READ_STABILITY:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HSIZE_LEGAL_FOR_BUS:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NO_BUSY_AFTER_SINGLE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HWRITE_CONSTANT_IN_BURST:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HPROT_KNOWN_ON_TRANSFER:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.H: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_START:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_WRITE:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.H: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF055): 0.0.H: A counterexample (cex) with 1 cycles was found for the property "ahb3liten.checker_i.HREADY_EQUALS_HREADYOUT" in 0.01 s.
+0.0.H: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.CAN_FINISH_WHAT_STARTED:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.BURST_START_CHECK:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.H: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_HWORD:precondition1" was covered in 1 cycles in 0.01 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.H: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_WORD:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.H: Trace Attempt  2	[0.01 s]
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_TO_SEQ:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HBURST_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HWDATA_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.BUSY_PERMITTED_IN_BURST:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.SEQ_STABLE_DURING_FIXED_BURST_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.SEQ_FOLLOWS_NONSEQ_OR_SEQ:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HBURST_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.SLAVE_REQUESTING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HWRITE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HSIZE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_STABLE_NONSEQ_SEQ:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HSIZE_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HSEL_STABLE_DURING_BURST:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HPROT_STABLE_IN_BURST:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_IDLE_TO_NONSEQ:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_NONSEQ_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_ANY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_INCR4_INCREMENT:precondition1" was covered in 2 cycles in 0.03 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_INCR8_INCREMENT:precondition1" was covered in 2 cycles in 0.03 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_INCR16_INCREMENT:precondition1" was covered in 2 cycles in 0.03 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_WRAP4_BOUNDARY:precondition1" was covered in 2 cycles in 0.03 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_WRAP8_BOUNDARY:precondition1" was covered in 2 cycles in 0.04 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_WRAP16_BOUNDARY:precondition1" was covered in 2 cycles in 0.04 s.
+0.0.H: Trace Attempt  3	[0.01 s]
+0.0.H: Trace Attempt  4	[0.01 s]
+0.0.H: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR4:precondition1" was covered in 4 cycles in 0.04 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_NO_BUSY_LAST:precondition1" was covered in 4 cycles in 0.04 s.
+0.0.H: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP4:precondition1" was covered in 4 cycles in 0.04 s.
+0.0.B: Proofgrid shell started at 29907@pc3(local) jg_28061_pc3_6
+0.0.H: Trace Attempt  5	[0.02 s]
+0.0.H: Trace Attempt  8	[0.03 s]
+0.0.H: A trace with 8 cycles was found. [0.03 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR8:precondition1" was covered in 8 cycles in 0.04 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.00s. The amount of pending traces decreased.
+0.0.H: A trace with 8 cycles was found. [0.03 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP8:precondition1" was covered in 8 cycles in 0.04 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF057): 0.0.H: The property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE" was proven in 0.05 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF057): 0.0.H: The property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE" was proven in 0.05 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF057): 0.0.H: The property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE" was proven in 0.05 s.
+0.0.H: Trace Attempt  9	[0.03 s]
+0.0.H: Trace Attempt 10	[0.03 s]
+0.0.H: A proof was found: No trace exists. [0.04 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR16:precondition1" was proven unreachable in 0.05 s.
+0.0.H: A proof was found: No trace exists. [0.04 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP16:precondition1" was proven unreachable in 0.05 s.
+0.0.H: A proof was found: No trace exists. [0.04 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.BURST_16_TERMINATION_CLEAN:precondition1" was proven unreachable in 0.05 s.
+0.0.H: Overconstrained at 11 [0.04 s]
+INFO (IPF144): 0: Initiating shutdown of proof [0.05 s]
+0.0.B: Requesting engine job to terminate
+0.0.H: Requesting engine job to terminate
+0.0.H: Outbound connection closed
+0.0.H: Outbound connection closed
+0.0.H: Exited with Success (@ 0.05 s)
+0: ProofGrid usable level: 0
+0.0.B: Interrupted. [0.01 s]
+0.0.B: Exited with Success (@ 0.05 s)
+0: --------------------------------------------------------------
+ProofGrid Summary (utilization 36.03 %)
+--------------------------------------------------------------
+     engines started                               :     2
+     engine jobs started                           :     2
+
+    Time in state (seconds)
+    --------------------------------------------
+               Pending     Running        Dead
+    --------------------------------------------
+    min           0.00        0.00        0.00
+    mean          0.06        0.03        0.00
+    median        0.06        0.03        0.00
+    max           0.06        0.05        0.00
+    sum           0.11        0.06        0.00
+
+    Data read    : 41.45 kiB
+    Data written : 1.58 kiB
+
+INFO (IPF180): 0: ProofGrid utilization: 36.03% slot-seconds: 0.06
+0: ProofGrid usable level: 0
+0: All pending notifications were processed.
+0: ProofGrid was paused 5 times for a total of 0.041 seconds
+WARNING (WAS006): The task is inconsistent at cycle 11.
+INFO (IPF059): 0: Completed proof on task: "<embedded>"
+
+==============================================================
+SUMMARY
+==============================================================
+           Properties Considered              : 66
+                 assertions                   : 11
+                  - proven                    : 9 (81.8182%)
+                  - bounded_proven (user)     : 0 (0%)
+                  - bounded_proven (auto)     : 0 (0%)
+                  - marked_proven             : 0 (0%)
+                  - cex                       : 2 (18.1818%)
+                  - ar_cex                    : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+                 covers                       : 55
+                  - unreachable               : 7 (12.7273%)
+                  - bounded_unreachable (user): 0 (0%)
+                  - covered                   : 48 (87.2727%)
+                  - ar_covered                : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+overconstrained
+%% 
+overconstrained
+[<embedded>] % include fpv_setup.tcl
+%% # ============================================================
+%% # fpv_setup.tcl
+%% # JasperGold FPV Setup Script
+%% # EE-5214 — AHB-Lite Verification — Spring 2025
+%% # ============================================================
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 1 — Clear previous session
+%% # ------------------------------------------------------------
+%% clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+%% 
+%% 
+%% # JG settings for lab
+%% set_engine_mode {H B}
+%% set_max_trace_length 100
+%% # ------------------------------------------------------------
+%% # STEP 2 — Analyze (compile) all files
+%% # Order matters:
+%% #   1. Package first — defines constants used by everything
+%% #   2. DUT files
+%% #   3. Checker and assumptions
+%% #   4. Bind file last — references all other modules
+%% # ------------------------------------------------------------
+%% 
+%% # Package
+%% analyze -sv12 ../packages/ahb3lite_pkg.sv
+[-- (VERI-1482)] Analyzing Verilog file '/mnt/cadence_tools/installs/JASPER25/lib/verilog/packages/std/std.sv' into library 'std'
+[-- (VERI-1482)] Analyzing Verilog file '../packages/ahb3lite_pkg.sv'
+%% 
+%% # DUT
+%% analyze -sv12 ../rtl/design.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/design.sv'
+%% analyze -sv12 ../rtl/mem.sv
+[-- (VERI-1482)] Analyzing Verilog file '../rtl/mem.sv'
+%% 
+%% # Checker and assumptions
+%% analyze -sv12 ahb_checker.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_checker.sv'
+[WARN (VERI-1049)] ahb_checker.sv(346): /* is inside a comment
+%% analyze -sv12 ahb_assumptions.sv
+[-- (VERI-1482)] Analyzing Verilog file 'ahb_assumptions.sv'
+%% 
+%% # Bind file — must be last
+%% analyze -sv12 bind_fpv.sv
+[-- (VERI-1482)] Analyzing Verilog file 'bind_fpv.sv'
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 3 — Elaborate
+%% # Top module is the DUT
+%% # Parameters match design.sv defaults
+%% # ------------------------------------------------------------
+%% elaborate -top ahb3liten \
+    -parameter MEM_SIZE 32 \
+    -parameter MEM_DEPTH 256 \
+    -parameter HADDR_SIZE 16 \
+    -parameter HDATA_SIZE 32
+INFO (ISW003): Top module name is "ahb3liten".
+[INFO (HIER-8002)] ../rtl/design.sv(297): Disabling old hierarchical reference handler
+[INFO (VERI-1018)] ../rtl/mem.sv(1): compiling module 'mem:(ABITS=8)'
+[INFO (VERI-2571)] ../rtl/mem.sv(25): extracting RAM for identifier 'mem_array'
+[WARN (VERI-9033)] ../rtl/mem.sv(25): array mem_array (size 8192) automatically BLACK-BOXED. Use the "elaborate -bbox_a" command to prevent automatic black-boxing.
+[INFO (VERI-1018)] ahb_checker.sv(6): compiling module 'ahb_checker'
+[WARN (VERI-1796)] ahb_checker.sv(123): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ahb_assumptions.sv(11): compiling module 'ahb_assumptions'
+[WARN (VERI-1796)] ahb_assumptions.sv(45): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1209)] ahb_assumptions.sv(72): expression size 32 truncated to fit in target size 5
+[WARN (VERI-1209)] ahb_assumptions.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(137): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(138): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(147): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ahb_assumptions.sv(148): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1796)] ahb_assumptions.sv(184): system function call isunknown with non-constant argument is not supported for synthesis
+[WARN (VERI-1796)] ahb_assumptions.sv(470): system function call isunknown with non-constant argument is not supported for synthesis
+[INFO (VERI-1018)] ../rtl/design.sv(1): compiling module 'ahb3liten'
+[WARN (VERI-1209)] ../rtl/design.sv(113): expression size 16 truncated to fit in target size 7
+[WARN (VERI-1959)] ../rtl/design.sv(155): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(156): left shift count >= width of value
+[WARN (VERI-1959)] ../rtl/design.sv(157): left shift count >= width of value
+[WARN (VERI-1209)] ../rtl/design.sv(126): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(127): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(128): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(129): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(130): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(131): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(132): expression size 32 truncated to fit in target size 16
+[WARN (VERI-1209)] ../rtl/design.sv(133): expression size 32 truncated to fit in target size 16
+INFO (INL208): Elaboration synthesis summary:
+  Number of synthesized netlists          5 (1 packages)
+  Single run mode                         On
+  Pipeline                                On (4 pipelined netlists)
+  Late hierarchical reference connection  On
+  Number of analyzed Verilog modules      6 (5 synthesized)
+  Number of analyzed VHDL entities        0 (0 synthesized)
+  Advanced Incremental run mode           Off
+WARNING (WNL018): ahb_assumptions.sv(265): multiplication operator mult_32u_32u (size 64) automatically black boxed.
+    Use the "elaborate -bbox_mul" command to prevent automatic black-boxing.
+INFO (INL003): Clearing all state information (assumes, stopats, and so forth).
+ahb3liten
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 4 — Clock and reset
+%% # HCLK  : rising edge triggered
+%% # HRESETn : active low reset
+%% # ------------------------------------------------------------
+%% clock HCLK
+%% reset -expression {!HRESETn} 
+INFO (IPM031): Clearing proof results of all properties.
+INFO (IRS006): Current reset condition is "HRESETn".
+%% 
+%% 
+%% # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
+%% set_max_trace_length 40
+%% 
+%% # ------------------------------------------------------------
+%% # STEP 6 — Run proof
+%% # ------------------------------------------------------------
+%% prove -all
+INFO (IPF036): Starting proof on task: "<embedded>", 66 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis: phase 2 of 4.
+INFO (IRS031): Running reset analysis: phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (ISIM006): Running simulation: {mode = single, probe = all}.
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (ISIM008): Simulation is processing trace data. Total number of nets in analysis 2614.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 158 of 269 design flops, 0 of 0 design latches, 237 of 367 internal elements.
+INFO (IRS039): Reset analysis complete.
+INFO (IPF031): Settings used for proof thread 0:
+    orchestration                      = on
+    time_limit                         = 86400s
+    per_property_time_limit            = 5s * 2 ^ scan
+    max_trace_length                   = 40
+    engine_mode                        = H B 
+    proofgrid_per_engine_max_jobs      = 1
+    max engine jobs                    = auto
+    proofgrid_mode                     = local
+    proofgrid_restarts                 = 10
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.ALWAYS_OK" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.DEASSERTION_RESET" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.DEASSERTION_RESET:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.TWO_CYCLE_HRESP_ERROR:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES" was proven in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.checker_i.HRESP_STABLE_TWO_CYCLES:precondition1" was proven unreachable in 0.00 s.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property "ahb3liten.assumptions_i.HTRANS_IDLE_DURING_RESET:precondition1" was proven unreachable in 0.00 s.
+0: Found proofs for 9 properties in preprocessing
+0: Using multistage preprocessing
+0: Starting reduce
+0: Finished reduce in 0.001s
+0.0.PRE: Performing Proof Simplification...
+0.0.H: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.H: Proof Simplification Iteration 1	[0.00 s]
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF057): 0.0.PRE: The property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE" was proven in 0.00 s.
+0.0.H: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.H: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" in 0.00 s.
+0.0.H: A max_length bound was found. The shortest trace is no longer than 1 cycles. [0.00 s]
+INFO (IPF008): 0.0.H: A max_length bound of 1 was found for the property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" in 0.00 s.
+0.0.H: Proof Simplification Iteration 2	[0.00 s]
+0.0.H: Proof Simplification Iteration 3	[0.00 s]
+0.0.H: Proof Simplification Iteration 4	[0.00 s]
+0.0.PRE: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.PRE: The cover property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.H: Proof Simplification Iteration 5	[0.01 s]
+INFO (IPF055): 0.0.PRE: A counterexample (cex) with 11 cycles was found for the property ":noConflict" in 0.00 s.
+    Use check_assumptions -show to show this property in the property table.
+    Use check_assumptions -conflict to generate a cex trace.
+0.0.PRE: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.PRE: The cover property ":live" was proven unreachable in 0.00 s.
+    Use check_assumptions -show -live to show this property in the property table.
+0.0.PRE: Proof Simplification completed in 0.01 s
+0.0.H: Identified and disabled 14 duplicated targets.
+0: About to start ProofGrid in its own thread with a limit of 10000 pending notifications and a limit of 10 traces.
+0: ============================= ProofGrid (v3) start =============================
+0: ProofGrid usable level: 41
+0: Initial ProofGrid level: 1
+0: ProofGrid is starting event handling
+0: Computed task hash in 0.00ss
+0.0.H: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.B: pc3: Support for "CentOS Linux release 7.9.2009 (Core)" will be removed with the 2025.09 release.
+0.0.H: Proofgrid shell started at 30120@pc3(local) jg_28061_pc3_7
+0.0.H: clocks: 1, declared: 1, looping: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.0.H: Trace Attempt  1	[0.00 s]
+0.0.H: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.ASSUME_HSEL_ALWAYS_ON:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NO_SEQ_AFTER_IDLE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.READ_STABILITY:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HSIZE_LEGAL_FOR_BUS:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HWRITE_CONSTANT_IN_BURST:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HPROT_KNOWN_ON_TRANSFER:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.H: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_START:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_WRITE:precondition1" was covered in 1 cycles in 0.00 s.
+0.0.H: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF055): 0.0.H: A counterexample (cex) with 1 cycles was found for the property "ahb3liten.checker_i.HREADY_EQUALS_HREADYOUT" in 0.01 s.
+0.0.H: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NORMAL_TRANSFER_BUS_COMPLETE:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.NO_BUSY_AFTER_SINGLE:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.H: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.CAN_FINISH_WHAT_STARTED:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.BURST_START_CHECK:precondition1" was covered in 1 cycles in 0.01 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.H: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_HWORD:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.B: Proofgrid shell started at 30139@pc3(local) jg_28061_pc3_7
+0.0.H: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_ALIGNED_WORD:precondition1" was covered in 1 cycles in 0.01 s.
+0.0.H: Trace Attempt  2	[0.01 s]
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.checker_i.HRESP_OKAY_DURING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_NONSEQ_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.MASTER_FREEZE_ON_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.SLAVE_REQUESTING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HWRITE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HSIZE_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_STABLE_NONSEQ_SEQ:precondition1" was covered in 2 cycles in 0.01 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HWDATA_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.01 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.SEQ_FOLLOWS_NONSEQ_OR_SEQ:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HBURST_STABLE_DURING_WAIT:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HBURST_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_WRAP8_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HSIZE_CONSTANT_IN_BURST:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HSEL_STABLE_DURING_BURST:precondition1" was covered in 2 cycles in 0.02 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HPROT_STABLE_IN_BURST:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_INCR4_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_INCR8_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_INCR16_INCREMENT:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_WRAP4_BOUNDARY:precondition1" was covered in 2 cycles in 0.02 s.
+0.0.H: A trace with 2 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.HADDR_WRAP16_BOUNDARY:precondition1" was covered in 2 cycles in 0.03 s.
+0.0.H: Trace Attempt  3	[0.01 s]
+0.0.H: Trace Attempt  4	[0.01 s]
+0.0.H: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR4:precondition1" was covered in 4 cycles in 0.03 s.
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_NO_BUSY_LAST:precondition1" was covered in 4 cycles in 0.03 s.
+0: ProofGrid is temporarily paused because there are too many pending traces.
+0: ProofGrid is resuming to work after pausing for 0.01s. The amount of pending traces decreased.
+0.0.H: A trace with 4 cycles was found. [0.01 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP4:precondition1" was covered in 4 cycles in 0.03 s.
+0.0.H: Trace Attempt  5	[0.01 s]
+0.0.H: Trace Attempt  8	[0.02 s]
+0.0.H: A trace with 8 cycles was found. [0.02 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR8:precondition1" was covered in 8 cycles in 0.04 s.
+0.0.H: A trace with 8 cycles was found. [0.03 s]
+INFO (IPF047): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP8:precondition1" was covered in 8 cycles in 0.04 s.
+0.0.H: Trace Attempt  9	[0.03 s]
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF057): 0.0.H: The property "ahb3liten.checker_i.IDLE_TRANSFER_WAIT_STATE" was proven in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF057): 0.0.H: The property "ahb3liten.checker_i.NONSEQ_READ_WAIT_STATE" was proven in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF057): 0.0.H: The property "ahb3liten.checker_i.WRITE_NO_WAIT_STATE" was proven in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_IDLE_TO_NONSEQ:precondition1" was proven unreachable in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_TO_SEQ:precondition1" was proven unreachable in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.SEQ_STABLE_DURING_FIXED_BURST_WAIT:precondition1" was proven unreachable in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.HTRANS_WAIT_BUSY_ANY:precondition1" was proven unreachable in 0.04 s.
+0.0.H: Trace Attempt 10	[0.03 s]
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.checker_i.BUSY_TRANSFER_WAIT_STATE:precondition1" was proven unreachable in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.00 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.BUSY_PERMITTED_IN_BURST:precondition1" was proven unreachable in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_INCR16:precondition1" was proven unreachable in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.FIXED_BURST_COUNT_WRAP16:precondition1" was proven unreachable in 0.04 s.
+0.0.H: A proof was found: No trace exists. [0.03 s]
+INFO (IPF051): 0.0.H: The cover property "ahb3liten.assumptions_i.BURST_16_TERMINATION_CLEAN:precondition1" was proven unreachable in 0.04 s.
+0.0.H: Overconstrained at 11 [0.03 s]
+INFO (IPF144): 0: Initiating shutdown of proof [0.04 s]
+0.0.H: Requesting engine job to terminate
+0.0.B: Requesting engine job to terminate
+0.0.B: Interrupted. [0.01 s]
+0.0.H: Exited with Success (@ 0.04 s)
+0: ProofGrid usable level: 0
+0.0.B: Exited with Success (@ 0.04 s)
+0: --------------------------------------------------------------
+ProofGrid Summary (utilization 34.49 %)
+--------------------------------------------------------------
+     engines started                               :     2
+     engine jobs started                           :     2
+
+    Time in state (seconds)
+    --------------------------------------------
+               Pending     Running        Dead
+    --------------------------------------------
+    min           0.00        0.00        0.00
+    mean          0.04        0.02        0.00
+    median        0.04        0.02        0.00
+    max           0.04        0.04        0.00
+    sum           0.07        0.04        0.00
+
+    Data read    : 36.53 kiB
+    Data written : 2.17 kiB
+
+INFO (IPF180): 0: ProofGrid utilization: 34.49% slot-seconds: 0.04
+0: ProofGrid usable level: 0
+0: All pending notifications were processed.
+0: ProofGrid was paused 3 times for a total of 0.03 seconds
+WARNING (WAS006): The task is inconsistent at cycle 11.
+INFO (IPF059): 0: Completed proof on task: "<embedded>"
+
+==============================================================
+SUMMARY
+==============================================================
+           Properties Considered              : 67
+                 assertions                   : 11
+                  - proven                    : 9 (81.8182%)
+                  - bounded_proven (user)     : 0 (0%)
+                  - bounded_proven (auto)     : 0 (0%)
+                  - marked_proven             : 0 (0%)
+                  - cex                       : 2 (18.1818%)
+                  - ar_cex                    : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+                 covers                       : 56
+                  - unreachable               : 13 (23.2143%)
+                  - bounded_unreachable (user): 0 (0%)
+                  - covered                   : 43 (76.7857%)
+                  - ar_covered                : 0 (0%)
+                  - undetermined              : 0 (0%)
+                  - unknown                   : 0 (0%)
+                  - error                     : 0 (0%)
+overconstrained
+%% 
+overconstrained
 INFO (IPL005): Received request to exit from the console.
-INFO (IPL018): The peak resident set memory use for this session was 0.328 GB.
 INFO (IPL014): Waiting for the Tcl-thread to exit.
-INFO (IPL015): The Tcl-thread exited with status 1.
-INFO (IPL016): Exiting the analysis session with status 1.
+INFO: Waiting for proof threads to stop...
+INFO: Proof threads stopped.
+INFO (IPL018): The peak resident set memory use for this session was 0.393 GB.
+INFO (IPL015): The Tcl-thread exited with status 0.
+INFO (IPL016): Exiting the analysis session with status 0.

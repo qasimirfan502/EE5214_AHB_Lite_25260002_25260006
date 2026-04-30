@@ -15,7 +15,6 @@ import ahb3lite_pkg::*;
     input logic        HRESETn,
     input logic        HSEL,
     input logic        HREADY,
-    input logic        HREADYOUT,
     input logic        HWRITE,
     input logic [1:0]  HTRANS,
     input logic [2:0]  HSIZE,
@@ -41,6 +40,13 @@ import ahb3lite_pkg::*;
 
     assign master_bus = '{HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR};
 
+
+    // Checking the following assumption HTRANS_IDLE_DURING_RESET
+    initial begin                           
+        assume (!HRESETn);
+        assume(HTRANS == HTRANS_IDLE);
+    end
+    
     // Default clock and reset
     default clocking cb 
             @(posedge HCLK);
@@ -60,17 +66,18 @@ import ahb3lite_pkg::*;
     end
 
     // Tracking the beat count
-    int unsigned beat_count;
+    //int unsigned beat_count;
+    logic [4:0] beat_count;
     always_ff @(posedge HCLK or negedge HRESETn) begin
         if (!HRESETn)
-            beat_count <= 0;
-        else if (HREADY && HSEL) begin
+            beat_count <= 5'd0;
+        else if (HREADY) begin
             if (HTRANS == HTRANS_NONSEQ)
-                beat_count <= 1;
+                beat_count <= 5'd1;
             else if (HTRANS == HTRANS_SEQ)
-                beat_count <= beat_count + 1;       // address related to previous transfer
-            else    
-                beat_count <= 0;
+                beat_count <= beat_count + 5'd1;
+            else if (HTRANS == HTRANS_IDLE)
+                beat_count <= 5'd0;
         end
     end
 
@@ -159,144 +166,251 @@ import ahb3lite_pkg::*;
             burst_start_page <= HADDR[15:10];
     end
 
+    // ==========================================================================================
+    //                                  WRITING ASSUMPTIONS
+    // ==========================================================================================
 
-    // Now writing assumptions
+    // Add this to ensure reset stays high after the first cycle
+    RESET_STAYS_HIGH: assume property (@(posedge HCLK) $past(!HRESETn) |-> HRESETn[*1:$]);
+    // First of all, since we have only one slave keeping HSEL high from the master
+    ASSUME_HSEL_ALWAYS_ON: assume property (HRESETn |-> HSEL == 1'b1);
 
-    // Reset State Assumption | Spec ref: Section 7.1.2
-    HTRANS_IDLE_DURING_RESET: assume property (
-        @(posedge HCLK)
-        !HRESETn |-> (HTRANS == HTRANS_IDLE) && (!$isunknown({master_bus}))
-    );
-
-    //---------------------------------------
-    // Normal Transfer - WRITE OPERATION
-    //---------------------------------------
-    NORMAL_TRANSFER_START: assume property(
-        (HWRITE == 1 && HSEL) |-> (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)
-    );
-
-    NORMAL_TRANSFER_BUS_WRITE: assume property (
-        (HSEL && HTRANS == HTRANS_NONSEQ && HWRITE == 1) |-> ##1 !($isunknown(HWDATA))      // antecedant is the address phase
-    );
-
-    NORMAL_TRANSFER_BUS_COMPLETE: assume property (
-        (HSEL && HTRANS == HTRANS_NONSEQ && HBURST == HBURST_SINGLE && HREADY) |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)   // The antecedant checks whether its a single transfer or back to back transfer
-    );
-
-
-    // Signal stability checks
-    SLAVE_REQUESTING_WAIT: assume property (
-        (!HREADY && HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |=> $stable({master_bus})        // Checking if slave requests wait states, the master must not change the address or control signals
-    );
-
-
-    //---------------------------------------
-    // Normal Transfer - READ OPERATION
-    //---------------------------------------
-    READ_STABILITY: assume property (
-        (HWRITE == 0 && HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |-> !HWRITE
-    );
-
-
-    //---------------------------------------
-    // Burst Transfers
-    //---------------------------------------
-
-    // First obligation of Burst | This is known by HTRANS being NONSEQ since that is the first beat
-    BURST_START_CHECK: assume property (
-        (HTRANS == HTRANS_NONSEQ && HSEL && 
-        (HBURST == HBURST_INCR4  || HBURST == HBURST_INCR8  ||
-             HBURST == HBURST_INCR16 || HBURST == HBURST_WRAP4  ||
-             HBURST == HBURST_WRAP8  || HBURST == HBURST_WRAP16)) 
-        |-> htrans_prev == HTRANS_IDLE      // htrans_prev stored the previous state in the ghost code above which we are checking
-    );
-
-    // Second obligation of Burst | SEQ must follow NONSEQ for the remaining beats
-    SEQ_FOLLOW_NONSEQ: assume property (
+    SEQ_FOLLOWS_NONSEQ_OR_SEQ: assume property (
         (HTRANS == HTRANS_SEQ && HSEL && 
             (HBURST == HBURST_INCR4  || HBURST == HBURST_INCR8  ||
              HBURST == HBURST_INCR16 || HBURST == HBURST_WRAP4  ||
              HBURST == HBURST_WRAP8  || HBURST == HBURST_WRAP16))
         |-> (htrans_prev == HTRANS_NONSEQ || htrans_prev == HTRANS_SEQ)
+    );    
+
+
+    // NO_SEQ_AFTER_IDLE: A SEQ transfer cannot follow an IDLE transfer
+    NO_SEQ_AFTER_IDLE: assume property (
+        (htrans_prev == HTRANS_IDLE) |-> (HTRANS != HTRANS_SEQ)
+    );    
+
+
+    NO_BUSY_AFTER_SINGLE: assume property (
+        (HSEL && HTRANS == HTRANS_NONSEQ && HBURST == HBURST_SINGLE && HREADY) |=> (HTRANS != HTRANS_BUSY)
+    );    
+
+
+    FIXED_BURST_COUNT_INCR4: assume property (
+        (HSEL && HTRANS == HTRANS_SEQ && HREADY && burst_at_start == HBURST_INCR4 && beat_count == 3) 
+        |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)
     );
 
-    // Third obligation of Burst | HBURST must not change
-    BURST_TYPE_STABLE: assume property (
-        (HTRANS == HTRANS_SEQ && HSEL) |-> HBURST == burst_at_start     // So burst_at_start stores the HBURST at the moment NONSEQ was seen, hence value compared to it
+    FIXED_BURST_COUNT_INCR8: assume property (
+        (HSEL && HTRANS == HTRANS_SEQ && HREADY && burst_at_start == HBURST_INCR8 && beat_count == 7) 
+        |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)
+    );   
+
+    FIXED_BURST_COUNT_INCR16: assume property (
+        (HSEL && HTRANS == HTRANS_SEQ && HREADY && burst_at_start == HBURST_INCR16 && beat_count == 15) 
+        |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)
+    );    
+
+    FIXED_BURST_COUNT_WRAP4: assume property (
+        (HSEL && HTRANS == HTRANS_SEQ && HREADY && burst_at_start == HBURST_WRAP4 && beat_count == 3) 
+        |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)
+    );    
+
+    FIXED_BURST_COUNT_WRAP8: assume property (
+        (HSEL && HTRANS == HTRANS_SEQ && HREADY && burst_at_start == HBURST_WRAP8 && beat_count == 7) 
+        |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)
     );
 
-    // Fourth obilgation of Burst | HADDR must increment correctly | Only for INCR
-    HADDR_INCREMENT_INCR: assume property (
-        (HTRANS == HTRANS_SEQ && HSEL && 
-        (HBURST == HBURST_INCR4  || HBURST == HBURST_INCR8  ||
-             HBURST == HBURST_INCR16))
-        |-> HADDR == haddr_at_ready + (1 << HSIZE)
+    FIXED_BURST_COUNT_WRAP16: assume property (
+        (HSEL && HTRANS == HTRANS_SEQ && HREADY && burst_at_start == HBURST_WRAP16 && beat_count == 15) 
+        |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)
+    );    
+
+
+    HTRANS_STABLE_NONSEQ_SEQ: assume property (
+        (!HREADY && HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) 
+        |=> $stable(HTRANS)
     );
 
-    // Fourth obilgation of Burst | HADDR must increment correctly | Only for WRAPS
-    HADDR_INCREMENT_WRAP4: assume property (
-        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_WRAP4) |-> HADDR == wrapped_addr_4
+    // HTRANS_WAIT_IDLE_TO_NONSEQ: During a waited transfer, IDLE can only change to NONSEQ
+    HTRANS_WAIT_IDLE_TO_NONSEQ: assume property (
+        (!HREADY && HSEL && HTRANS == HTRANS_IDLE) 
+        |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)
+    );    
+
+    HTRANS_WAIT_BUSY_TO_SEQ: assume property (
+        (!HREADY && HSEL && HTRANS == HTRANS_BUSY && burst_at_start != HBURST_INCR) 
+        |=> (HTRANS == HTRANS_BUSY || HTRANS == HTRANS_SEQ)
     );
 
-    HADDR_INCREMENT_WRAP8: assume property (
-        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_WRAP8) |-> HADDR == wrapped_addr_8
+    // HTRANS_WAIT_BUSY_ANY: During a waited INCR burst, BUSY can change to any type
+    HTRANS_WAIT_BUSY_ANY: assume property (
+    (!HREADY && HSEL && 
+     HTRANS == HTRANS_BUSY && 
+     burst_at_start == HBURST_INCR) |=>
+    (HTRANS == HTRANS_SEQ    || 
+     HTRANS == HTRANS_IDLE   || 
+     HTRANS == HTRANS_NONSEQ ||
+     HTRANS == HTRANS_BUSY)
     );
 
-    HADDR_INCREMENT_WRAP16: assume property (
-        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_WRAP16) |-> HADDR == wrapped_addr_16
+    HADDR_STABLE_DURING_WAIT: assume property (
+        (!HREADY && HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |=> $stable(HADDR)
     );
 
-    // Fifth obligation of Burst | Burst must complete exactly N beats | After NONSEQ, exactly N-1 SEQ beats must follow
-    BURST_COMPLETE: assume property (
-        (HSEL && HTRANS == HTRANS_SEQ && HREADY &&
-        (
-            // beat_count reaches N-1 meaning this is the last SEQ beat
-            (burst_at_start == HBURST_INCR4  && beat_count == 3) ||
-            (burst_at_start == HBURST_WRAP4  && beat_count == 3) ||
-            (burst_at_start == HBURST_INCR8  && beat_count == 7) ||
-            (burst_at_start == HBURST_WRAP8  && beat_count == 7) ||
-            (burst_at_start == HBURST_INCR16 && beat_count == 15)||
-            (burst_at_start == HBURST_WRAP16 && beat_count == 15)
-        )) |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)
+    HWRITE_STABLE_DURING_WAIT: assume property (
+        (!HREADY && HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |=> $stable(HWRITE)
+    );
+
+
+    HSIZE_STABLE_DURING_WAIT: assume property (
+        (!HREADY && HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |=> $stable(HSIZE)
+    );
+
+
+    HBURST_STABLE_DURING_WAIT: assume property (
+        (HTRANS == HTRANS_SEQ && HSEL) |-> (HBURST == burst_at_start)     // So burst_at_start stores the HBURST at the moment NONSEQ was seen, hence value compared to it
+    );
+
+    // Address must be naturally aligned to transfer size
+    HADDR_ALIGNED_HWORD: assume property(
+        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) && HSIZE == HSIZE_HWORD |-> (HADDR[0] == 1'b0)
+    );
+
+    HADDR_ALIGNED_WORD: assume property (
+        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) && HSIZE == HSIZE_WORD |-> (HADDR[1:0] == 2'b00)
+    );
+
+    HSIZE_LEGAL_FOR_BUS: assume property (
+        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ))
+        |-> (HSIZE <= HSIZE_WORD)
+    );
+
+    HWRITE_CONSTANT_IN_BURST: assume property (
+        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |=> $stable(HWRITE)
+    );
+
+   // HBURST_CONSTANT_IN_BURST: HBURST must remain constant throughout the burst
+    HBURST_CONSTANT_IN_BURST: assume property (
+        (HSEL && (HTRANS == HTRANS_SEQ || HTRANS == HTRANS_BUSY)) |-> (HBURST == burst_at_start)
+    );
+
+    HSIZE_CONSTANT_IN_BURST: assume property(
+        (HSEL && HTRANS == HTRANS_SEQ) |-> (HSIZE == hsize_at_ready)
     );
 
     // Sixth obligation of Burst | 1KB Boundary | Masters should not attempt to start an increment that crosses 1KB boundary
-    BURST_1KB_BOUNDARY: assume property (
+    INCR_NO_1KB_BOUNDARY: assume property (
         (HTRANS == HTRANS_SEQ && HSEL &&
         (HBURST == HBURST_INCR4  || HBURST == HBURST_INCR8 ||
         HBURST == HBURST_INCR16)) |->
         HADDR[15:10] == burst_start_page
     );
 
+    HADDR_INCR4_INCREMENT: assume property(
+        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_INCR4 && HREADY) |-> HADDR == haddr_at_ready + (1 << HSIZE)
+    );
 
-    //---------------------------------------
+    HADDR_INCR8_INCREMENT: assume property(
+        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_INCR8 && HREADY) |-> HADDR == haddr_at_ready + (1 << HSIZE)
+    );
+
+    HADDR_INCR16_INCREMENT: assume property(
+        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_INCR16 && HREADY) |-> (HADDR == $past(HADDR)) + (1 << HSIZE)
+    );    
+
+    // Fourth obilgation of Burst | HADDR must increment correctly | Only for WRAPS
+    HADDR_WRAP4_BOUNDARY: assume property (
+        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_WRAP4 && HREADY) |-> HADDR == wrapped_addr_4
+    );
+
+    HADDR_WRAP8_BOUNDARY: assume property (
+        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_WRAP8 && HREADY) |-> HADDR == wrapped_addr_8
+    );
+
+    HADDR_WRAP16_BOUNDARY: assume property (
+        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_WRAP16 && HREADY) |-> HADDR == wrapped_addr_16
+    );    
+
+    HSEL_STABLE_DURING_BURST: assume property (
+        (HSEL && HTRANS == HTRANS_SEQ) |-> $stable(HSEL)
+    );
+
+    // Optional assumption added for generic implementation | HPROT not in this design but can be in some other slave module
+    HPROT_STABLE_IN_BURST: assume property (
+        (HSEL && HTRANS == HTRANS_SEQ) |-> $stable(HPROT)
+    );
+
+    HPROT_KNOWN_ON_TRANSFER: assume property (
+        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |-> !$isunknown(HPROT) 
+    );
+
+    BUSY_PERMITTED_IN_BURST: assume property (
+        (HSEL && HTRANS == HTRANS_BUSY) |->
+        (
+            (htrans_prev == HTRANS_NONSEQ || 
+            htrans_prev == HTRANS_SEQ    ||
+            htrans_prev == HTRANS_BUSY)
+            &&
+            (HBURST != HBURST_SINGLE)
+        )
+    );
+
+    // Once HTRANS changes to NONSEQ during a wait it must stay NONSEQ
+    HTRANS_NONSEQ_STABLE_DURING_WAIT: assume property (
+        (!HREADY && HSEL && HTRANS == HTRANS_NONSEQ) |=>
+        HTRANS == HTRANS_NONSEQ
+    );
+    
     // Wait state behavior stability check | HWDATA must be held valid until transfer completes
     //---------------------------------------
     HWDATA_STABLE_DURING_WAIT: assume property (
-        (!HREADY && HSEL && HWRITE && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ))
+        (!HREADY)
         |=> $stable(HWDATA)
+    );    
+
+    // Signal stability checks
+    SLAVE_REQUESTING_WAIT: assume property (
+        (!HREADY && HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |=> $stable({master_bus})        // Checking if slave requests wait states, the master must not change the address or control signals
     );
 
-    //---------------------------------------
-    // HSIZE and Address alignment
-    // 2 rules: 
-    //        - HSIZE must be legal for 32-bit bus |"Transfer size must be less than or equal to the width of the data bus"
-    //        - Address must be natrually aligned to HSIZE | "All transfers in a burst must be aligned to the address boundary equal to the size of the transfer"
-    //---------------------------------------
-    HSIZE_LEGAL: assume property (
-        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ))
-        |-> (HSIZE <= HSIZE_WORD)
+    NORMAL_TRANSFER_START: assume property(
+        (HWRITE == 1 && HSEL) |-> (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)
     );
 
-    // Address must be naturally aligned to transfer size
-    HADDR_ALIGNED: assume property (
-        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |->
-        (
-            (HSIZE == HSIZE_BYTE)  ? 1'b1                :  // always aligned
-            (HSIZE == HSIZE_HWORD) ? (HADDR[0] == 1'b0)  :  // bit 0 must be 0
-            (HSIZE == HSIZE_WORD)  ? (HADDR[1:0] == 2'b00): // bits 1:0 must be 00
-            1'b0                                             // larger sizes illegal
-        )
+
+    NORMAL_TRANSFER_BUS_WRITE: assume property (
+        (HSEL && HTRANS == HTRANS_NONSEQ && HWRITE == 1) |-> ##1 !($isunknown(HWDATA))      // antecedant is the address phase
     );
+
+    // Once HTRANS changes to SEQ during a fixed burst wait it must stay SEQ
+    SEQ_STABLE_DURING_FIXED_BURST_WAIT: assume property (
+        (!HREADY && HSEL && HTRANS == HTRANS_SEQ &&
+            (burst_at_start == HBURST_INCR4  || 
+            burst_at_start == HBURST_INCR8  ||
+            burst_at_start == HBURST_INCR16 ||
+            burst_at_start == HBURST_WRAP4  ||
+            burst_at_start == HBURST_WRAP8  ||
+            burst_at_start == HBURST_WRAP16) &&
+            // Do not force stability on last beat
+            !(beat_count == 3  && (burst_at_start == HBURST_INCR4  || burst_at_start == HBURST_WRAP4))  &&
+            !(beat_count == 7  && (burst_at_start == HBURST_INCR8  || burst_at_start == HBURST_WRAP8))  &&
+            !(beat_count == 15 && (burst_at_start == HBURST_INCR16 || burst_at_start == HBURST_WRAP16))
+        ) |=> HTRANS == HTRANS_SEQ
+    );
+
+    FIXED_BURST_NO_BUSY_LAST: assume property (
+        (HSEL && HREADY && 
+        ((burst_at_start == HBURST_INCR4 && beat_count == 3) ||
+         (burst_at_start == HBURST_INCR8 && beat_count == 7) ||    
+         (burst_at_start == HBURST_INCR16 && beat_count == 15) ||
+         (burst_at_start == HBURST_WRAP4 && beat_count == 3) ||
+         (burst_at_start == HBURST_WRAP8 && beat_count == 7) ||
+         (burst_at_start == HBURST_WRAP16 && beat_count == 15))) |->
+         (HTRANS != HTRANS_BUSY)
+    );
+
+    NORMAL_TRANSFER_BUS_COMPLETE: assume property (
+        (HSEL && HTRANS == HTRANS_NONSEQ && HBURST == HBURST_SINGLE && HREADY) |=> (HTRANS == HTRANS_IDLE || HTRANS == HTRANS_NONSEQ)   // The antecedant checks whether its a single transfer or back to back transfer
+    );    
 
 endmodule
