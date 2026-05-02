@@ -5,10 +5,10 @@
 # version   : 2025.06p002 64 bits
 # build date: 2025.08.26 14:59:20 UTC
 # ----------------------------------------
-# started   : 2026-04-30 03:31:24 PKT
+# started   : 2026-05-01 17:42:28 PKT
 # hostname  : pc3.(none)
-# pid       : 28061
-# arguments : '-style' 'windows' '-label' 'session_0' '-console' '//127.0.0.1:33908' '-data' 'AAAAfHicY2RgYLCp////PwMYMD6A0Aw2jAyoAMRnQhUJbEChGRhYUZVLMaQxFDCUMcQzFDOkMpQwlAJ5ekA6mSEHrAYA9BgL7A==' '-bridge_url' '10.103.76.67:36021' '-proj' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.initCmds.tcl' 'fpv_setup.tcl'
+# pid       : 5029
+# arguments : '-style' 'windows' '-label' 'session_0' '-console' '//127.0.0.1:35132' '-data' 'AAAAfHicY2RgYLCp////PwMYMD6A0Aw2jAyoAMRnQhUJbEChGRhYUZVLMaQxFDCUMcQzFDOkMpQwlAJ5ekA6mSEHrAYA9BgL7A==' '-bridge_url' '10.103.76.67:43943' '-proj' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.initCmds.tcl' 'fpv_setup.tcl'
 # ============================================================
 # fpv_setup.tcl
 # JasperGold FPV Setup Script
@@ -22,10 +22,8 @@ clear -all
 
 
 # JG settings for lab
-set_max_trace_length 40
-set_engine_mode {Hp Ht J L B N} 
-set_prove_per_property_time_limit 5s 
-set_prove_per_property_time_limit_factor 2
+set_engine_mode {H B}
+set_max_trace_length 100
 # ------------------------------------------------------------
 # STEP 2 — Analyze (compile) all files
 # Order matters:
@@ -67,7 +65,8 @@ elaborate -top ahb3liten \
 # ------------------------------------------------------------
 clock HCLK
 reset -expression {!HRESETn} 
-
+# Connected HREADY to HREADYOUT since single slave system
+assume -name HREADY_TIES {HREADY == HREADYOUT}
 
 # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
 set_max_trace_length 40
@@ -82,8 +81,5 @@ include fpv_setup.tcl
 include fpv_setup.tcl
 include fpv_setup.tcl
 include fpv_setup.tcl
-check_assumptions -conflict -property
-check_assumptions -conflict
-check_assumptions -show -dead_end
 include fpv_setup.tcl
 include fpv_setup.tcl

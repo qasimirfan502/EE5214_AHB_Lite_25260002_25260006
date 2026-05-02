@@ -5,10 +5,10 @@
 # version   : 2025.06p002 64 bits
 # build date: 2025.08.26 14:59:20 UTC
 # ----------------------------------------
-# started   : 2026-04-30 20:25:33 PKT
+# started   : 2026-05-02 16:25:16 PKT
 # hostname  : pc3.(none)
-# pid       : 4782
-# arguments : '-style' 'windows' '-label' 'session_0' '-console' '//127.0.0.1:32882' '-data' 'AAAAfHicY2RgYLCp////PwMYMD6A0Aw2jAyoAMRnQhUJbEChGRhYUZVLMaQxFDCUMcQzFDOkMpQwlAJ5ekA6mSEHrAYA9BgL7A==' '-bridge_url' '10.103.76.67:43169' '-proj' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.initCmds.tcl' 'fpv_setup.tcl'
+# pid       : 6578
+# arguments : '-style' 'windows' '-label' 'session_0' '-console' '//127.0.0.1:33879' '-data' 'AAAAfHicY2RgYLCp////PwMYMD6A0Aw2jAyoAMRnQhUJbEChGRhYUZVLMaQxFDCUMcQzFDOkMpQwlAJ5ekA6mSEHrAYA9BgL7A==' '-bridge_url' '10.103.76.67:40677' '-proj' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/Abdullah.Rafique/Documents/Formal_Verification/25260002_25260006_Project/EE5214_AHB_Lite_25260002_25260006/rtl/jgproject/.tmp/.initCmds.tcl' 'fpv_setup.tcl'
 # ============================================================
 # fpv_setup.tcl
 # JasperGold FPV Setup Script
@@ -65,7 +65,8 @@ elaborate -top ahb3liten \
 # ------------------------------------------------------------
 clock HCLK
 reset -expression {!HRESETn} 
-
+# Connected HREADY to HREADYOUT since single slave system
+assume -name HREADY_TIES {HREADY == HREADYOUT}
 
 # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
 set_max_trace_length 40
@@ -75,24 +76,62 @@ set_max_trace_length 40
 # ------------------------------------------------------------
 prove -all
 
-check_assumptions -assume_list
-include fpv_setup.tcl
-check_assumptions -conflict
-include fpv_setup.tcl
-include fpv_setup.tcl
-include fpv_setup.tcl
-check_assumptions -conflict
-check_assumptions -deadlock
+visualize -new_window; visualize -violation -property <embedded>::ahb3liten.checker_i.ASRT_SYMB_COHERENCE -bg
 include fpv_setup.tcl
 include fpv_setup.tcl
 include fpv_setup.tcl
 include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
 include fpv_setup.tcl
 include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
 include fpv_setup.tcl
 include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
 include fpv_setup.tcl
 include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+prove -all -bg
 include fpv_setup.tcl
 include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+visualize -property <embedded>::ahb3liten.checker_i.FA1_TRIGGER_COVER -new_window
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
 include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.DATA_VALIDITY -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.FA2_NO_SPURIOUS_WRITE -new_window
+include fpv_setup.tcl
+visualize -violation -property <embedded>::ahb3liten.checker_i.FA2_NO_SPURIOUS_WRITE -new_window

@@ -41,12 +41,11 @@ import ahb3lite_pkg::*;
     assign master_bus = '{HWRITE, HTRANS, HSIZE, HBURST, HPROT, HADDR};
 
 
-    // Checking the following assumption HTRANS_IDLE_DURING_RESET
+    // Checking the following assumption 
     initial begin                           
         assume (!HRESETn);
         assume(HTRANS == HTRANS_IDLE);
     end
-    
     // Default clock and reset
     default clocking cb 
             @(posedge HCLK);
@@ -286,7 +285,7 @@ import ahb3lite_pkg::*;
     );
 
     HWRITE_CONSTANT_IN_BURST: assume property (
-        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |=> $stable(HWRITE)
+        (HSEL && HTRANS == HTRANS_SEQ) |=> (HWRITE == hwrite_at_burst_start)      // it was too restrictive causing issues for read and write
     );
 
    // HBURST_CONSTANT_IN_BURST: HBURST must remain constant throughout the burst
@@ -315,7 +314,7 @@ import ahb3lite_pkg::*;
     );
 
     HADDR_INCR16_INCREMENT: assume property(
-        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_INCR16 && HREADY) |-> (HADDR == $past(HADDR)) + (1 << HSIZE)
+        (HTRANS == HTRANS_SEQ && HSEL && HBURST == HBURST_INCR16 && HREADY) |-> (HADDR == haddr_at_ready + (1 << HSIZE))
     );    
 
     // Fourth obilgation of Burst | HADDR must increment correctly | Only for WRAPS
@@ -374,7 +373,8 @@ import ahb3lite_pkg::*;
     );
 
     NORMAL_TRANSFER_START: assume property(
-        (HWRITE == 1 && HSEL) |-> (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)
+        (HSEL && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ) && HWRITE)
+        |-> ##1 !($isunknown(HWDATA))
     );
 
 

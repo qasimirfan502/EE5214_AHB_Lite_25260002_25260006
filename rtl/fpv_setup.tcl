@@ -1,7 +1,7 @@
 # ============================================================
 # fpv_setup.tcl
 # JasperGold FPV Setup Script
-# EE-5214 — AHB-Lite Verification — Spring 2025
+# EE-5214 — AHB-Lite Verification Project - 25260002-25260006
 # ============================================================
 
 # ------------------------------------------------------------
@@ -54,7 +54,8 @@ elaborate -top ahb3liten \
 # ------------------------------------------------------------
 clock HCLK
 reset -expression {!HRESETn} 
-
+# Connected HREADY to HREADYOUT since single slave system
+assume -name HREADY_TIES {HREADY == HREADYOUT}
 
 # Setting this because some assumptions require more cycles such as INCR16 and WRAP16
 set_max_trace_length 40
