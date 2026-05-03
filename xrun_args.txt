@@ -1,15 +1,21 @@
--sv
+// Lists all design files and the testbench
 
-// Compile the package first
-packages/ahb3lite_pkg.sv	// package compilation
+// Package
+packages/ahb3lite_pkg.sv
 
-rtl/ahb3lite_sram1x32.sv	// DUT compilation
+// Design files
+rtl/design.sv
+rtl/mem.sv
 
-// other complilations
+
+// Testbench
+
 scoreboard.sv
-ahb_cov.sv
 tb_top.sv
 
--coverage all
--covoverwrite
--covfile covfile.txt
+
+// Options
+
+-timescale 1ns/1ps
+-sv
+-top tb_top

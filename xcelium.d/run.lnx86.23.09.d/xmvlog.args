@@ -5,9 +5,12 @@
 -XLMODE
 ./xcelium.d/run.lnx86.23.09.d
 -RUNMODE
--sv
 packages/ahb3lite_pkg.sv
+rtl/design.sv
+rtl/mem.sv
+scoreboard.sv
 tb_top.sv
+-sv
 -CDSLIB
 ./xcelium.d/run.lnx86.23.09.d/cdsrun.lib
 -HDLVAR
@@ -18,3 +21,4 @@ tb_top.sv
 -XLLIBSTORE
 ./xcelium.d/run.lnx86.23.09.d/xllibs
 -ALLOWUNBOUND
+-hastop

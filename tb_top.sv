@@ -1,173 +1,394 @@
 `timescale 1ns/1ps
 
-//`include "packages/ahb3lite_pkg.sv"
-
-
-// Place this right after your imports/includes and BEFORE module tb_top;
-
-class ahb_master;
-    
-    // Random variables for 10k transactions 
-    rand logic [31:0] haddr;
-    rand logic [1:0]  htrans;
-    rand logic        hwrite;
-    rand logic [2:0]  hsize;
-    rand logic [2:0]  hburst;
-    rand logic [31:0] hwdata []; // To feed bursts of 16 beats
-
-    // <--- FIX: Intermediate variables for the constraint solver
-    rand int num_beats;
-    rand int beat_bytes;
-
-    // Constraints [Chapter 3]----------------------------------------------------------------------
-
-    // <--- FIX: Let the solver calculate the beats and bytes directly to prevent array crashes
-    constraint c_beat_calc {
-        beat_bytes == (1 << hsize); // 3'b000 = 1 byte, 3'b001 = 2 bytes, 3'b010 = 4 bytes....
-
-        if (hburst == 3'b010 || hburst == 3'b011) num_beats == 4;       // WRAP4  | INCR4
-        else if (hburst == 3'b100 || hburst == 3'b101) num_beats == 8;  // WRAP8  | INCR8
-        else if (hburst == 3'b110 || hburst == 3'b111) num_beats == 16; // WRAP16 | INCR16
-        else num_beats == 1;                                            // SINGLE | INCR
-    }
-
-    // Address Alignment [Spec 3.4]
-    constraint c_alignment {
-        haddr % beat_bytes == 0;
-    }
-
-    // 1 KB Boundary Restriction [Spec 3.5]
-    /*
-    * a = Start Addr/1024
-    * b = End Addr/1024
-    * if (a != b){
-    * the burst crossed into a new 1 KB block.
-    * }
-    */
-    constraint c_1kb_boundary {
-        if (hburst == 3'b011 || hburst == 3'b101 || hburst == 3'b111) { // INCR4, INCR8, INCR16
-            (haddr / 1024) == ((haddr + (num_beats * beat_bytes) - 1) / 1024);
-        }
-    }
-
-    // 32-bit data width according to key signals in project description 
-    constraint c_max_size {
-        hsize <= 3'b010; 
-    }
-
-    // new transactions should always start as a NONSEQ transfer... SEQ continues it — SEQ cannot follow IDLE are handled in driver task
-    constraint c_valid_htrans {
-        htrans == 2'b10; 
-    }
-    
-    // Make the data array match the burst length
-    constraint c_hwdata_size {
-        hwdata.size() == num_beats;
-    }
-
-endclass
+`include "scoreboard.sv"
 
 module tb_top;
-    import ahb3lite_pkg::*;
-    logic HCLK;     // rising edge clk 
-    logic HRESETn;  // rst @ 0 (active low)
 
-    // Master Control Signals
-    logic [31:0]    HADDR;        // Address — must be aligned to HSIZE
-    logic [1:0]     HTRANS;       // IDLE=00, BUSY=01, NONSEQ=10, SEQ=11
-    logic           HWRITE;       // 1=write, 0=read
-    logic [2:0]     HSIZE;        // Transfer size: byte/halfword/word
-    logic [2:0]     HBURST;       // SINGLE, INCR, WRAP4/8/16, INCR4/8/16
-    logic           HMASTLOCK;    // High = current transfer is part of a locked sequence
-    logic [3:0]     HPROT;
-    logic           HREADYOUT;
+  parameter HADDR_SIZE = 16;
+  parameter HDATA_SIZE = 32;
+
+  localparam TRANS_IDLE   = 2'b00;
+  localparam TRANS_BUSY   = 2'b01; 
+  localparam TRANS_NONSEQ = 2'b10;
+  localparam TRANS_SEQ    = 2'b11;
+
+  localparam BURST_SINGLE = 3'b000;
+
+  localparam BURST_WRAP4  = 3'b010;
+  localparam BURST_WRAP8  = 3'b100;
+  localparam BURST_WRAP16 = 3'b110;
+
+  localparam BURST_INCR4  = 3'b011;
+  localparam BURST_INCR8  = 3'b101;
+  localparam BURST_INCR16 = 3'b111;
+
+  logic                  HCLK;
+  logic                  HRESETn;
+  logic                  HSEL;
+  logic [HADDR_SIZE-1:0] HADDR;
+  logic [HDATA_SIZE-1:0] HWDATA;
+  logic [HDATA_SIZE-1:0] HRDATA;
+  logic                  HWRITE;
+  logic [2:0]            HSIZE;
+  logic [2:0]            HBURST;
+  logic [3:0]            HPROT;
+  logic [1:0]            HTRANS;
+  logic                  HMASTLOCK;
+  logic                  HREADY;
+  logic                  HREADYOUT;
+  logic                  HRESP;
+
+  string TEST_TYPE;
+
+  assign HREADY = HREADYOUT; 
+
+  ahb3liten #(
+    .HADDR_SIZE (HADDR_SIZE),
+    .HDATA_SIZE (HDATA_SIZE)
+  ) dut (
+    .HCLK      (HCLK),
+    .HRESETn   (HRESETn),
+    .HSEL      (HSEL),
+    .HADDR     (HADDR),
+    .HWDATA    (HWDATA),
+    .HRDATA    (HRDATA),
+    .HWRITE    (HWRITE),
+    .HSIZE     (HSIZE),
+    .HBURST    (HBURST),
+    .HPROT     (HPROT),
+    .HTRANS    (HTRANS),
+    .HREADYOUT (HREADYOUT),
+    .HREADY    (HREADY),
+    .HRESP     (HRESP)
+  );
+
+  // clocking block to avoid any race conditions caused by this master
+  clocking cb @(posedge HCLK);
+    input  HRDATA, HREADYOUT, HRESP;
+    output HADDR, HWDATA, HWRITE, HSIZE, HBURST, HPROT, HTRANS, HMASTLOCK;
+  endclocking
+
+  initial HCLK = 0;
+  always #5 HCLK = ~HCLK;
+
+  initial begin
+    HRESETn   = 0;
+    HSEL      = 1'b1;
+    TEST_TYPE = "INIT";
+    HADDR     = '0;
+    HWDATA    = '0;
+    HWRITE    = 1'b0;
+    HSIZE     = 3'b010; 
+    HBURST    = BURST_SINGLE;
+    HPROT     = 4'b0011; 
+    HTRANS    = TRANS_IDLE;
+    HMASTLOCK = 1'b0;
     
-    logic [31:0]    HWDATA;       
+    repeat(5) @(posedge HCLK);
+    HRESETn = 1;
+  end
 
-    // clk generation
-    initial begin
-        HCLK = 1'b0;
-        forever #5 HCLK = ~HCLK; 
+  // FUNCTIONS *****************************************************************************
+
+  function automatic logic [15:0] get_safe_rand_addr(int num_beats);
+    logic [15:0] addr;
+    int max_page_offset = 1024 - (num_beats * 4); 
+    addr[15:10] = $urandom; 
+    addr[9:0] = ($urandom_range(0, max_page_offset)) & 10'h3FC; 
+    return addr;
+  endfunction
+  
+  function automatic logic [31:0] align_wdata(logic [31:0] data, logic [2:0] size);
+    if (size == 3'b000) return {4{data[7:0]}}; 
+    if (size == 3'b001) return {2{data[15:0]}};
+    return data;
+  endfunction
+
+  function automatic logic [31:0] extract_data(logic [31:0] raw_data, logic [1:0] lane, logic [2:0] size);
+    int shift_amt = lane * 8;
+    logic [31:0] shifted = raw_data >> shift_amt;
+    if (size == 3'b000) return shifted & 32'hFF;
+    if (size == 3'b001) return shifted & 32'hFFFF;
+    return shifted;
+  endfunction
+
+  function automatic logic [31:0] get_next_addr(logic [31:0] addr, logic [2:0] burst, logic [2:0] size);
+    int beat_bytes = 1 << size;
+    int num_beats;
+    logic [31:0] wrap_boundary, wrap_mask;
+    
+    case (burst)
+      BURST_WRAP4:  num_beats = 4;
+      BURST_WRAP8:  num_beats = 8;
+      BURST_WRAP16: num_beats = 16;
+      default: return addr + beat_bytes; 
+    endcase
+    
+    wrap_boundary = num_beats * beat_bytes;
+    wrap_mask = ~(wrap_boundary - 1);
+    
+    return (addr & wrap_mask) | ((addr + beat_bytes) % wrap_boundary);
+  endfunction
+
+  // TASKS *****************************************************************************
+ 
+  task automatic ahb_write(input [HADDR_SIZE-1:0] addr, input [31:0] data, input [2:0] size);
+    bit err = 0;
+    
+    begin
+      sb.check_alignment(addr, size);
+      
+      @(cb); 
+      while (!cb.HREADYOUT) @(cb);
+      cb.HADDR <= addr; cb.HWRITE <= 1'b1; cb.HTRANS <= TRANS_NONSEQ; cb.HBURST <= BURST_SINGLE; cb.HSIZE <= size;
+      @(cb); 
+      cb.HWDATA <= align_wdata(data, size); cb.HTRANS <= TRANS_IDLE;
+      @(cb); 
+      
+      while (!cb.HREADYOUT) begin
+      
+        if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+        @(cb);
+      
+      end
+      if (cb.HRESP) err = 1; 
+      cb.HWRITE <= 1'b0; 
+    
     end
+  
+  endtask
 
-    // reset generation & test execution
-    initial begin
-        // The reset can be asserted asynchronously 
-        HRESETn = 1'b0; 
-        HTRANS    = 2'b00; // IDLE as required
-        HADDR     = 32'h0;
-        HBURST    = 3'b000;
-        HSIZE     = 3'b000;
-        HWRITE    = 1'b0;
-        HPROT     = 4'b0000;
-        HMASTLOCK = 1'b0;
 
-        // Hold reset active for a few clock cycles
-        repeat(5) @(posedge HCLK);
 
-        // Reset is deasserted synchronously after the rising edge of HCLK. 
-        #1 HRESETn = 1'b1;
+  task automatic ahb_read(input [HADDR_SIZE-1:0] addr, output [31:0] data, input [2:0] size);
+    bit err = 0;
+    
+    begin
+      sb.check_alignment(addr, size);
+      @(cb);
+      
+      while (!cb.HREADYOUT) @(cb);
+      
+      cb.HADDR <= addr; cb.HWRITE <= 1'b0; cb.HTRANS <= TRANS_NONSEQ; cb.HBURST <= BURST_SINGLE; cb.HSIZE <= size;
+      
+      @(cb); 
+      cb.HTRANS <= TRANS_IDLE;  
+      @(cb); 
+      
+      while (!cb.HREADYOUT) begin
+      
+        if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+        @(cb);
+      
+      end
+      if (cb.HRESP) err = 1;
+      
+      data = extract_data(cb.HRDATA, addr[1:0], size); 
+    
+    end
+  
+  endtask
 
-        // **************************TODO: Directed tests here****************************************
 
-        // (Inside your initial block, after reset deasserts)
-        begin
-            ahb_master my_txn = new();
-            
-            repeat(10) begin
-                if (my_txn.randomize()) begin
-                    $display("[%0t] Driving Burst: HADDR=%0h, HBURST=%0b", $time, my_txn.haddr, my_txn.hburst);
-                    execute_txn(my_txn); // Drive it!
-                end else begin
-                    $error("Randomization failed!");
-                end
-            end
+
+  task automatic ahb_write_burst(input [HADDR_SIZE-1:0] base_addr, ref logic [31:0] data [], input int length, input [2:0] burst_type, input [2:0] size);
+    int i;
+    logic [HADDR_SIZE-1:0] curr_addr;
+    bit err = 0;
+  
+    begin
+      
+      sb.check_alignment(base_addr, size);
+      curr_addr = base_addr;
+      @(cb); 
+      
+      while (!cb.HREADYOUT) @(cb);
+      
+      cb.HADDR <= curr_addr; cb.HWRITE <= 1'b1; cb.HTRANS <= TRANS_NONSEQ; cb.HBURST <= burst_type; cb.HSIZE <= size;
+      
+      for (i = 1; i < length; i++) begin
+        curr_addr = get_next_addr(curr_addr, burst_type, size); 
+        @(cb); 
+      
+        while (!cb.HREADYOUT) begin
+      
+          if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+          @(cb);
+        
         end
         
-        #100 $finish; // End simulation neatly
+        if (err) begin cb.HWRITE <= 1'b0; return; end
+        
+        cb.HADDR <= curr_addr; cb.HTRANS <= TRANS_SEQ; cb.HWDATA <= align_wdata(data[i-1], size);       
+      
+      end
+      
+      @(cb); 
+      
+      while (!cb.HREADYOUT) begin
+      
+        if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+        @(cb);
+      
+      end
+      cb.HTRANS <= TRANS_IDLE; cb.HBURST <= BURST_SINGLE; cb.HWDATA <= align_wdata(data[length-1], size);
+      @(cb);
+      
+      while (!cb.HREADYOUT) @(cb);
+      
+      cb.HWRITE <= 1'b0;
+    
+    end
+  
+  endtask
+
+
+
+  task automatic ahb_read_burst(input [HADDR_SIZE-1:0] base_addr, ref logic [31:0] data [], input int length, input [2:0] burst_type, input [2:0] size);
+    int i;
+    logic [HADDR_SIZE-1:0] curr_addr;
+    logic [HADDR_SIZE-1:0] dphase_addrs []; 
+    bit err = 0;
+
+    begin
+      sb.check_alignment(base_addr, size);
+      dphase_addrs = new[length];
+      curr_addr = base_addr;
+      dphase_addrs[0] = curr_addr;
+      @(cb); while (!cb.HREADYOUT) @(cb);
+      cb.HADDR <= curr_addr; cb.HWRITE <= 1'b0; cb.HTRANS <= TRANS_NONSEQ; cb.HBURST <= burst_type; cb.HSIZE <= size;
+
+      for (i = 1; i < length; i++) begin
+        curr_addr = get_next_addr(curr_addr, burst_type, size);
+        dphase_addrs[i] = curr_addr;
+        @(cb); 
+        
+        while (!cb.HREADYOUT) begin
+          if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+          @(cb);
+        end
+        
+        if (err) return;
+        
+        if (i > 1) data[i-2] = extract_data(cb.HRDATA, dphase_addrs[i-2][1:0], size); 
+        cb.HADDR <= curr_addr; cb.HTRANS <= TRANS_SEQ; 
+
+      end
+      @(cb); 
+      
+      while (!cb.HREADYOUT) begin
+      
+        if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+        @(cb);
+      
+      end
+      if (length > 1) data[length-2] = extract_data(cb.HRDATA, dphase_addrs[length-2][1:0], size);
+      cb.HTRANS <= TRANS_IDLE; cb.HBURST <= BURST_SINGLE; 
+      @(cb); while (!cb.HREADYOUT) @(cb);
+      data[length-1] = extract_data(cb.HRDATA, dphase_addrs[length-1][1:0], size);
+    end
+  endtask
+
+  `include "directed_tests.sv"
+
+  // MAIN *****************************************************************************
+
+  logic [31:0] s_wdata, s_rdata;
+  logic [31:0] wdata_dyn [], rdata_dyn [];
+  
+  ahb_scoreboard sb;
+  
+  initial begin
+  
+    sb = new(); 
+    wait(HRESETn);
+    repeat(2) @(posedge HCLK);
+
+    run_directed_tests(sb);
+
+    $display("\n*****************************************************************************");
+    $display("               PHASE 9 --> RANDOMIZED TESTS  ~10,500     ");
+    $display("*****************************************************************************\n");
+    TEST_TYPE = "RANDOM";
+
+    begin
+      int fails_before_random; 
+      fails_before_random = sb.total_fails; 
+
+      for (int k = 0; k < 1500; k++) begin
+      
+        logic [15:0] rand_addr;
+
+        // SINGLE RANDOM *****************************************************************************
+        rand_addr = get_safe_rand_addr(1);
+        s_wdata = $urandom;
+        ahb_write(rand_addr, s_wdata, 3'b010);
+        ahb_read (rand_addr, s_rdata, 3'b010);
+        sb.check_beat("RANDOM SINGLE", s_wdata, s_rdata);
+
+        // INCR4 RANDOM *****************************************************************************
+        rand_addr = get_safe_rand_addr(4);
+        wdata_dyn = new[4]; rdata_dyn = new[4];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
+        ahb_write_burst(rand_addr, wdata_dyn, 4, BURST_INCR4, 3'b010);
+        ahb_read_burst (rand_addr, rdata_dyn, 4, BURST_INCR4, 3'b010);
+        sb.check_burst("RANDOM INCR4", wdata_dyn, rdata_dyn);
+
+        // INCR8 RANDOM *****************************************************************************
+        rand_addr = get_safe_rand_addr(8);
+        wdata_dyn = new[8]; rdata_dyn = new[8];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
+        ahb_write_burst(rand_addr, wdata_dyn, 8, BURST_INCR8, 3'b010);
+        ahb_read_burst (rand_addr, rdata_dyn, 8, BURST_INCR8, 3'b010);
+        sb.check_burst("RANDOM INCR8", wdata_dyn, rdata_dyn);
+
+        // INCR16 RANDOM *****************************************************************************
+        rand_addr = get_safe_rand_addr(16);
+        wdata_dyn = new[16]; rdata_dyn = new[16];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
+        ahb_write_burst(rand_addr, wdata_dyn, 16, BURST_INCR16, 3'b010);
+        ahb_read_burst (rand_addr, rdata_dyn, 16, BURST_INCR16, 3'b010);
+        sb.check_burst("RANDOM INCR16", wdata_dyn, rdata_dyn);
+
+        // WRAP4 RANDOM *****************************************************************************
+        rand_addr = get_safe_rand_addr(4);
+        wdata_dyn = new[4]; rdata_dyn = new[4];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
+        ahb_write_burst(rand_addr, wdata_dyn, 4, BURST_WRAP4, 3'b010);
+        ahb_read_burst (rand_addr, rdata_dyn, 4, BURST_WRAP4, 3'b010);
+        sb.check_burst("RANDOM WRAP4", wdata_dyn, rdata_dyn);
+
+        // WRAP8 RANDOM *****************************************************************************
+        rand_addr = get_safe_rand_addr(8);
+        wdata_dyn = new[8]; rdata_dyn = new[8];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
+        ahb_write_burst(rand_addr, wdata_dyn, 8, BURST_WRAP8, 3'b010);
+        ahb_read_burst (rand_addr, rdata_dyn, 8, BURST_WRAP8, 3'b010);
+        sb.check_burst("RANDOM WRAP8", wdata_dyn, rdata_dyn);
+
+        // WRAP16 RANDOM *****************************************************************************
+        rand_addr = get_safe_rand_addr(16);
+        wdata_dyn = new[16]; rdata_dyn = new[16];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
+        ahb_write_burst(rand_addr, wdata_dyn, 16, BURST_WRAP16, 3'b010);
+        ahb_read_burst (rand_addr, rdata_dyn, 16, BURST_WRAP16, 3'b010);
+        sb.check_burst("RANDOM WRAP16", wdata_dyn, rdata_dyn);
+
+//  UNCOMMENT TO CHECK DIRECTED TESTS FROM THE CONSOLE******************************************************************************************************************************************
+/*         
+        if (sb.total_fails > fails_before_random) begin
+          $display("\n[FATAL] Scoreboard mismatch detected in Random Phase! Halting random tests to prevent log flood.");
+          break;
+        end
+ */     
+      end
+    
     end
 
-    // Dummy ready signal so the while loop doesn't hang
-    assign HREADYOUT = 1'b1; 
+    #50;
+    sb.print_report();
+    $finish;
+  
+  end
 
-    task execute_txn(ahb_master txn);
-        int beats;
-        logic [31:0] current_addr;
-        
-        // <--- FIX: Using the direct variables instead of function calls
-        beats = txn.num_beats; 
-        current_addr = txn.haddr;
-        
-        // @ beat 0
-        @(posedge HCLK);
-        HADDR  <= current_addr;
-        HWRITE <= txn.hwrite;
-        HSIZE  <= txn.hsize;
-        HBURST <= txn.hburst;
-        HTRANS <= 2'b10; // First beat -> NONSEQ [Spec 3.2]
-        
-        //loop to iterate through rest of the beats
-        for (int i = 0; i < beats; i++) begin
-            @(posedge HCLK);
-            
-            // wait -> HREADYOUT == 0.
-            while (HREADYOUT == 1'b0) begin
-                @(posedge HCLK);
-            end
-            
-            // Data phase 
-            if (txn.hwrite) begin
-                HWDATA <= txn.hwdata[i];
-            end
-
-            // Addr phase for next beat 
-            if (i < (beats - 1)) begin
-                current_addr = current_addr + txn.beat_bytes; // Increment address
-                HADDR  <= current_addr;
-                HTRANS <= 2'b11; // SEQ continues the transfer after NONSEQ state
-            end else begin
-                HTRANS <= 2'b00; //IDLE
-            end
-        end
-    endtask
 endmodule
