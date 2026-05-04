@@ -38,4 +38,25 @@ module bind_fpv;
         .HADDR     ( HADDR     ),
         .HWDATA    ( HWDATA    )
     );
+
+    // -------------------------------------------------------------------------
+    // 3. Cover properties — corner case reachability checks
+    // -------------------------------------------------------------------------
+    bind ahb3liten ahb_covers covers_i (
+        .HCLK      ( HCLK      ),
+        .HRESETn   ( HRESETn   ),
+        .HSEL      ( HSEL      ),
+        .HREADY    ( HREADY    ),
+        .HREADYOUT ( HREADYOUT ),
+        .HRESP     ( HRESP     ),
+        .HWRITE    ( HWRITE    ),
+        .HTRANS    ( HTRANS    ),
+        .HSIZE     ( HSIZE     ),
+        .HBURST    ( HBURST    ),
+        .HPROT     ( HPROT     ),
+        .HADDR     ( HADDR     ),
+        .HWDATA    ( HWDATA    ),
+        .HRDATA    ( HRDATA    )
+    );
+
 endmodule

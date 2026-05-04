@@ -1,29 +1,29 @@
-[2026-05-01 17:42:26 PKT] [INFO] IBR0122: ===========System Information==========
-[2026-05-01 17:42:26 PKT] [INFO] IBR0123: Start date: 2026-05-01 12:42:26 UTC
-[2026-05-01 17:42:26 PKT] [INFO] IBR0124: Hostname: pc3
-[2026-05-01 17:42:26 PKT] [INFO] IBR0125: Host IP address(es): p8p1(10.103.76.67), virbr0(192.168.122.1)
-[2026-05-01 17:42:26 PKT] [WARNING] WBR0037: Multiple IP addresses were found
-[2026-05-01 17:42:26 PKT] [WARNING] WBR0038: Make sure listen address (ws://10.103.76.67:0) is reachable from your network
-[2026-05-01 17:42:26 PKT] [INFO] IBR0126: Username: Abdullah.Rafique
-[2026-05-01 17:42:26 PKT] [INFO] IBR0129: Limit of open files: 1024
-[2026-05-01 17:42:26 PKT] [INFO] IBR0145: System Info:
-[2026-05-01 17:42:26 PKT] [INFO] IBR0146: 	Product Type : CentOS Linux 7 (Core)
-[2026-05-01 17:42:26 PKT] [INFO] IBR0147: 	Kernel Type : linux
-[2026-05-01 17:42:26 PKT] [INFO] IBR0148: 	Kernel Version : 3.10.0-1160.119.1.el7.x86_64
-[2026-05-01 17:42:26 PKT] [INFO] IBR0149: 	Machine ID : pc3
-[2026-05-01 17:42:26 PKT] [INFO] IBR0154: Memory Info:
-[2026-05-01 17:42:26 PKT] [INFO] IBR0155: 	Total memory: 16099 MB
-[2026-05-01 17:42:26 PKT] [INFO] IBR0156: 	Available memory: 8735 MB
-[2026-05-01 17:42:26 PKT] [INFO] IBR0150: CPU information:
-[2026-05-01 17:42:26 PKT] [INFO] IBR0151: 	Architecture : x86_64
-[2026-05-01 17:42:26 PKT] [INFO] IBR0153: 	 Model name: Intel(R) Core(TM) i5-8400 CPU @ 2.80GHz
-[2026-05-01 17:42:26 PKT] [INFO] IBR0152: 	Core count: 6
-[2026-05-01 17:42:26 PKT] [INFO] IBR0130: PID: 5020
-[2026-05-01 17:42:26 PKT] [INFO] IBR0131: =======================================
-[2026-05-01 17:42:26 PKT] [INFO] IBR0102: Bridge endpoint: ws://10.103.76.67:45308
-[2026-05-01 17:42:26 PKT] [INFO] IBR0096: Jasper endpoint: '10.103.76.67:43943'
-[2026-05-01 18:50:01 PKT] [INFO] IBR0175: Termination signal received (#2). Trying to exit.
-[2026-05-01 18:50:01 PKT] [INFO] IBR0175: Termination signal received (#2). Trying to exit.
-[2026-05-01 18:50:02 PKT] [INFO] IBR0168: Shutting down...
-[2026-05-01 18:50:02 PKT] [INFO] IBR0178: Jobs are finished and clients are disconnected.
-[2026-05-01 18:50:02 PKT] [INFO] IBR0179: Exiting with exit status 0.
+[2026-05-04 17:07:00 PKT] [INFO] IBR0122: ===========System Information==========
+[2026-05-04 17:07:00 PKT] [INFO] IBR0123: Start date: 2026-05-04 12:07:00 UTC
+[2026-05-04 17:07:00 PKT] [INFO] IBR0124: Hostname: pc3
+[2026-05-04 17:07:00 PKT] [INFO] IBR0125: Host IP address(es): p8p1(10.103.76.67), wlp4s0(192.168.1.101), virbr0(192.168.122.1)
+[2026-05-04 17:07:00 PKT] [WARNING] WBR0037: Multiple IP addresses were found
+[2026-05-04 17:07:00 PKT] [WARNING] WBR0038: Make sure listen address (ws://10.103.76.67:0) is reachable from your network
+[2026-05-04 17:07:00 PKT] [INFO] IBR0126: Username: Abdullah.Rafique
+[2026-05-04 17:07:00 PKT] [INFO] IBR0129: Limit of open files: 1024
+[2026-05-04 17:07:00 PKT] [INFO] IBR0145: System Info:
+[2026-05-04 17:07:00 PKT] [INFO] IBR0146: 	Product Type : CentOS Linux 7 (Core)
+[2026-05-04 17:07:00 PKT] [INFO] IBR0147: 	Kernel Type : linux
+[2026-05-04 17:07:00 PKT] [INFO] IBR0148: 	Kernel Version : 3.10.0-1160.119.1.el7.x86_64
+[2026-05-04 17:07:00 PKT] [INFO] IBR0149: 	Machine ID : pc3
+[2026-05-04 17:07:00 PKT] [INFO] IBR0154: Memory Info:
+[2026-05-04 17:07:00 PKT] [INFO] IBR0155: 	Total memory: 16099 MB
+[2026-05-04 17:07:00 PKT] [INFO] IBR0156: 	Available memory: 8191 MB
+[2026-05-04 17:07:00 PKT] [INFO] IBR0150: CPU information:
+[2026-05-04 17:07:00 PKT] [INFO] IBR0151: 	Architecture : x86_64
+[2026-05-04 17:07:00 PKT] [INFO] IBR0153: 	 Model name: Intel(R) Core(TM) i5-8400 CPU @ 2.80GHz
+[2026-05-04 17:07:00 PKT] [INFO] IBR0152: 	Core count: 6
+[2026-05-04 17:07:00 PKT] [INFO] IBR0130: PID: 19946
+[2026-05-04 17:07:00 PKT] [INFO] IBR0131: =======================================
+[2026-05-04 17:07:00 PKT] [INFO] IBR0102: Bridge endpoint: ws://10.103.76.67:42960
+[2026-05-04 17:07:00 PKT] [INFO] IBR0096: Jasper endpoint: '10.103.76.67:37001'
+[2026-05-04 17:27:34 PKT] [INFO] IBR0175: Termination signal received (#2). Trying to exit.
+[2026-05-04 17:27:34 PKT] [INFO] IBR0175: Termination signal received (#2). Trying to exit.
+[2026-05-04 17:27:34 PKT] [INFO] IBR0168: Shutting down...
+[2026-05-04 17:27:34 PKT] [INFO] IBR0178: Jobs are finished and clients are disconnected.
+[2026-05-04 17:27:34 PKT] [INFO] IBR0179: Exiting with exit status 0.

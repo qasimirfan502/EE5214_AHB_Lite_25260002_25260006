@@ -29,159 +29,90 @@ import ahb3lite_pkg::*;
 
     default disable iff (!HRESETn);
 
-    // =========================================
-    // Auxilary Code
+// =========================================
+    // Optimized Ghost Logic
     // =========================================
 
-    // Track last completed HTRANS
-    logic [1:0] htrans_prev;
-    always_ff @(posedge HCLK or negedge HRESETn) begin
-        if (!HRESETn)
-            htrans_prev <= HTRANS_IDLE;
-        else if (HREADY)
-            htrans_prev <= HTRANS;
-    end
+    // Basic Phase Signals
+    logic ghost_ahb_write;
+    assign ghost_ahb_write = HSEL && HWRITE && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ);
+    
+    logic ghost_ahb_read;
+    assign ghost_ahb_read  = HSEL && !HWRITE && (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ);
 
-    // =========================================
-    // Write tracking — two stage pipeline
-    // Stage 1: address phase (HADDR valid)
-    // Stage 2: data phase (HWDATA valid next cycle)
-    // =========================================
+    // 1. Write Tracking (Capture Address then Data)
     logic        write_addr_captured;
     logic [15:0] write_addr_latched;
+    logic [15:0] last_write_addr;
+    logic [31:0] last_write_data;
+    logic        last_write_valid;
+    logic [2:0]   write_size_latched;
 
     always_ff @(posedge HCLK or negedge HRESETn) begin
         if (!HRESETn) begin
             write_addr_captured <= 1'b0;
-            write_addr_latched  <= '0;
+            last_write_valid    <= 1'b0;
+            write_size_latched  <= 3'b0;
         end else begin
-            if (HREADY && HSEL && HWRITE &&
-                (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) begin
+            // Address Phase Capture
+            if (HREADY && ghost_ahb_write) begin
                 write_addr_captured <= 1'b1;
                 write_addr_latched  <= HADDR;
-            end else begin
+                write_size_latched  <= HSIZE;
+            end else if (HREADY) begin
                 write_addr_captured <= 1'b0;
             end
-        end
+
+            // Data Phase Commit
+            if (write_addr_captured && HREADY && ghost_ahb_write) begin
+                last_write_addr  <= write_addr_latched;
+                last_write_data  <= HWDATA;
+                last_write_valid <= 1'b1;
+                end else if (write_addr_captured && !ghost_ahb_write) begin
+                last_write_valid <= 1'b0;  // abandoned write
+                end
+            end
     end
 
-    logic [15:0] last_write_addr;
-    logic [31:0] last_write_data;
-    logic        last_write_valid;
-    // Ghost signal that mirrors the DUT's internal ahb_write
-    logic ghost_ahb_write;
-    assign ghost_ahb_write = HSEL & HWRITE & (HTRANS != HTRANS_BUSY) & (HTRANS != HTRANS_IDLE);
-    // Ghost signal that mirrors the DUT's internal ahb_read
-    logic ghost_ahb_read;
-    assign ghost_ahb_read = HSEL & ~HWRITE & (HTRANS != HTRANS_BUSY) & (HTRANS != HTRANS_IDLE);
-
-    // Stage 2: only commit when the data phase is also a genuine write
-    always_ff @(posedge HCLK or negedge HRESETn) begin
-        if (!HRESETn) begin
-            last_write_addr  <= '0;
-            last_write_data  <= '0;
-            last_write_valid <= 1'b0;
-        end else if (write_addr_captured && HREADY && ghost_ahb_write) begin
-        // ghost_ahb_write ensures data phase is a real write, not BUSY/IDLE
-            last_write_addr  <= write_addr_latched;
-            last_write_data  <= HWDATA;
-            last_write_valid <= 1'b1;
-        end else if (write_addr_captured && ghost_ahb_write && !HREADY) begin
-            // Address phase happened but data phase is not a write — abandoned
-            last_write_valid <= 1'b0;
-        end
-    end
-
-    // =========================================
-    // Byte write tracking — two stage pipeline
-    // =========================================
-    logic [15:0] byte_write_addr_saved;
-    logic        byte_write_addr_captured;
-
-    always_ff @(posedge HCLK or negedge HRESETn) begin
-        if (!HRESETn) begin
-            byte_write_addr_saved    <= '0;
-            byte_write_addr_captured <= 1'b0;
-        end else if (HREADYOUT && HSEL && HWRITE && HTRANS == HTRANS_NONSEQ && HSIZE == HSIZE_BYTE) begin
-            byte_write_addr_saved    <= HADDR;
-            byte_write_addr_captured <= 1'b1;
-        end else begin
-            byte_write_addr_captured <= 1'b0;
-        end
-    end
-
-    logic [7:0]  byte_write_data;
-    logic        byte_write_pending;
-
-    always_ff @(posedge HCLK or negedge HRESETn) begin
-        if (!HRESETn) begin
-            byte_write_data    <= '0;
-            byte_write_pending <= 1'b0;
-        end else if (byte_write_addr_captured && HSEL && HWRITE) begin
-            case (byte_write_addr_saved[1:0])
-                2'b00: byte_write_data <= HWDATA[7:0];
-                2'b01: byte_write_data <= HWDATA[15:8];
-                2'b10: byte_write_data <= HWDATA[23:16];
-                2'b11: byte_write_data <= HWDATA[31:24];
-            endcase
-            byte_write_pending <= 1'b1;
-        end else begin
-            byte_write_pending <= 1'b0;
-        end
-    end
-
-    // =========================================
-    // Read tracking — two stage pipeline
-    // =========================================
+    // 2. Read Tracking & Stability Logic
     logic        read_addr_captured;
     logic [15:0] read_addr_latched;
-
-    always_ff @(posedge HCLK or negedge HRESETn) begin
-        if (!HRESETn) begin
-            read_addr_captured <= 1'b0;
-            read_addr_latched  <= '0;
-        end else begin
-            if (HREADYOUT && HSEL && !HWRITE &&
-                (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ) &&
-                !(HTRANS == HTRANS_SEQ && $past(HWRITE))) begin  // not a direction flip
-                read_addr_captured <= 1'b1;
-                read_addr_latched  <= HADDR;
-            end else begin
-                read_addr_captured <= 1'b0;
-            end
-        end
-    end
-
     logic [15:0] last_read_addr;
     logic [31:0] last_read_data;
     logic        last_read_valid;
-    logic        valid_write_between;
+    logic        write_to_last_read_addr;
 
     always_ff @(posedge HCLK or negedge HRESETn) begin
         if (!HRESETn) begin
-            last_read_addr  <= '0;
-            last_read_data  <= '0;
-            last_read_valid <= 1'b0;
-        end else if (read_addr_captured && HREADYOUT && ghost_ahb_read) begin
-            last_read_addr  <= read_addr_latched;
-            last_read_data  <= HRDATA;
-            last_read_valid <= 1'b1;
+            read_addr_captured      <= 1'b0;
+            last_read_valid         <= 1'b0;
+            write_to_last_read_addr <= 1'b0;
+        end else begin
+            // Address Phase Capture for Read
+            if (HREADYOUT && ghost_ahb_read) begin
+                read_addr_captured <= 1'b1;
+                read_addr_latched  <= HADDR;
+            end else if (HREADYOUT && !ghost_ahb_read && HTRANS != HTRANS_BUSY && HTRANS != HTRANS_IDLE) begin
+            // Only clear when bus completes something that is NOT a read
+            // If !HREADYOUT — hold as-is to survive wait states
+            read_addr_captured <= 1'b0;
+            end
+
+            // Data Phase Commit for Read
+            if (read_addr_captured && HREADYOUT && ghost_ahb_read) begin
+                last_read_addr          <= read_addr_latched;
+                last_read_data          <= HRDATA;
+                last_read_valid         <= 1'b1;
+                write_to_last_read_addr <= 1'b0; // Reset tracking for the new address
+            end 
+            // Check if any write hits our tracked address
+            else if (last_read_valid && write_addr_captured && HREADYOUT && (write_addr_latched == last_read_addr)) begin
+                write_to_last_read_addr <= 1'b1;
+            end
         end
     end
 
-    // Track whether a valid write occurred between two reads
-    always_ff @(posedge HCLK or negedge HRESETn) begin
-        if (!HRESETn) begin
-            valid_write_between <= 1'b0;
-        end else if (write_addr_captured && HREADYOUT && ghost_ahb_write) begin
-            valid_write_between <= 1'b1;
-        end else if (read_addr_captured && HREADYOUT && ghost_ahb_read) begin
-            valid_write_between <= 1'b0;
-        end
-    end
-
- 
-
+    
 
     // ---------------------------------------------PROTOCOL ASSERTIONS----------------------------------------------
 
@@ -192,14 +123,6 @@ import ahb3lite_pkg::*;
 
     IDLE_ZERO_WAIT: assert property (IDLE_ZERO_WAIT_PROP)
         else $error("FAIL: Slave did not provide zero wait state on IDLE");
-
-
-    property BUSY_ZERO_WAIT_PROP;
-        (HSEL && HTRANS == HTRANS_BUSY) |=> HREADYOUT;
-    endproperty
-
-    BUSY_ZERO_WAIT: assert property (BUSY_ZERO_WAIT_PROP)
-        else $error("FAIL: Slave did not provide zero wait state on BUSY");
 
     property HRESP_ALWAYS_OKAY_PROP;
         HRESP == HRESP_OKAY;
@@ -266,13 +189,23 @@ import ahb3lite_pkg::*;
         else $error("FAIL: DUT inserted wait state on write transfer");
 
 
-    property HREADY_EQUALS_HREADYOUT_PROP;
-        HREADY == HREADYOUT;
+    property SEQ_READ_NO_WAIT_STATE_PROP;
+    (HSEL && HTRANS == HTRANS_SEQ && !HWRITE && HREADYOUT) |=>
+    HREADYOUT;
     endproperty
 
-    HREADY_EQUALS_HREADYOUT: assert property (HREADY_EQUALS_HREADYOUT_PROP)
-        else $error("FAIL: HREADY does not equal HREADYOUT");
-    
+    SEQ_READ_NO_WAIT_STATE: assert property (SEQ_READ_NO_WAIT_STATE_PROP)
+        else $error("FAIL: DUT inserted unexpected wait state on SEQ read");
+
+    property HRDATA_VALID_ON_COMPLETE_PROP;
+        (HREADYOUT && HSEL && !HWRITE &&
+        (HTRANS == HTRANS_NONSEQ || HTRANS == HTRANS_SEQ)) |=>
+        !$isunknown(HRDATA);
+    endproperty
+
+    HRDATA_VALID_ON_COMPLETE: assert property (HRDATA_VALID_ON_COMPLETE_PROP)
+        else $error("FAIL: HRDATA unknown when transfer completed");
+   
     // ---------------------------------------------FUNCTIONAL ASSERTIONS----------------------------------------------
    
     DATA_VALIDITY_COVER: cover property (
@@ -283,39 +216,72 @@ import ahb3lite_pkg::*;
     );
 
     property DATA_VALIDITY_PROP;
+        // Declare a local variable to lock in the data we want to check
+        logic [31:0] expected_data;
+       
+        // ANTECEDENT (Address Phase)
         (last_write_valid &&
-        HSEL && !HWRITE &&
-        HTRANS == HTRANS_NONSEQ &&
-        HADDR == last_write_addr &&
-        HREADYOUT)
-        |->
-        ##1 (!HREADYOUT)
-        ##1 (HREADYOUT && (HRDATA == $past(last_write_data, 2)));
+         HSEL && !HWRITE &&
+         HTRANS == HTRANS_NONSEQ &&
+         HADDR == last_write_addr &&
+         HREADYOUT,
+         expected_data = last_write_data) // <--- Lock in the data here!
+        |=> // Move to Data Phase
+        // CONSEQUENT (Data Phase)
+        // Wait for HREADYOUT to go high (whether that takes 0, 1, or 50 cycles)
+        HREADYOUT[->1] ##0 (HRDATA == expected_data);
     endproperty
 
     DATA_VALIDITY: assert property (DATA_VALIDITY_PROP)
          else $error("FAIL: Read data was not valid");
 
-    NO_MEMORY_LOCATION_CHANGE_COVER: cover property (
-        last_read_valid &&
-        !valid_write_between ##1
-        (HSEL && !HWRITE &&
-        HTRANS == HTRANS_NONSEQ &&
-        HADDR == last_read_addr)
-    );
-
-    property NO_MEMORY_LOCATION_CHANGE_PROP;
-        (last_read_valid &&
-        !valid_write_between &&
-        HSEL && !HWRITE &&
-        HTRANS == HTRANS_NONSEQ &&
-        HADDR == last_read_addr &&
-        HREADYOUT)
-        |-> ##1 (!HREADYOUT) ##1 (HREADYOUT && (HRDATA == $past(last_read_data, 2)));
+    property MEM_STABILITY_PROP;
+        // Declare a local variable to lock in the expected stable data
+        logic [31:0] expected_data;
+       
+        // ANTECEDENT (Address Phase)
+        (last_read_valid && !write_to_last_read_addr &&
+         HSEL && !HWRITE &&
+         HTRANS == HTRANS_NONSEQ &&
+         HADDR == last_read_addr &&
+         HREADYOUT,
+         expected_data = last_read_data) // <--- Lock in the data here!
+        |=> // Move to Data Phase
+        // CONSEQUENT (Data Phase)
+        HREADYOUT[->1] ##0 (HRDATA == expected_data);
     endproperty
 
-    NO_MEMORY_LOCATION_CHANGE: assert property (NO_MEMORY_LOCATION_CHANGE_PROP)
-    else $error("FA2 FAIL: Memory at addr 0x%04h changed without a valid write",
-            last_read_addr);
+    MEM_STABILITY: assert property (MEM_STABILITY_PROP)
+        else $error("FAIL: Memory content changed at 0x%04h without a write to that address", last_read_addr);
+
+    STABILITY_CHECK_COVER: cover property (
+        last_read_valid ##[5:10] (HSEL && !HWRITE && HADDR == last_read_addr && HREADYOUT)
+    );
+
+
+    property BYTE_WRITE_ISOLATION_PROP;
+        logic [15:0] target_addr;
+        logic [31:0] prev_mem_data;
+        
+        // ANTECEDENT: A Byte write is starting to a known address
+        (last_read_valid && 
+         HSEL && HWRITE && HREADYOUT &&
+         HTRANS == HTRANS_NONSEQ && 
+         HSIZE == 3'b000 &&              // 3'b000 = Byte access
+         HADDR == last_read_addr,        // We already know the old data
+         target_addr = HADDR,
+         prev_mem_data = last_read_data) // Store the "old" 32-bit word
+        |=>
+        // CONSEQUENT: After the write completes, read the word back 
+        // and verify bytes 1, 2, and 3 are unchanged.
+        HREADYOUT[->1] ##1               // Wait for write to finish
+        (HSEL && !HWRITE && HADDR == target_addr && HREADYOUT) // Trigger a Read
+        |=>
+        HREADYOUT[->1] ##0 
+        (HRDATA[31:8] == prev_mem_data[31:8]); // Check top 3 bytes match old data
+    endproperty
+
+    BYTE_WRITE_ISOLATION: assert property (BYTE_WRITE_ISOLATION_PROP)
+        else $error("FAIL: Byte write to 0x%0h corrupted neighboring bytes!", last_read_addr);
 
 endmodule

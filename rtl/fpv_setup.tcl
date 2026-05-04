@@ -1,67 +1,51 @@
 # ============================================================
-# fpv_setup.tcl
-# JasperGold FPV Setup Script
-# EE-5214 — AHB-Lite Verification Project - 25260002-25260006
-# ============================================================
-
-# ------------------------------------------------------------
 # STEP 1 — Clear previous session
-# ------------------------------------------------------------
+# ============================================================
 clear -all
 
-
-# JG settings for lab
+# Engine settings
 set_engine_mode {H B}
-set_max_trace_length 100
-# ------------------------------------------------------------
-# STEP 2 — Analyze (compile) all files
-# Order matters:
-#   1. Package first — defines constants used by everything
-#   2. DUT files
-#   3. Checker and assumptions
-#   4. Bind file last — references all other modules
-# ------------------------------------------------------------
+set_max_trace_length 40
 
-# Package
+# ============================================================
+# STEP 2 — Analyze
+# ============================================================
+
 analyze -sv12 ../packages/ahb3lite_pkg.sv
 
-# DUT
 analyze -sv12 ../rtl/design.sv
 analyze -sv12 ../rtl/mem.sv
 
-# Checker and assumptions
 analyze -sv12 ahb_checker.sv
 analyze -sv12 ahb_assumptions.sv
-
-# Bind file — must be last
+analyze -sv12 ahb_cover.sv
 analyze -sv12 bind_fpv.sv
 
-# ------------------------------------------------------------
+# ============================================================
 # STEP 3 — Elaborate
-# Top module is the DUT
-# Parameters match design.sv defaults
-# ------------------------------------------------------------
+# ============================================================
+
 elaborate -top ahb3liten \
     -parameter MEM_SIZE 32 \
     -parameter MEM_DEPTH 256 \
     -parameter HADDR_SIZE 16 \
     -parameter HDATA_SIZE 32
 
-# ------------------------------------------------------------
-# STEP 4 — Clock and reset
-# HCLK  : rising edge triggered
-# HRESETn : active low reset
-# ------------------------------------------------------------
+# ============================================================
+# STEP 4 — Clock and Reset (IMPORTANT: before prove)
+# ============================================================
+
 clock HCLK
-reset -expression {!HRESETn} 
-# Connected HREADY to HREADYOUT since single slave system
-assume -name HREADY_TIES {HREADY == HREADYOUT}
+reset -expression {!HRESETn}
 
-# Setting this because some assumptions require more cycles such as INCR16 and WRAP16
-set_max_trace_length 40
+# ============================================================
+# STEP 5 — Run Proof
+# ============================================================
 
-# ------------------------------------------------------------
-# STEP 6 — Run proof
-# ------------------------------------------------------------
 prove -all
 
+# ============================================================
+# STEP 6 — Coverage Reports (AFTER prove)
+# ============================================================
+
+report -summary
