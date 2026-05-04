@@ -1,0 +1,88 @@
+*** Message Type: info ***
+When: Mon May 04 16:52:41 PKT 2026
+SimVision started.
+Version: TOOL:  simvision       23.09-s013
+User: Qasim.Irfan
+Host: pc6
+Platform: Linux/x86_64/3.10.0-1160.119.1.el7.x86_64
+Started: Mon May 04 16:52:41 PKT 2026
+Command: /mnt/cadence_tools/installs/XCELIUM2309/tools.lnx86/simvision/bin/simvision.exe -connect dc:pc6:39529 -nocopyright
+Work Directory: /home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006
+ 
+*** Message Type: info ***
+When: Mon May 04 16:52:42 PKT 2026
+Create browser window: "Design Browser 1"
+ 
+*** Message Type: info ***
+When: Mon May 04 16:53:07 PKT 2026
+Create console window: "Console"
+ 
+*** Message Type: info ***
+When: Mon May 04 16:53:19 PKT 2026
+Connect to Simulator
+      Design: worklib.tb_top:sv
+   Languages: verilog
+   Simulator: XM-Sim
+     Version: TOOL:  xmsim   23.09-s013
+        User: Qasim.Irfan
+        Host: pc6
+Time Started: Mon May 04 16:52:40 PKT 2026
+  Process ID: 3212
+   Directory: /home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006
+     Command: xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps
+
+ 
+*** Message Type: info ***
+When: Mon May 04 16:53:20 PKT 2026
+Create utility window: "Properties"
+ 
+*** Message Type: info ***
+When: Mon May 04 16:53:28 PKT 2026
+Create waveform window: "Waveform 1"
+ 
+*** Message Type: info ***
+When: Mon May 04 16:54:46 PKT 2026
+Exit XM-Sim: user
+      Design: worklib.tb_top:sv
+   Languages: verilog
+   Simulator: XM-Sim
+     Version: TOOL:  xmsim   23.09-s013
+        User: Qasim.Irfan
+        Host: pc6
+Time Started: Mon May 04 16:52:40 PKT 2026
+  Process ID: 3212
+   Directory: /home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006
+     Command: xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps
+
+ 
+*** Message Type: error ***
+When: Mon May 04 16:54:48 PKT 2026
+XM-Sim Crashed:
+      Design: worklib.tb_top:sv
+   Languages: verilog
+   Simulator: XM-Sim
+     Version: TOOL:  xmsim   23.09-s013
+        User: Qasim.Irfan
+        Host: pc6
+Time Started: Mon May 04 16:52:40 PKT 2026
+  Process ID: 3212
+   Directory: /home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006
+     Command: xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps
+      Design: worklib.tb_top:sv
+   Languages: verilog
+   Simulator: XM-Sim
+     Version: TOOL: xmsim   23.09-s013
+        User: Qasim.Irfan
+        Host: pc6
+Time Started: Mon May 04 16:52:40 PKT 2026
+  Process ID: 3212
+   Directory: /home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006
+     Command: xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps
+
+Outstanding STRAP Requests:
+        strap::report enable out
+ 
+*** Message Type: info ***
+When: Mon May 04 16:54:50 PKT 2026
+SimVision Exit.
+ 

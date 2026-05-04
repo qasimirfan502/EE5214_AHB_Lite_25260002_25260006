@@ -7,6 +7,7 @@ packages/ahb3lite_pkg.sv
 rtl/design.sv
 rtl/mem.sv
 
+-l ahb_sim_results.log
 
 // Testbench
 

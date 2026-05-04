@@ -2,5 +2,12 @@
 // File created by:  xrun
 // Do not modify this file
 //
--f
-xrun_args.txt
+packages/ahb3lite_pkg.sv
+rtl/mem.sv
+rtl/design.sv
+tb_top.sv
+-access
++rwc
+-top
+tb_top
+-gui

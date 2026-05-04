@@ -6,11 +6,9 @@
 ./xcelium.d/run.lnx86.23.09.d
 -RUNMODE
 packages/ahb3lite_pkg.sv
-rtl/design.sv
 rtl/mem.sv
-scoreboard.sv
+rtl/design.sv
 tb_top.sv
--sv
 -CDSLIB
 ./xcelium.d/run.lnx86.23.09.d/cdsrun.lib
 -HDLVAR

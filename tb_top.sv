@@ -13,6 +13,7 @@ module tb_top;
   localparam TRANS_SEQ    = 2'b11;
 
   localparam BURST_SINGLE = 3'b000;
+  localparam BURST_INCR   = 3'b001;
 
   localparam BURST_WRAP4  = 3'b010;
   localparam BURST_WRAP8  = 3'b100;
@@ -97,6 +98,18 @@ module tb_top;
     addr[9:0] = ($urandom_range(0, max_page_offset)) & 10'h3FC; 
     return addr;
   endfunction
+
+  function automatic void check_alignment(logic [31:0] addr, logic [2:0] size);
+    logic [31:0] aligned;
+    case (size)
+      3'b001: aligned = {addr[31:1], 1'b0}; 
+      3'b010: aligned = {addr[31:2], 2'b00};
+      default: aligned = addr;
+    endcase
+    if (aligned != addr) begin
+      $error("[AHB PROTOCOL VIOLATION] Unaligned address detected! Size: %b, Addr: %h", size, addr);
+    end
+  endfunction
   
   function automatic logic [31:0] align_wdata(logic [31:0] data, logic [2:0] size);
     if (size == 3'b000) return {4{data[7:0]}}; 
@@ -136,7 +149,7 @@ module tb_top;
     bit err = 0;
     
     begin
-      sb.check_alignment(addr, size);
+      check_alignment(addr, size);
       
       @(cb); 
       while (!cb.HREADYOUT) @(cb);
@@ -164,7 +177,7 @@ module tb_top;
     bit err = 0;
     
     begin
-      sb.check_alignment(addr, size);
+      check_alignment(addr, size);
       @(cb);
       
       while (!cb.HREADYOUT) @(cb);
@@ -198,7 +211,7 @@ module tb_top;
   
     begin
       
-      sb.check_alignment(base_addr, size);
+      check_alignment(base_addr, size);
       curr_addr = base_addr;
       @(cb); 
       
@@ -251,7 +264,7 @@ module tb_top;
     bit err = 0;
 
     begin
-      sb.check_alignment(base_addr, size);
+      check_alignment(base_addr, size);
       dphase_addrs = new[length];
       curr_addr = base_addr;
       dphase_addrs[0] = curr_addr;
@@ -289,6 +302,102 @@ module tb_top;
     end
   endtask
 
+
+
+  task automatic ahb_b2b_write_read_burst(input [HADDR_SIZE-1:0] w_addr, ref logic [31:0] w_data [], input [HADDR_SIZE-1:0] r_addr, ref logic [31:0] r_data [], input int length, input [2:0] burst_type, input [2:0] size);
+    int i;
+    logic [HADDR_SIZE-1:0] curr_waddr;
+    logic [HADDR_SIZE-1:0] curr_raddr;
+    logic [HADDR_SIZE-1:0] dphase_raddrs []; 
+    bit err = 0;
+
+    begin
+      
+      check_alignment(w_addr, size);
+      check_alignment(r_addr, size);
+      dphase_raddrs = new[length];
+      curr_waddr = w_addr;
+      
+      @(cb); 
+      
+      while (!cb.HREADYOUT) @(cb);
+      
+      cb.HADDR <= curr_waddr; cb.HWRITE <= 1'b1; cb.HTRANS <= TRANS_NONSEQ; cb.HBURST <= burst_type; cb.HSIZE <= size;
+      
+      for (i = 1; i < length; i++) begin
+        curr_waddr = get_next_addr(curr_waddr, burst_type, size); 
+        @(cb); 
+      
+        while (!cb.HREADYOUT) begin
+      
+          if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+          @(cb);
+        
+        end
+        
+        if (err) begin cb.HWRITE <= 1'b0; return; end
+        
+        cb.HADDR <= curr_waddr; cb.HTRANS <= TRANS_SEQ; cb.HWDATA <= align_wdata(w_data[i-1], size);       
+      
+      end
+      
+      @(cb); 
+      
+      while (!cb.HREADYOUT) begin
+      
+        if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+        @(cb);
+      
+      end
+      
+      // B2B TRANSITION: Drive final write data AND initiate NONSEQ read address phase simultaneously
+      cb.HWDATA <= align_wdata(w_data[length-1], size);
+      
+      curr_raddr = r_addr;
+      dphase_raddrs[0] = curr_raddr;
+      cb.HADDR <= curr_raddr; cb.HWRITE <= 1'b0; cb.HTRANS <= TRANS_NONSEQ; cb.HBURST <= burst_type; 
+
+      for (i = 1; i < length; i++) begin
+        curr_raddr = get_next_addr(curr_raddr, burst_type, size);
+        dphase_raddrs[i] = curr_raddr;
+        @(cb); 
+        
+        while (!cb.HREADYOUT) begin
+          if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+          @(cb);
+        end
+        
+        if (err) return;
+        
+        if (i > 1) r_data[i-2] = extract_data(cb.HRDATA, dphase_raddrs[i-2][1:0], size); 
+        cb.HADDR <= curr_raddr; cb.HTRANS <= TRANS_SEQ; 
+
+      end
+      
+      @(cb); 
+      
+      while (!cb.HREADYOUT) begin
+      
+        if (cb.HRESP) begin err = 1; cb.HTRANS <= TRANS_IDLE; end
+        @(cb);
+      
+      end
+      
+      if (length > 1) r_data[length-2] = extract_data(cb.HRDATA, dphase_raddrs[length-2][1:0], size);
+      cb.HTRANS <= TRANS_IDLE; cb.HBURST <= BURST_SINGLE; 
+      
+      @(cb); 
+      
+      while (!cb.HREADYOUT) @(cb);
+      
+      r_data[length-1] = extract_data(cb.HRDATA, dphase_raddrs[length-1][1:0], size);
+      
+    end
+    
+  endtask
+
+
+
   `include "directed_tests.sv"
 
   // MAIN *****************************************************************************
@@ -307,72 +416,221 @@ module tb_top;
     run_directed_tests(sb);
 
     $display("\n*****************************************************************************");
-    $display("               PHASE 9 --> RANDOMIZED TESTS  ~10,500     ");
+    $display("               PHASE 8 --> RANDOMIZED TESTS  ~10,000     ");
     $display("*****************************************************************************\n");
     TEST_TYPE = "RANDOM";
 
     begin
       int fails_before_random; 
+      int rand_len;
       fails_before_random = sb.total_fails; 
 
-      for (int k = 0; k < 1500; k++) begin
+      for (int k = 0; k < 450; k++) begin
       
         logic [15:0] rand_addr;
 
         // SINGLE RANDOM *****************************************************************************
+        // WORD
         rand_addr = get_safe_rand_addr(1);
         s_wdata = $urandom;
         ahb_write(rand_addr, s_wdata, 3'b010);
         ahb_read (rand_addr, s_rdata, 3'b010);
-        sb.check_beat("RANDOM SINGLE", s_wdata, s_rdata);
+        sb.check_beat("RANDOM SINGLE (WORD)", s_wdata, s_rdata);
+
+        // HALFWORD
+        rand_addr = get_safe_rand_addr(1);
+        s_wdata = $urandom;
+        ahb_write(rand_addr, s_wdata, 3'b001);
+        ahb_read (rand_addr, s_rdata, 3'b001);
+        sb.check_beat("RANDOM SINGLE (HALFWORD)", s_wdata[15:0], s_rdata[15:0]);
+
+        // BYTE
+        rand_addr = get_safe_rand_addr(1);
+        s_wdata = $urandom;
+        ahb_write(rand_addr, s_wdata, 3'b000);
+        ahb_read (rand_addr, s_rdata, 3'b000);
+        sb.check_beat("RANDOM SINGLE (BYTE)", s_wdata[7:0], s_rdata[7:0]);
+
+
+        // INCR RANDOM (UNDEFINED LENGTH) *****************************************************************************
+        rand_len = $urandom_range(2, 12); // Undefined length means the master picks a dynamic beat length at runtime
+        
+        // WORD
+        rand_addr = get_safe_rand_addr(rand_len);
+        wdata_dyn = new[rand_len]; rdata_dyn = new[rand_len];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
+        ahb_b2b_write_read_burst(rand_addr, wdata_dyn, rand_addr, rdata_dyn, rand_len, BURST_INCR, 3'b010);
+        sb.check_burst("RANDOM INCR (WORD)", wdata_dyn, rdata_dyn);
+
+        // HALFWORD
+        rand_addr = get_safe_rand_addr(rand_len);
+        wdata_dyn = new[rand_len]; rdata_dyn = new[rand_len];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h0000FFFF; 
+        ahb_b2b_write_read_burst(rand_addr, wdata_dyn, rand_addr, rdata_dyn, rand_len, BURST_INCR, 3'b001);
+        sb.check_burst("RANDOM INCR (HALFWORD)", wdata_dyn, rdata_dyn);
+
+        // BYTE
+        rand_addr = get_safe_rand_addr(rand_len);
+        wdata_dyn = new[rand_len]; rdata_dyn = new[rand_len];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h000000FF; 
+        ahb_b2b_write_read_burst(rand_addr, wdata_dyn, rand_addr, rdata_dyn, rand_len, BURST_INCR, 3'b000);
+        sb.check_burst("RANDOM INCR (BYTE)", wdata_dyn, rdata_dyn);
+
 
         // INCR4 RANDOM *****************************************************************************
+        // WORD
         rand_addr = get_safe_rand_addr(4);
         wdata_dyn = new[4]; rdata_dyn = new[4];
         foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
         ahb_write_burst(rand_addr, wdata_dyn, 4, BURST_INCR4, 3'b010);
         ahb_read_burst (rand_addr, rdata_dyn, 4, BURST_INCR4, 3'b010);
-        sb.check_burst("RANDOM INCR4", wdata_dyn, rdata_dyn);
+        sb.check_burst("RANDOM INCR4 (WORD)", wdata_dyn, rdata_dyn);
+
+        // HALFWORD
+        rand_addr = get_safe_rand_addr(4);
+        wdata_dyn = new[4]; rdata_dyn = new[4];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h0000FFFF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 4, BURST_INCR4, 3'b001);
+        ahb_read_burst (rand_addr, rdata_dyn, 4, BURST_INCR4, 3'b001);
+        sb.check_burst("RANDOM INCR4 (HALFWORD)", wdata_dyn, rdata_dyn);
+
+        // BYTE
+        rand_addr = get_safe_rand_addr(4);
+        wdata_dyn = new[4]; rdata_dyn = new[4];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h000000FF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 4, BURST_INCR4, 3'b000);
+        ahb_read_burst (rand_addr, rdata_dyn, 4, BURST_INCR4, 3'b000);
+        sb.check_burst("RANDOM INCR4 (BYTE)", wdata_dyn, rdata_dyn);
+
 
         // INCR8 RANDOM *****************************************************************************
+        // WORD
         rand_addr = get_safe_rand_addr(8);
         wdata_dyn = new[8]; rdata_dyn = new[8];
         foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
         ahb_write_burst(rand_addr, wdata_dyn, 8, BURST_INCR8, 3'b010);
         ahb_read_burst (rand_addr, rdata_dyn, 8, BURST_INCR8, 3'b010);
-        sb.check_burst("RANDOM INCR8", wdata_dyn, rdata_dyn);
+        sb.check_burst("RANDOM INCR8 (WORD)", wdata_dyn, rdata_dyn);
+
+        // HALFWORD
+        rand_addr = get_safe_rand_addr(8);
+        wdata_dyn = new[8]; rdata_dyn = new[8];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h0000FFFF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 8, BURST_INCR8, 3'b001);
+        ahb_read_burst (rand_addr, rdata_dyn, 8, BURST_INCR8, 3'b001);
+        sb.check_burst("RANDOM INCR8 (HALFWORD)", wdata_dyn, rdata_dyn);
+
+        // BYTE
+        rand_addr = get_safe_rand_addr(8);
+        wdata_dyn = new[8]; rdata_dyn = new[8];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h000000FF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 8, BURST_INCR8, 3'b000);
+        ahb_read_burst (rand_addr, rdata_dyn, 8, BURST_INCR8, 3'b000);
+        sb.check_burst("RANDOM INCR8 (BYTE)", wdata_dyn, rdata_dyn);
+
 
         // INCR16 RANDOM *****************************************************************************
+        // WORD
         rand_addr = get_safe_rand_addr(16);
         wdata_dyn = new[16]; rdata_dyn = new[16];
         foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
         ahb_write_burst(rand_addr, wdata_dyn, 16, BURST_INCR16, 3'b010);
         ahb_read_burst (rand_addr, rdata_dyn, 16, BURST_INCR16, 3'b010);
-        sb.check_burst("RANDOM INCR16", wdata_dyn, rdata_dyn);
+        sb.check_burst("RANDOM INCR16 (WORD)", wdata_dyn, rdata_dyn);
+
+        // HALFWORD
+        rand_addr = get_safe_rand_addr(16);
+        wdata_dyn = new[16]; rdata_dyn = new[16];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h0000FFFF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 16, BURST_INCR16, 3'b001);
+        ahb_read_burst (rand_addr, rdata_dyn, 16, BURST_INCR16, 3'b001);
+        sb.check_burst("RANDOM INCR16 (HALFWORD)", wdata_dyn, rdata_dyn);
+
+        // BYTE
+        rand_addr = get_safe_rand_addr(16);
+        wdata_dyn = new[16]; rdata_dyn = new[16];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h000000FF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 16, BURST_INCR16, 3'b000);
+        ahb_read_burst (rand_addr, rdata_dyn, 16, BURST_INCR16, 3'b000);
+        sb.check_burst("RANDOM INCR16 (BYTE)", wdata_dyn, rdata_dyn);
+
 
         // WRAP4 RANDOM *****************************************************************************
+        // WORD
         rand_addr = get_safe_rand_addr(4);
         wdata_dyn = new[4]; rdata_dyn = new[4];
         foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
         ahb_write_burst(rand_addr, wdata_dyn, 4, BURST_WRAP4, 3'b010);
         ahb_read_burst (rand_addr, rdata_dyn, 4, BURST_WRAP4, 3'b010);
-        sb.check_burst("RANDOM WRAP4", wdata_dyn, rdata_dyn);
+        sb.check_burst("RANDOM WRAP4 (WORD)", wdata_dyn, rdata_dyn);
+
+        // HALFWORD
+        rand_addr = get_safe_rand_addr(4);
+        wdata_dyn = new[4]; rdata_dyn = new[4];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h0000FFFF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 4, BURST_WRAP4, 3'b001);
+        ahb_read_burst (rand_addr, rdata_dyn, 4, BURST_WRAP4, 3'b001);
+        sb.check_burst("RANDOM WRAP4 (HALFWORD)", wdata_dyn, rdata_dyn);
+
+        // BYTE
+        rand_addr = get_safe_rand_addr(4);
+        wdata_dyn = new[4]; rdata_dyn = new[4];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h000000FF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 4, BURST_WRAP4, 3'b000);
+        ahb_read_burst (rand_addr, rdata_dyn, 4, BURST_WRAP4, 3'b000);
+        sb.check_burst("RANDOM WRAP4 (BYTE)", wdata_dyn, rdata_dyn);
+
 
         // WRAP8 RANDOM *****************************************************************************
+        // WORD
         rand_addr = get_safe_rand_addr(8);
         wdata_dyn = new[8]; rdata_dyn = new[8];
         foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
         ahb_write_burst(rand_addr, wdata_dyn, 8, BURST_WRAP8, 3'b010);
         ahb_read_burst (rand_addr, rdata_dyn, 8, BURST_WRAP8, 3'b010);
-        sb.check_burst("RANDOM WRAP8", wdata_dyn, rdata_dyn);
+        sb.check_burst("RANDOM WRAP8 (WORD)", wdata_dyn, rdata_dyn);
+
+        // HALFWORD
+        rand_addr = get_safe_rand_addr(8);
+        wdata_dyn = new[8]; rdata_dyn = new[8];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h0000FFFF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 8, BURST_WRAP8, 3'b001);
+        ahb_read_burst (rand_addr, rdata_dyn, 8, BURST_WRAP8, 3'b001);
+        sb.check_burst("RANDOM WRAP8 (HALFWORD)", wdata_dyn, rdata_dyn);
+
+        // BYTE
+        rand_addr = get_safe_rand_addr(8);
+        wdata_dyn = new[8]; rdata_dyn = new[8];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h000000FF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 8, BURST_WRAP8, 3'b000);
+        ahb_read_burst (rand_addr, rdata_dyn, 8, BURST_WRAP8, 3'b000);
+        sb.check_burst("RANDOM WRAP8 (BYTE)", wdata_dyn, rdata_dyn);
+
 
         // WRAP16 RANDOM *****************************************************************************
+        // WORD
         rand_addr = get_safe_rand_addr(16);
         wdata_dyn = new[16]; rdata_dyn = new[16];
         foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom; 
         ahb_write_burst(rand_addr, wdata_dyn, 16, BURST_WRAP16, 3'b010);
         ahb_read_burst (rand_addr, rdata_dyn, 16, BURST_WRAP16, 3'b010);
-        sb.check_burst("RANDOM WRAP16", wdata_dyn, rdata_dyn);
+        sb.check_burst("RANDOM WRAP16 (WORD)", wdata_dyn, rdata_dyn);
+
+        // HALFWORD
+        rand_addr = get_safe_rand_addr(16);
+        wdata_dyn = new[16]; rdata_dyn = new[16];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h0000FFFF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 16, BURST_WRAP16, 3'b001);
+        ahb_read_burst (rand_addr, rdata_dyn, 16, BURST_WRAP16, 3'b001);
+        sb.check_burst("RANDOM WRAP16 (HALFWORD)", wdata_dyn, rdata_dyn);
+
+        // BYTE
+        rand_addr = get_safe_rand_addr(16);
+        wdata_dyn = new[16]; rdata_dyn = new[16];
+        foreach(wdata_dyn[i]) wdata_dyn[i] = $urandom & 32'h000000FF; 
+        ahb_write_burst(rand_addr, wdata_dyn, 16, BURST_WRAP16, 3'b000);
+        ahb_read_burst (rand_addr, rdata_dyn, 16, BURST_WRAP16, 3'b000);
+        sb.check_burst("RANDOM WRAP16 (BYTE)", wdata_dyn, rdata_dyn);
 
 //  UNCOMMENT TO CHECK DIRECTED TESTS FROM THE CONSOLE******************************************************************************************************************************************
 /*         

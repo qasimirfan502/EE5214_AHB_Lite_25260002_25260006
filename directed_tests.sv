@@ -1,7 +1,7 @@
 task automatic run_directed_tests(ahb_scoreboard sb);
   logic [31:0] s_wdata, s_rdata;
   logic [31:0] wdata_dyn [], rdata_dyn [];
-  logic [31:0] bb_data2;
+  logic [31:0] bb_data2;  // second beat for back-to-back test
 
   $display("\n*****************************************************************************");
   $display("               PHASE 1: SINGLE TRANSFERS               ");
@@ -30,6 +30,36 @@ task automatic run_directed_tests(ahb_scoreboard sb);
   $display("\n*****************************************************************************");
   $display("               PHASE 2: INCREMENTING BURSTS            ");
   $display("*****************************************************************************\n");
+
+  // INCR BURSTS (UNDEFINED LENGTH) *****************************************************************************
+    wdata_dyn = new[5]; rdata_dyn = new[5];
+
+  // WORD (3'b010)
+  wdata_dyn[0] = 32'hB001B001;
+  wdata_dyn[1] = 32'hB002B002;
+  wdata_dyn[2] = 32'hB003B003;
+  wdata_dyn[3] = 32'hB004B004;
+  wdata_dyn[4] = 32'hB005B005;
+  ahb_b2b_write_read_burst(16'h00A0, wdata_dyn, 16'h00A0, rdata_dyn, 5, BURST_INCR, 3'b010);
+  sb.check_burst("INCR DIRECTED (WORD)", wdata_dyn, rdata_dyn);
+
+  // HALFWORD (3'b001)
+  wdata_dyn[0] = 32'h0000C001;
+  wdata_dyn[1] = 32'h0000C002;
+  wdata_dyn[2] = 32'h0000C003;
+  wdata_dyn[3] = 32'h0000C004;
+  wdata_dyn[4] = 32'h0000C005;
+  ahb_b2b_write_read_burst(16'h00C0, wdata_dyn, 16'h00C0, rdata_dyn, 5, BURST_INCR, 3'b001);
+  sb.check_burst("INCR DIRECTED (HALFWORD)", wdata_dyn, rdata_dyn);
+
+  // BYTE (3'b000)
+  wdata_dyn[0] = 32'h000000D1;
+  wdata_dyn[1] = 32'h000000D2;
+  wdata_dyn[2] = 32'h000000D3;
+  wdata_dyn[3] = 32'h000000D4;
+  wdata_dyn[4] = 32'h000000D5;
+  ahb_b2b_write_read_burst(16'h00E0, wdata_dyn, 16'h00E0, rdata_dyn, 5, BURST_INCR, 3'b000);
+  sb.check_burst("INCR DIRECTED (BYTE)", wdata_dyn, rdata_dyn);
 
   // INCR4 BURSTS *****************************************************************************
 
@@ -330,7 +360,7 @@ task automatic run_directed_tests(ahb_scoreboard sb);
 
 
   $display("\n*****************************************************************************");
-  $display("               PHASE 7: 2-CYCLE ERROR RESPONSE TEST          ");
+  $display("               PHASE 6: 2-CYCLE ERROR RESPONSE TEST          ");
   $display("*****************************************************************************\n");
   TEST_TYPE = "ERROR_TEST";
 
@@ -372,7 +402,7 @@ task automatic run_directed_tests(ahb_scoreboard sb);
 
 
   $display("\n*****************************************************************************");
-  $display("               PHASE 8: PROTECTION FAULT INJECTION           ");
+  $display("               PHASE 7: PROTECTION FAULT INJECTION           ");
   $display("*****************************************************************************\n");
   TEST_TYPE = "PROTECTION_TEST";
 
