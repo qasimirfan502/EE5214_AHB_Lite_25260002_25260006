@@ -1,0 +1,112 @@
+2026-05-04 17:44:13.593669 (24483) main____ INFO    ----------------------------------------
+2026-05-04 17:44:13.593721 (24483) main____ INFO    Jasper version info
+2026-05-04 17:44:13.593730 (24483) main____ INFO      tool      : Jasper 2025.06
+2026-05-04 17:44:13.593738 (24483) main____ INFO      version   : 2025.06p002 64 bits
+2026-05-04 17:44:13.593743 (24483) main____ INFO      build date: 2025.08.26 14:59:20 UTC
+2026-05-04 17:44:13.593748 (24483) main____ INFO    ----------------------------------------
+2026-05-04 17:44:13.593751 (24483) main____ INFO    Runtime info:
+2026-05-04 17:44:13.593757 (24483) main____ INFO      platform  : Linux 3.10.0-1160.119.1.el7.x86_64 x86_64
+2026-05-04 17:44:13.593766 (24483) main____ INFO      hostname  : pc3
+2026-05-04 17:44:13.593773 (24483) main____ INFO      pid       : 24483
+2026-05-04 17:44:13.593778 (24483) main____ INFO      arguments : '-style' 'windows' 'fpv_setup.tcl'
+2026-05-04 17:44:13.593782 (24483) main____ INFO      locale    : ANSI_X3.4-1968
+2026-05-04 17:44:13.593786 (24483) main____ INFO    ----------------------------------------
+2026-05-04 17:44:13.593790 (24483) main____ INFO    System resource limits info:
+2026-05-04 17:44:13.593795 (24483) main____ INFO      virtual memory: unlimited
+2026-05-04 17:44:13.593800 (24483) main____ INFO      cpu time      : unlimited
+2026-05-04 17:44:13.593808 (24483) main____ INFO      processes     : 4096
+2026-05-04 17:44:13.593817 (24483) main____ INFO      stack size    : 8388608 B
+2026-05-04 17:44:13.593823 (24483) main____ INFO      core file size: 0 B
+2026-05-04 17:44:13.593829 (24483) main____ INFO      open files    : 1024
+2026-05-04 17:44:13.593834 (24483) main____ INFO      file size     : unlimited
+2026-05-04 17:44:13.593838 (24483) main____ INFO    ----------------------------------------
+2026-05-04 17:44:13.593842 (24483) main____ INFO    Memory statistics:
+2026-05-04 17:44:13.593846 (24483) main____ INFO      total physical memory  : 16099656 kB
+2026-05-04 17:44:13.593851 (24483) main____ INFO      free physical memory   : 5156764 kB
+2026-05-04 17:44:13.593855 (24483) main____ INFO      committed address space: 17041788 kB
+2026-05-04 17:44:13.593859 (24483) main____ INFO    ----------------------------------------
+2026-05-04 17:44:13.594453 (24483) main____ INFO    Important environment variables:
+2026-05-04 17:44:13.594472 (24483) main____ INFO      CDS_LIC_FILE       : '5280@cadenceserver'
+2026-05-04 17:44:13.594480 (24483) main____ INFO      CDS_Netlisting_Mode: 'Analog'
+2026-05-04 17:44:13.594485 (24483) main____ INFO      DISPLAY            : ':0'
+2026-05-04 17:44:13.594491 (24483) main____ INFO      JASPER_CPU_CHECK   : '1'
+2026-05-04 17:44:13.594496 (24483) main____ INFO      JASPER_INSTALL_DIR : '/mnt/cadence_tools/installs/JASPER25'
+2026-05-04 17:44:13.594501 (24483) main____ INFO      JASPER_KERNEL_CHECK: '1'
+2026-05-04 17:44:13.594506 (24483) main____ INFO      JASPER_OS_CHECK    : '1'
+2026-05-04 17:44:13.594511 (24483) main____ INFO      JASPER_PLATFORM    : 'Linux64'
+2026-05-04 17:44:13.594516 (24483) main____ INFO      LANG               : 'C'
+2026-05-04 17:44:13.594522 (24483) main____ INFO      LM_LICENSE_FILE    : '5280@cadenceserver'
+2026-05-04 17:44:13.594526 (24483) main____ INFO    ----------------------------------------
+2026-05-04 17:44:13.594590 (24483) lic_core INFO    Initializing license system ...
+2026-05-04 17:44:13.597524 (24503) lic_core INFO    [17:44:13.462753] Configured Lic search path (24.01-s003): 5280@cadenceserver
+2026-05-04 17:44:13.599299 (24483) lic_core INFO    ... license system initialized.
+2026-05-04 17:44:13.599488 (24483) lic__man INFO    Claim 'main' for <ui>.
+2026-05-04 17:44:13.599514 (24483) lic_core INFO    (1) checking out 'jasper_interactive' ...
+2026-05-04 17:44:13.604738 (24483) lic_core INFO    ... (1) checkout failed (error: -5) ("FLEXnet ERROR(-5, 0, 0): No such feature exists.")
+2026-05-04 17:44:13.604782 (24483) lic_core INFO    (2) checking out 'jasper_pint' ...
+2026-05-04 17:44:13.613674 (24483) lic_core INFO    ... (2) checkout succeeded
+2026-05-04 17:44:13.613717 (24483) lic__man INFO    Claim 'fpv' for <ui>.
+2026-05-04 17:44:13.613738 (24483) lic_core INFO    (3) checking out 'jasper_fpv' ...
+2026-05-04 17:44:13.617483 (24483) lic_core INFO    ... (3) checkout failed (error: -5) ("FLEXnet ERROR(-5, 0, 0): No such feature exists.")
+2026-05-04 17:44:13.617503 (24483) lic_core INFO    (4) checking out 'jasper_fao' ...
+2026-05-04 17:44:13.620871 (24483) lic_core INFO    ... (4) checkout failed (error: -5) ("FLEXnet ERROR(-5, 0, 0): No such feature exists.")
+2026-05-04 17:44:13.620920 (24483) lic_core INFO    (5) checking out 'jasper_papp' ...
+2026-05-04 17:44:13.631324 (24483) lic_core INFO    ... (5) checkout succeeded
+2026-05-04 17:44:13.631852 (24483) main____ INFO    Tool inactivity delay is 480000 ms.
+2026-05-04 17:44:14.297481 (24483) lic__man INFO    Claim 'fpv' for <ui>.
+2026-05-04 17:44:14.454169 (24483) lic__man INFO    Unclaim 'fpv' for <ui>.
+2026-05-04 17:44:14.454230 (24483) lic__man INFO    Claim 'fpv' for <ui>.
+2026-05-04 17:44:14.459207 (24483) session_ INFO    Starting analysis session with session id 'session_0' (launcher: <local>) ...
+2026-05-04 17:44:14.461387 (24483) session_ INFO    Analysis session with session id 'session_0' started (pid: 24515)
+2026-05-04 17:44:15.698866 (24483) session_ INFO    Analysis session 'session_0' connected to the console (host: 127.0.0.1:46060)
+2026-05-04 17:44:16.014789 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 17:44:16.015918 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 17:45:13.456450 (24503) lic_core INFO    [17:45:13.456304] Periodic Lic check successful
+2026-05-04 17:45:13.456481 (24503) lic_core INFO      [17:45:13.456320] Feature usage summary:
+2026-05-04 17:45:13.456487 (24503) lic_core INFO      [17:45:13.456321] jasper_pint
+2026-05-04 17:45:13.456492 (24503) lic_core INFO      [17:45:13.456321] jasper_papp
+2026-05-04 17:51:42.190886 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 17:51:42.191003 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 17:52:06.111449 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 17:52:06.111552 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 17:52:34.050730 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 17:52:34.050819 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 17:53:58.645087 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 17:53:58.645161 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 17:56:05.642676 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 17:56:05.642803 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 17:56:17.858720 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 17:56:17.858944 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 17:56:18.588808 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 17:56:18.669313 (24483) lic__man INFO    Claim 'fpv' for 'session_0'.
+2026-05-04 17:56:18.669402 (24483) lic__man INFO    Claim 'fpv' for 'session_0/prove-0'.
+2026-05-04 17:56:19.026200 (24483) lic__man INFO    Unclaim everything for 'session_0/prove-0'.
+2026-05-04 18:04:54.420231 (24483) lic__man INFO    Entering idle state.
+2026-05-04 18:06:45.328545 (24483) lic__man INFO    Leaving idle state.
+2026-05-04 18:14:49.420302 (24483) lic__man INFO    Entering idle state.
+2026-05-04 20:54:48.425091 (24483) lic__man INFO    Leaving idle state.
+2026-05-04 21:03:39.420302 (24483) lic__man INFO    Entering idle state.
+2026-05-04 21:03:54.987409 (24483) lic__man INFO    Leaving idle state.
+2026-05-04 21:03:55.211350 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 21:03:55.211572 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 21:03:56.037075 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 21:03:56.106613 (24483) lic__man INFO    Claim 'fpv' for 'session_0'.
+2026-05-04 21:03:56.106688 (24483) lic__man INFO    Claim 'fpv' for 'session_0/prove-0'.
+2026-05-04 21:03:56.459831 (24483) lic__man INFO    Unclaim everything for 'session_0/prove-0'.
+2026-05-04 21:09:07.650961 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 21:09:07.651147 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 21:09:08.482596 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 21:09:08.549263 (24483) lic__man INFO    Claim 'fpv' for 'session_0'.
+2026-05-04 21:09:08.549294 (24483) lic__man INFO    Claim 'fpv' for 'session_0/prove-0'.
+2026-05-04 21:09:08.852890 (24483) lic__man INFO    Unclaim everything for 'session_0/prove-0'.
+2026-05-04 21:17:08.419595 (24483) lic__man INFO    Entering idle state.
+2026-05-04 21:35:23.371389 (24483) lic__man INFO    Leaving idle state.
+2026-05-04 21:43:26.419600 (24483) lic__man INFO    Entering idle state.
+2026-05-04 21:51:11.420445 (24483) lic__man INFO    Leaving idle state.
+2026-05-04 21:52:54.850469 (24483) main____ INFO    Releasing console memory by request of analysis session 'session_0'.
+2026-05-04 21:52:54.850719 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 21:52:55.868777 (24483) lic__man INFO    Unclaim everything for 'session_0'.
+2026-05-04 21:52:55.956871 (24483) lic__man INFO    Claim 'fpv' for 'session_0'.
+2026-05-04 21:52:55.956905 (24483) lic__man INFO    Claim 'fpv' for 'session_0/prove-0'.
+2026-05-04 21:52:56.331399 (24483) lic__man INFO    Unclaim everything for 'session_0/prove-0'.
+2026-05-04 22:00:56.419994 (24483) lic__man INFO    Entering idle state.
