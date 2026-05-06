@@ -1,0 +1,24 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-XLMODE
+./xcelium.d/run.lnx86.23.09.d
+-RUNMODE
+packages/ahb3lite_pkg.sv
+rtl/mem.sv
+rtl/design.sv
+ahb_cov.sv
+tb_top.sv
+directed_tests.sv
+-CDSLIB
+./xcelium.d/run.lnx86.23.09.d/cdsrun.lib
+-HDLVAR
+./xcelium.d/run.lnx86.23.09.d/hdlrun.var
+-no_analogsolver
+-MESSAGES
+-UPDATE
+-XLLIBSTORE
+./xcelium.d/run.lnx86.23.09.d/xllibs
+-ALLOWUNBOUND
+-hastop

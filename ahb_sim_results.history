@@ -1,0 +1,22 @@
+s1(03May2026:23:57:19):  xrun -f xrun_args.txt 
+s2(03May2026:23:58:27):  xrun -f xrun_args.txt 
+s3(04May2026:15:51:17):  xrun -f xrun_args.txt 
+s4(04May2026:16:00:28):  xrun -f xrun_args.txt 
+s5(04May2026:16:02:37):  xrun -f xrun_args.txt 
+s6(04May2026:16:21:43):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps 
+s7(04May2026:16:41:45):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps 
+s8(04May2026:16:43:59):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps 
+s9(04May2026:16:52:39):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps 
+s10(04May2026:16:55:52):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s11(04May2026:17:12:27):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s12(04May2026:18:10:01):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s13(06May2026:10:55:16):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s14(06May2026:13:49:27):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s15(06May2026:13:50:50):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s16(06May2026:15:58:13):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s17(06May2026:16:00:55):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s18(06May2026:16:01:09):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s19(06May2026:16:01:55):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s20(06May2026:16:02:11):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
+s21(06May2026:16:05:27):  xrun -f xrun_args.txt 
+s22(06May2026:16:07:03):  xrun -f xrun_args.txt 

@@ -1,0 +1,23 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+packages/ahb3lite_pkg.sv
+rtl/mem.sv
+rtl/design.sv
+ahb_cov.sv
+tb_top.sv
+directed_tests.sv
+-access
++rwc
+-top
+tb_top
+-timescale
+1ns/1ps
+-covdut
+tb_top
+-covfile
+covfile.txt
+-coverage
+all
+-covoverwrite

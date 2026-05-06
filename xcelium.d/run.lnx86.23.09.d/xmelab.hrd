@@ -1,0 +1,16 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-ACCESS
++rwc
+
+tb_top
+-timescale
+1ns/1ps
+-COVDUT
+tb_top
+-COVFILE
+covfile.txt
+-COVERAGE
+all

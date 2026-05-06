@@ -1,0 +1,222 @@
+xrun: 23.09-s013: (c) Copyright 1995-2024 Cadence Design Systems, Inc.
+TOOL:	xrun	23.09-s013: Started on May 06, 2026 at 16:20:04 PKT
+xrun
+	packages/ahb3lite_pkg.sv
+	rtl/mem.sv
+	rtl/design.sv
+	ahb_cov.sv
+	tb_top.sv
+	directed_tests.sv
+	-access +rwc
+	-top tb_top
+	-timescale 1ns/1ps
+	-covdut tb_top
+	-covfile covfile.txt
+	-coverage all
+	-covoverwrite
+file: rtl/mem.sv
+	module worklib.mem:sv
+		errors: 0, warnings: 0
+file: rtl/design.sv
+	module worklib.ahb3liten:sv
+		errors: 0, warnings: 0
+file: ahb_cov.sv
+	module worklib.ahb_cov:sv
+		errors: 0, warnings: 0
+file: tb_top.sv
+	module worklib.tb_top:sv
+		errors: 0, warnings: 0
+file: directed_tests.sv
+  TEST_TYPE = "DIRECTED";
+          |
+xmvlog: *E,UNDIDN (directed_tests.sv,9|10): 'TEST_TYPE': undeclared identifier [12.5(IEEE)].
+  ahb_b2b_write_read_burst(16'h00A0, wdata_dyn, 16'h00A0, rdata_dyn, 5, BURST_INCR, 3'b010);
+                                                                                 |
+xmvlog: *E,UNDIDN (directed_tests.sv,43|81): 'BURST_INCR': undeclared identifier [12.5(IEEE)].
+  ahb_b2b_write_read_burst(16'h00C0, wdata_dyn, 16'h00C0, rdata_dyn, 5, BURST_INCR, 3'b001);
+                                                                                 |
+xmvlog: *E,UNDIDN (directed_tests.sv,52|81): 'BURST_INCR': undeclared identifier [12.5(IEEE)].
+  ahb_b2b_write_read_burst(16'h00E0, wdata_dyn, 16'h00E0, rdata_dyn, 5, BURST_INCR, 3'b000);
+                                                                                 |
+xmvlog: *E,UNDIDN (directed_tests.sv,61|81): 'BURST_INCR': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0100, wdata_dyn, 4, BURST_INCR4, 3'b010);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,73|52): 'BURST_INCR4': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0100, rdata_dyn, 4, BURST_INCR4, 3'b010);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,74|52): 'BURST_INCR4': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0120, wdata_dyn, 4, BURST_INCR4, 3'b001);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,82|52): 'BURST_INCR4': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0120, rdata_dyn, 4, BURST_INCR4, 3'b001);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,83|52): 'BURST_INCR4': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0140, wdata_dyn, 4, BURST_INCR4, 3'b000);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,91|52): 'BURST_INCR4': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0140, rdata_dyn, 4, BURST_INCR4, 3'b000);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,92|52): 'BURST_INCR4': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0200, wdata_dyn, 8, BURST_INCR8, 3'b010);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,107|52): 'BURST_INCR8': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0200, rdata_dyn, 8, BURST_INCR8, 3'b010);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,108|52): 'BURST_INCR8': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0240, wdata_dyn, 8, BURST_INCR8, 3'b001);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,120|52): 'BURST_INCR8': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0240, rdata_dyn, 8, BURST_INCR8, 3'b001);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,121|52): 'BURST_INCR8': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0280, wdata_dyn, 8, BURST_INCR8, 3'b000);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,133|52): 'BURST_INCR8': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0280, rdata_dyn, 8, BURST_INCR8, 3'b000);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,134|52): 'BURST_INCR8': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0300, wdata_dyn, 16, BURST_INCR16, 3'b010);
+                                                      |
+xmvlog: *E,UNDIDN (directed_tests.sv,157|54): 'BURST_INCR16': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0300, rdata_dyn, 16, BURST_INCR16, 3'b010);
+                                                      |
+xmvlog: *E,UNDIDN (directed_tests.sv,158|54): 'BURST_INCR16': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0380, wdata_dyn, 16, BURST_INCR16, 3'b001);
+                                                      |
+xmvlog: *E,UNDIDN (directed_tests.sv,178|54): 'BURST_INCR16': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0380, rdata_dyn, 16, BURST_INCR16, 3'b001);
+                                                      |
+xmvlog: *E,UNDIDN (directed_tests.sv,179|54): 'BURST_INCR16': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0400, wdata_dyn, 16, BURST_INCR16, 3'b000);
+                                                      |
+xmvlog: *E,UNDIDN (directed_tests.sv,199|54): 'BURST_INCR16': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0400, rdata_dyn, 16, BURST_INCR16, 3'b000);
+                                                      |
+xmvlog: *E,UNDIDN (directed_tests.sv,200|54): 'BURST_INCR16': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0808, wdata_dyn, 4, BURST_WRAP4, 3'b010);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,216|52): 'BURST_WRAP4': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0808, rdata_dyn, 4, BURST_WRAP4, 3'b010);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,217|52): 'BURST_WRAP4': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0826, wdata_dyn, 4, BURST_WRAP4, 3'b001);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,225|52): 'BURST_WRAP4': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0826, rdata_dyn, 4, BURST_WRAP4, 3'b001);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,226|52): 'BURST_WRAP4': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0843, wdata_dyn, 4, BURST_WRAP4, 3'b000);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,234|52): 'BURST_WRAP4': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0843, rdata_dyn, 4, BURST_WRAP4, 3'b000);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,235|52): 'BURST_WRAP4': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0918, wdata_dyn, 8, BURST_WRAP8, 3'b010);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,251|52): 'BURST_WRAP8': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0918, rdata_dyn, 8, BURST_WRAP8, 3'b010);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,252|52): 'BURST_WRAP8': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h092E, wdata_dyn, 8, BURST_WRAP8, 3'b001);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,264|52): 'BURST_WRAP8': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h092E, rdata_dyn, 8, BURST_WRAP8, 3'b001);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,265|52): 'BURST_WRAP8': undeclared identifier [12.5(IEEE)].
+  ahb_write_burst(16'h0947, wdata_dyn, 8, BURST_WRAP8, 3'b000);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,277|52): 'BURST_WRAP8': undeclared identifier [12.5(IEEE)].
+  ahb_read_burst (16'h0947, rdata_dyn, 8, BURST_WRAP8, 3'b000);
+                                                    |
+xmvlog: *E,UNDIDN (directed_tests.sv,278|52): 'BURST_WRAP8': undeclared identifier [12.5(IEEE)].
+  force HREADYOUT = 1'b0;
+                |
+xmvlog: *E,UNDIDN (directed_tests.sv,288|16): 'HREADYOUT': undeclared identifier [12.5(IEEE)].
+      repeat(3) @(posedge HCLK); release HREADYOUT;
+                             |
+xmvlog: *E,UNDIDN (directed_tests.sv,291|29): 'HCLK': undeclared identifier [12.5(IEEE)].
+      repeat(3) @(posedge HCLK); release HREADYOUT;
+                                                 |
+xmvlog: *E,UNDIDN (directed_tests.sv,291|49): 'HREADYOUT': undeclared identifier [12.5(IEEE)].
+  force HREADYOUT = 1'b0;
+                |
+xmvlog: *E,UNDIDN (directed_tests.sv,303|16): 'HREADYOUT': undeclared identifier [12.5(IEEE)].
+      repeat(3) @(posedge HCLK); release HREADYOUT;
+                             |
+xmvlog: *E,UNDIDN (directed_tests.sv,306|29): 'HCLK': undeclared identifier [12.5(IEEE)].
+      repeat(3) @(posedge HCLK); release HREADYOUT;
+                                                 |
+xmvlog: *E,UNDIDN (directed_tests.sv,306|49): 'HREADYOUT': undeclared identifier [12.5(IEEE)].
+  force HREADYOUT = 1'b0;
+                |
+xmvlog: *E,UNDIDN (directed_tests.sv,318|16): 'HREADYOUT': undeclared identifier [12.5(IEEE)].
+      repeat(3) @(posedge HCLK); release HREADYOUT;
+                             |
+xmvlog: *E,UNDIDN (directed_tests.sv,321|29): 'HCLK': undeclared identifier [12.5(IEEE)].
+      repeat(3) @(posedge HCLK); release HREADYOUT;
+                                                 |
+xmvlog: *E,UNDIDN (directed_tests.sv,321|49): 'HREADYOUT': undeclared identifier [12.5(IEEE)].
+  @(cb); while (!cb.HREADYOUT) @(cb);
+     |
+xmvlog: *E,UNDIDN (directed_tests.sv,339|5): 'cb': undeclared identifier [12.5(IEEE)].
+  @(cb); while (!cb.HREADYOUT) @(cb);
+                                  |
+xmvlog: *E,UNDIDN (directed_tests.sv,339|34): 'cb': undeclared identifier [12.5(IEEE)].
+  cb.HADDR <= 16'h0B00; cb.HWRITE <= 1'b1; cb.HTRANS <= TRANS_NONSEQ;
+                                                                   |
+xmvlog: *E,UNDIDN (directed_tests.sv,340|67): 'TRANS_NONSEQ': undeclared identifier [12.5(IEEE)].
+  cb.HBURST <= BURST_SINGLE; cb.HSIZE <= 3'b010;
+                          |
+xmvlog: *E,UNDIDN (directed_tests.sv,341|26): 'BURST_SINGLE': undeclared identifier [12.5(IEEE)].
+  @(cb); while (!cb.HREADYOUT) @(cb);
+     |
+xmvlog: *E,UNDIDN (directed_tests.sv,344|5): 'cb': undeclared identifier [12.5(IEEE)].
+  @(cb); while (!cb.HREADYOUT) @(cb);
+                                  |
+xmvlog: *E,UNDIDN (directed_tests.sv,344|34): 'cb': undeclared identifier [12.5(IEEE)].
+  cb.HADDR  <= 16'h0B04; cb.HTRANS <= TRANS_NONSEQ;
+                                                 |
+xmvlog: *E,UNDIDN (directed_tests.sv,345|49): 'TRANS_NONSEQ': undeclared identifier [12.5(IEEE)].
+  @(cb); while (!cb.HREADYOUT) @(cb);
+     |
+xmvlog: *E,UNDIDN (directed_tests.sv,349|5): 'cb': undeclared identifier [12.5(IEEE)].
+  @(cb); while (!cb.HREADYOUT) @(cb);
+                                  |
+xmvlog: *E,UNDIDN (directed_tests.sv,349|34): 'cb': undeclared identifier [12.5(IEEE)].
+  cb.HTRANS <= TRANS_IDLE; cb.HWDATA <= align_wdata(bb_data2, 3'b010);
+                        |
+xmvlog: *E,UNDIDN (directed_tests.sv,350|24): 'TRANS_IDLE': undeclared identifier [12.5(IEEE)].
+  @(cb); while (!cb.HREADYOUT) @(cb);
+     |
+xmvlog: *E,UNDIDN (directed_tests.sv,352|5): 'cb': undeclared identifier [12.5(IEEE)].
+  @(cb); while (!cb.HREADYOUT) @(cb);
+                                  |
+xmvlog: *E,UNDIDN (directed_tests.sv,352|34): 'cb': undeclared identifier [12.5(IEEE)].
+  TEST_TYPE = "ERROR_TEST";
+          |
+xmvlog: *E,UNDIDN (directed_tests.sv,365|10): 'TEST_TYPE': undeclared identifier [12.5(IEEE)].
+        @(cb);
+           |
+xmvlog: *E,UNDIDN (directed_tests.sv,376|11): 'cb': undeclared identifier [12.5(IEEE)].
+           @(cb);
+              |
+xmvlog: *E,UNDIDN (directed_tests.sv,381|14): 'cb': undeclared identifier [12.5(IEEE)].
+  TEST_TYPE = "PROTECTION_TEST";
+          |
+xmvlog: *E,UNDIDN (directed_tests.sv,407|10): 'TEST_TYPE': undeclared identifier [12.5(IEEE)].
+  @(cb);
+     |
+xmvlog: *E,UNDIDN (directed_tests.sv,410|5): 'cb': undeclared identifier [12.5(IEEE)].
+        @(cb);
+           |
+xmvlog: *E,UNDIDN (directed_tests.sv,421|11): 'cb': undeclared identifier [12.5(IEEE)].
+           @(cb);
+              |
+xmvlog: *E,UNDIDN (directed_tests.sv,426|14): 'cb': undeclared identifier [12.5(IEEE)].
+  @(cb);
+     |
+xmvlog: *E,UNDIDN (directed_tests.sv,449|5): 'cb': undeclared identifier [12.5(IEEE)].
+	Total errors/warnings found outside modules and primitives:
+		errors: 63, warnings: 0
+xrun: *E,VLGERR: An error occurred during parsing.  Review the log file for errors with the code *E and fix those identified problems to proceed.  Exiting with code (status 1).
+TOOL:	xrun	23.09-s013: Exiting on May 06, 2026 at 16:20:04 PKT  (total: 00:00:00)

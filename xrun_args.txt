@@ -1,0 +1,22 @@
+// Lists all design files and the testbench
+
+// Package
+packages/ahb3lite_pkg.sv
+
+// Design files
+rtl/design.sv
+rtl/mem.sv
+
+-l ahb_sim_results.log
+
+// Testbench
+
+scoreboard.sv
+tb_top.sv
+
+
+// Options
+
+-timescale 1ns/1ps
+-sv
+-top tb_top
