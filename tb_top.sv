@@ -62,7 +62,24 @@ module tb_top;
     .HREADY    (HREADY),
     .HRESP     (HRESP)
   );
-
+/*
+  ahb_cov u_ahb_cov (
+    .HCLK      (HCLK),
+    .HRESETn   (HRESETn),
+    .HSEL      (HSEL),
+    .HREADY    (HREADY),
+    .HREADYOUT (HREADYOUT),
+    .HRESP     (HRESP),
+    .HWRITE    (HWRITE),
+    .HTRANS    (HTRANS),
+    .HSIZE     (HSIZE),
+    .HBURST    (HBURST),
+    .HPROT     (HPROT),
+    .HADDR     (HADDR),
+    .HWDATA    (HWDATA),
+    .HRDATA    (HRDATA)
+);
+*/
   // clocking block to avoid any race conditions caused by this master
   clocking cb @(posedge HCLK);
     input  HRDATA, HREADYOUT, HRESP;
@@ -425,7 +442,7 @@ module tb_top;
       int rand_len;
       fails_before_random = sb.total_fails; 
 
-      for (int k = 0; k < 450; k++) begin
+      for (int k = 0; k < 550; k++) begin
       
         logic [15:0] rand_addr;
 

@@ -8,7 +8,9 @@
 packages/ahb3lite_pkg.sv
 rtl/mem.sv
 rtl/design.sv
+ahb_cov.sv
 tb_top.sv
+directed_tests.sv
 -CDSLIB
 ./xcelium.d/run.lnx86.23.09.d/cdsrun.lib
 -HDLVAR

@@ -4,6 +4,14 @@
 //
 -ACCESS
 +rwc
+-timescale
+1ns/1ps
+-COVDUT
+tb_top
+-COVFILE
+covfile.txt
+-COVERAGE
+all
 -no_analogsolver
 -MESSAGES
 tb_top
