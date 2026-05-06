@@ -2,12 +2,10 @@
 // File created by:  xrun
 // Do not modify this file
 //
--ACCESS
-+rwc
-
-tb_top
 -timescale
 1ns/1ps
+
+tb_top
 -COVDUT
 tb_top
 -COVFILE

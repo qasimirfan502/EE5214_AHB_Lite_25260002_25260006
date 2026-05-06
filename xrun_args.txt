@@ -12,6 +12,7 @@ rtl/mem.sv
 // Testbench
 
 scoreboard.sv
+ahb_cov.sv
 tb_top.sv
 
 

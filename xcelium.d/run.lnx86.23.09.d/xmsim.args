@@ -2,12 +2,11 @@
 // File created by:  xrun
 // Do not modify this file
 //
--COVOVERWRITE
 -MESSAGES
 +EMGRLOG
-xrun.log
+ahb_sim_results.log
 -XLSTIME
-1778066180
+1778073462
 -XLKEEP
 -XLMODE
 ./xcelium.d/run.lnx86.23.09.d

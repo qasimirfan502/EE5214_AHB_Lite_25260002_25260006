@@ -2,8 +2,9 @@
 // File created by:  xrun
 // Do not modify this file
 //
-/home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006/packages/ahb3lite_pkg.sv
-/home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006/rtl/mem.sv
-/home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006/rtl/design.sv
-/home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006/ahb_cov.sv
-/home/Qasim.Irfan/Downloads/EE5214_AHB_Lite_25260002_25260006/tb_top.sv
+/home/Qasim.Irfan/Documents/Project/EE5214_AHB_Lite_25260002_25260006/packages/ahb3lite_pkg.sv
+/home/Qasim.Irfan/Documents/Project/EE5214_AHB_Lite_25260002_25260006/rtl/design.sv
+/home/Qasim.Irfan/Documents/Project/EE5214_AHB_Lite_25260002_25260006/rtl/mem.sv
+/home/Qasim.Irfan/Documents/Project/EE5214_AHB_Lite_25260002_25260006/scoreboard.sv
+/home/Qasim.Irfan/Documents/Project/EE5214_AHB_Lite_25260002_25260006/ahb_cov.sv
+/home/Qasim.Irfan/Documents/Project/EE5214_AHB_Lite_25260002_25260006/tb_top.sv

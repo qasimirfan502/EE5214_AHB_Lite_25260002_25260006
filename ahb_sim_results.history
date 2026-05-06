@@ -20,3 +20,11 @@ s19(06May2026:16:01:55):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv
 s20(06May2026:16:02:11):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv tb_top.sv -access +rwc -top tb_top -gui 
 s21(06May2026:16:05:27):  xrun -f xrun_args.txt 
 s22(06May2026:16:07:03):  xrun -f xrun_args.txt 
+s23(06May2026:16:07:07):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv -access +rwc -top tb_top -gui 
+s24(06May2026:16:08:16):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv -access +rwc -top tb_top -timescale 1ns/1ps 
+s25(06May2026:16:11:55):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv -access +rwc -top tb_top -timescale 1ns/1ps -covdut tb_top -covfile covfile.txt -coverage all -covoverwrite 
+s26(06May2026:16:15:33):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv -access +rwc -top tb_top -gui -timescale 1ns/1ps 
+s27(06May2026:16:15:47):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv -access +rwc -top tb_top -timescale 1ns/1ps 
+s28(06May2026:16:16:20):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv -access +rwc -top tb_top -timescale 1ns/1ps -covdut tb_top -covfile covfile.txt -coverage all -covoverwrite 
+s29(06May2026:16:20:04):  xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv directed_tests.sv -access +rwc -top tb_top -timescale 1ns/1ps -covdut tb_top -covfile covfile.txt -coverage all -covoverwrite 
+s30(06May2026:18:17:42):  xrun -f xrun_args.txt -covdut tb_top -covfile covfile.txt -coverage all 

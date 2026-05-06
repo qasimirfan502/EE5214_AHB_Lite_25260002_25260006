@@ -1,0 +1,15 @@
+// covfile.txt — Coverage configuration file
+// Controls which modules are instrumented for coverage
+
+// Include the DUT hierarchy
+select_coverage -block -expr -toggle -module ahb3liten
+select_coverage -block -expr -toggle -module mem
+
+// Instead, just disable code coverage for it:
+
+deselect_coverage -block -module ahb_cov
+deselect_coverage -expr  off -module ahb_cov
+deselect_coverage -toggle off -module ahb_cov
+
+// Keep covergroups
+set_covergroup -new_instance_reporting

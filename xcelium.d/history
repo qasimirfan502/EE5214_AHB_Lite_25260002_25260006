@@ -31,3 +31,4 @@ s26::(06May2026:16:15:33):( xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.
 s27::(06May2026:16:15:47):( xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv -access +rwc -top tb_top -timescale 1ns/1ps )
 s28::(06May2026:16:16:20):( xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv -access +rwc -top tb_top -timescale 1ns/1ps -covdut tb_top -covfile covfile.txt -coverage all -covoverwrite )
 s29::(06May2026:16:20:04):( xrun packages/ahb3lite_pkg.sv rtl/mem.sv rtl/design.sv ahb_cov.sv tb_top.sv directed_tests.sv -access +rwc -top tb_top -timescale 1ns/1ps -covdut tb_top -covfile covfile.txt -coverage all -covoverwrite )
+s30::(06May2026:18:17:42):( xrun -f xrun_args.txt -covdut tb_top -covfile covfile.txt -coverage all )

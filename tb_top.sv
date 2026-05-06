@@ -62,7 +62,7 @@ module tb_top;
     .HREADY    (HREADY),
     .HRESP     (HRESP)
   );
-/*
+
   ahb_cov u_ahb_cov (
     .HCLK      (HCLK),
     .HRESETn   (HRESETn),
@@ -79,7 +79,7 @@ module tb_top;
     .HWDATA    (HWDATA),
     .HRDATA    (HRDATA)
 );
-*/
+
   // clocking block to avoid any race conditions caused by this master
   clocking cb @(posedge HCLK);
     input  HRDATA, HREADYOUT, HRESP;
